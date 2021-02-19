@@ -1,0 +1,94 @@
+<html xmlns:th="http://www.thymeleaf.org " th:fragment="head">
+<script type="text/javascript">
+    $(function () {
+
+        /**
+         * 为导航栏绑定选择事件
+         */
+        // $(".header-tabs li").removeClass("active");
+        // $("#${cateId==null?0:cateId}").addClass("active")
+
+
+        //轮播图间隔时间
+        $('.carousel').carousel({
+            interval: 2000
+        });
+
+        /**
+         * 为导航栏绑定选择事件
+         */
+        // $(".nav-tabs li").click(function () {
+        //     $(".nav-tabs li").removeClass("active");
+        //     $(this).addClass("active");
+        // });
+        $('.nav-tabs li').find('a').each(function () {
+            if (this.href == document.location.href || document.location.href.search(this.href) >= 0) {
+                $(this).parent().siblings('li').removeClass('active');
+                $(this).parent().addClass('active');
+            }
+        });
+
+    });
+
+
+    function submitSearchForm() {
+        var keywords = $("#keywords").val();
+        if ("" == keywords.trim()) {
+            $("#keywords").val("java");
+        }
+
+        $("#searchForm").submit();
+    }
+
+
+</script>
+<div th:insert="~{top ::top}"></div>
+<div class="container">
+    <div class="row">
+        <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 logo">
+            <a href="/" target="_blank"><img
+                    src="https://img.alicdn.com/tfs/TB1QP0Jq4jaK1RjSZKzXXXVwXXa-430-180.png" width="90%"
+                    alt="cc.com"/></a>
+        </div>
+        <div class="col-lg-6 col-md-6 col-xs-12 search">
+            <form action="book/list" class="form-inline" id="searchForm" role="form" method="get">
+                <div class="form-group">
+                    <label class="sr-only" for="keywords">关键字</label>
+                    <input type="text" class="form-control" id="keywords" name="keywords" value="" size="55"
+                           placeholder="奶粉">
+                </div>
+                <button type="button" onclick="submitSearchForm()" class="btn btn-info">
+                    <span class="glyphicon glyphicon-search"></span>
+                    搜索
+                </button>
+            </form>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 search" xmlns:th="http://www.thymeleaf.org">
+            <a th:href="${#httpSession.getAttribute('username')==null?'/user/login':'/product/cart?username='+#httpSession.getAttribute('username')}">
+                <button type="button"
+                        style="background-color: #ff2832;border-color: #ff2832" class="btn btn-info">
+                    <span class="glyphicon glyphicon-shopping-cart"></span>
+                    我的购物车
+                </button>
+            </a>
+
+            <button type="button" onclick="window.open('order/list')"
+                    style="background-color: #ff2832;border-color: #ff2832" class="btn btn-info">我的订单
+            </button>
+        </div>
+    </div>
+    <div class="row">
+        <ul class="nav nav-tabs header-tabs" role="tablist">
+            <li class="active navClick" id="0"><a href="/">首页</a></li>
+            <li class="navClick" id="allProduct"><a href="/product/list">全部</a></li>
+            <li class="navClick" id="1"><a href="/product/list/1">纸尿裤</a></li>
+            <li class="navClick" id="2"><a href="/product/list/2">婴儿推车</a></li>
+            <li class="navClick" id="3"><a href="/product/list/3">奶瓶</a></li>
+            <li class="navClick" id="4"><a href="/product/list/4">婴儿床</a></li>
+            <li class="navClick" id="5"><a href="/product/list/5">奶粉</a></li>
+
+        </ul>
+    </div>
+</div>
+<div style="height: 3px; background-color: #ff2832;"></div>
+</html>

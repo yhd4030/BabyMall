@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>主页</title>
+
+    <link rel="shortcut icon" th:href="@{/images/java.ico}" type="image/x-icon"/>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/css/bs.css}"/>
+    <link rel="stylesheet" th:href="@{/css/product_info.css}"/>
+    <link rel="stylesheet" th:href="@{/css/mc-dialoger.css}"/>
+
+    <script type="text/javascript" th:src="@{/js/jquery-3.4.1.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/dialoger.js}"></script>
+
+    <script type="application/javascript">
+        $(function () {
+
+            $(".book_message li").click(function () {
+                $(".book_message li").removeClass("active");
+                $(this).addClass("active");
+                $(".nav_content").hide();
+                var name = $(this).attr("id");
+                $("#" + name + "_content").show();
+            });
+
+            $("#num_add").click(function () {
+                var num = parseInt($("#buy_num").val());
+                if (num < 10) {
+                    $("#buy_num").val(num + 1);
+                }
+            });
+
+            $("#num_sub").click(function () {
+                var num = parseInt($("#buy_num").val());
+                if (num > 1) {
+                    $("#buy_num").val(num - 1);
+                }
+            });
+        });
+
+        function buyNow(bookId) {
+            location.href = +"order/info?bookId=" + bookId + "&buyNum=" + $("#buy_num").val();
+        }
+
+        function addCart(pid) {
+
+            $.ajax({
+                type: "post",
+                url: "/product/cart/addition",
+                data: {pid: pid,amount:$("#buy_num").val()},
+                success: function (data) {
+                    if (data==true){
+                        dialoger.$toast({mes:'添加成功，赶快去看看吧',type:'success'});
+                    }else {
+                        dialoger.$toast({mes:'添加购物车失败',type:'error'});
+                    }
+
+                }
+            })
+
+            // location.href = "/cart/addition?pid=" + pid + "&buyNum=" + $("#buy_num").val();
+        }
+    </script>
+</head>
+<body>
+<div th:insert="~{header::head}"></div>
+<div class="container">
+    <div class="row" style="border-bottom:1px dashed #CCCCCC;margin-bottom:15px ;">
+
+        <!--        <a href="#">-->
+        <!--            <img src="img/1.jpg"/>-->
+        <!--        </a>-->
+
+    </div>
+    <div class="row" id="breadcrumb" style="margin-bottom:40px" ;>
+        <a href="index" target="_blank">
+            <b>产品 </b>
+        </a>
+        <span>&gt;</span>
+        <a th:href="'/product/list?typeId='+${ProductInfo.typeId}" target="_blank"
+           th:if="${ProductInfo.typeId}==1">纸尿裤</a>
+        <a th:href="'/product/list?typeId='+${ProductInfo.typeId}" target="_blank"
+           th:if="${ProductInfo.typeId}==2">婴儿推车</a>
+        <a th:href="'/product/list?typeId='+${ProductInfo.typeId}" target="_blank"
+           th:if="${ProductInfo.typeId}==3">奶瓶</a>
+        <a th:href="'/product/list?typeId='+${ProductInfo.typeId}" target="_blank"
+           th:if="${ProductInfo.typeId}==4">婴儿床</a>
+        <a th:href="'/product/list?typeId='+${ProductInfo.typeId}" target="_blank"
+           th:if="${ProductInfo.typeId}==5">奶粉</a>
+        <a th:href="'/product/list?typeId='+${ProductInfo.typeId}" target="_blank"
+           th:if="${ProductInfo.typeId}>5">其它类型</a>
+
+        <span>&gt;</span>
+        <b th:text="${ProductInfo.productName}"></b>
+    </div>
+    <div class="row">
+        <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12" style="height: 400px;">
+            <div>
+                <a href="book/info/${bookInfo.bookId}">
+                    <img th:src="${ProductInfo.productImg}" width="290px" height="290px"/>
+                </a>
+            </div>
+        </div>
+        <div class="col-lg-9 col-md-6 col-sm-12 col-xs-12">
+            <div class="name_info">
+                <h1 style="font-weight: bold;" th:text="${ProductInfo.productName}"></h1>
+                <h2>
+                    <span th:text="${ProductInfo.description}"></span>
+                </h2>
+            </div>
+            <div class="book_info_base">
+                <span class="book_info_span">
+                    快递：免运费
+                </span>
+
+            </div>
+            <div class="book_price">
+                <p class="what_price">特价</p>
+                <p class="price_info">
+                    <span class="rob" style="font-size: 30px;"
+                          th:text="'￥'+${ProductInfo.price.multiply(ProductInfo.discount).setScale(2)}"></span>
+                    <!--                    <span style="color: red;" th:text="'￥'+${ProductInfo.price}">(${bookInfo.discount}折扣)</span>-->
+                    <span>定价:</span>
+                    <span class="oprice" th:text="'￥'+${ProductInfo.price}"></span>
+                </p>
+            </div>
+
+            <div class="buy_box">
+                <div class="num buy_div">
+                    <input type="text" class="text" id="buy_num" disabled="disabled" value="1" width="30px"
+                           height="30px"/>
+                    <a href="javascript:void(0);" class="num_add" id="num_add">+</a>
+                    <a href="javascript:void(0);" class="num_sub" id="num_sub">-</a>
+                </div>
+                <div class="buy_div">
+                    <div class="cart">
+                        <a href="javascript:void(0);" th:onclick="|addCart(${ProductInfo.detail_id})|" class="add_cart">
+                            <i class="cart_icon"></i> 加入购物车
+                        </a>
+                    </div>
+                </div>
+                <div class="buy_div buy_now_div">
+                    <a href="javascript:void(0);" onclick="buyNow(${bookInfo.bookId})" class="buy_now">立即购买</a>
+                </div>
+                <div class="clear"></div>
+                <div class="buy_tip">每账户最多可购买<b>10</b>件</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+            <div class="product_left">
+                <h3 style="">浏览此商品的顾客也同时浏览</h3>
+                <ul class="product_left_ul">
+                    <li class="product_li" th:each="randomDisplay:${productByRandom}">
+                        <p class="pic">
+                            <a th:href="'/product/info/'+${randomDisplay.id}" class="img" target="_blank">
+                                <img th:src="${randomDisplay.productImg}"/>
+                            </a>
+                        <p class="price">
+                            <span class="rob"
+                                  th:text="'￥'+${randomDisplay.price.multiply(randomDisplay.discount).setScale(2)}"></span>
+                            <span class="oprice" th:text="'￥'+${ProductInfo.price}"></span>
+                        </p>
+                        <p class="name">
+                            <a th:href="'/product/info/'+${randomDisplay.id}"
+                               th:text="${randomDisplay.productName}"></a>
+                        </p>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
+
+            <ul class="nav nav-tabs nav-justified book_message">
+                <li class="active" id="book_detail">
+                    <a href="javascript:void(0)">商品详情</a>
+                </li>
+                <li id="book_comment">
+                    <a href="javascript:void(0)">商品评价</a>
+                </li>
+            </ul>
+            <div class="content">
+                <div id="book_detail_content" class="nav_content">
+                    <div id="detail" class="section">
+                        <div id="bookDetail" class="section">
+                            <div class="title">
+                                <span class="title_span">产品详情</span>
+                                <ul class="attributes-list">
+                                    <li class="details_list" th:title="${ProductInfo.productDetails.d_productName}"
+                                        th:text="'产品名称:&nbsp;'+${ProductInfo.productDetails.d_productName}"></li>
+
+                                    <li class="details_list" th:title="${ProductInfo.productDetails.d_brand}"
+                                        th:text="'品牌:&nbsp;'+${ProductInfo.productDetails.d_brand}"></li>
+
+                                    <li class="details_list" th:title="${ProductInfo.productDetails.d_age}"
+                                        th:text="'适用年龄:&nbsp;'+${ProductInfo.productDetails.d_age}"></li>
+
+                                    <li class="details_list" th:title="${ProductInfo.productDetails.d_placeOrigin}"
+                                        th:text="'产地:&nbsp;'+${ProductInfo.productDetails.d_placeOrigin}"></li>
+
+                                    <li class="details_list" th:title="${ProductInfo.productDetails.d_gender}"
+                                        th:text="'适用性别:&nbsp;'+${ProductInfo.productDetails.d_gender}"></li>
+
+                                    <li class="details_list" th:title="${ProductInfo.productDetails.d_weigth}"
+                                        th:text="'适合体重:&nbsp;'+${ProductInfo.productDetails.d_weigth}"></li>
+
+                                    <li class="details_list"
+                                        th:title="${ProductInfo.productDetails.d_manufacturerContact}"
+                                        th:text="'厂家联系方式:&nbsp;'+${ProductInfo.productDetails.d_manufacturerContact}"></li>
+
+                                    <li class="details_list"
+                                        th:title="${ProductInfo.productDetails.d_manufacturerAddress}"
+                                        th:text="'生产厂家地址:&nbsp;'+${ProductInfo.productDetails.d_manufacturerAddress}"></li>
+
+                                    <li class="details_list" th:title="${ProductInfo.productDetails.d_manufacturerName}"
+                                        th:text="'生产厂家名称:&nbsp;'+${ProductInfo.productDetails.d_manufacturerName}"></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div id="feature" class="section">
+                            <div class="title">
+                                <span class="title_span">产品特色</span>
+                            </div>
+                            <p>
+                                <img th:src="${ProductInfo.productImg}">
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div id="book_comment_content" style="display: none;" class="nav_content">
+                    小菜太忙啦~~尽请期待！！！
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+</body>
+</html>

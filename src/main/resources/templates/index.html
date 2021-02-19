@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>主页</title>
+
+    <link rel="shortcut icon" th:href="@{/images/java.ico}" type="image/x-icon"/>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/css/bs.css}"/>
+
+    <script type="text/javascript" th:src="@{/js/jquery-3.4.1.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
+</head>
+
+<body>
+<div th:insert="~{header::head}"></div>
+<div class="container" style="margin-top:10px ;">
+    <div class="row" style="height: 850px;">
+        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12 sort" style="width: 17.5%;height: 100%;padding: 0;">
+            <div id="sort_header">
+                <span>母婴分类</span>
+            </div>
+            <ul id="sort_ul">
+                <li class="sort_li">
+                    <a href="">优惠商品</a>
+                    <span class="sort_span">></span>
+                </li>
+                <!--                <c:forEach items="${bookCategories}" var="bookCat">-->
+                <li class="sort_li">
+                    <a href="book/list?cateId=${bookCat.cateId}">各种分类</a>
+                    <span class="sort_span">></span>
+                </li>
+                <!--                </c:forEach>-->
+            </ul>
+        </div>
+        <div class="col-lg-6 col-md-4 col-sm-6 col-xs-12" style="width: 65%;height: 100%;">
+            <div id="myCarousel" class="carousel slide">
+                <!-- 轮播（Carousel）指标 -->
+                <ol class="carousel-indicators">
+                    <li data-target="#myCarousel" data-slide-to="0"
+                        class="active"></li>
+                    <li data-target="#myCarousel" data-slide-to="1"></li>
+                    <li data-target="#myCarousel" data-slide-to="2"></li>
+                    <li data-target="#myCarousel" data-slide-to="3"></li>
+                    <li data-target="#myCarousel" data-slide-to="4"></li>
+                </ol>
+                <!-- 轮播（Carousel）项目 -->
+                <div class="carousel-inner">
+                    <div class="item active">
+                        <img src="https://image2.suning.cn/uimg/cms/img/161223647981226642.jpg" alt="Third slide">
+                    </div>
+                    <div class="item">
+                        <img src="https://image5.suning.cn/uimg/cms/img/161233913069031033.jpg" alt="Third slide">
+                    </div>
+                    <div class="item">
+                        <img src="https://image4.suning.cn/uimg/cms/img/161234035331227082.jpg" alt="Third slide">
+                    </div>
+                    <div class="item">
+                        <img src="https://image3.suning.cn/uimg/cms/img/161224700430689272.jpg" alt="Third slide">
+                    </div>
+                    <div class="item">
+                        <img src="https://image3.suning.cn/uimg/cms/img/161223652763413823.jpg" alt="Third slide">
+                    </div>
+                </div>
+                <!-- 轮播（Carousel）导航 -->
+                <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
+                    <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                    <span class="sr-only">Previous</span>
+                </a>
+                <a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
+                    <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                    <span class="sr-only">Next</span>
+                </a>
+            </div>
+            <div class="index_product_top">
+                <span class="title">新品上架</span>
+                <div class="div_hr"></div>
+            </div>
+            <div class="product_div">
+                <ul class="product_ul">
+
+                    <!--                    <c:forEach items="${bookInfos}" begin="0" end="7" var="bookInfo">-->
+
+                    <li class="product_li" th:each="newProduct:${newProduct}">
+                        <a th:href="'product/info1/'+${newProduct.id}" class="img" target="_blank">
+                            <img th:src="${newProduct.productImg}"/>
+                        </a>
+                        <p class="name">
+                            <a th:href="'product/info1/'+${newProduct.id}" th:text="${newProduct.productName}"></a>
+                        </p>
+<!--                        <p class="author">${bookInfo.author}</p>-->
+                        <p class="price">
+                            <span class="rob" th:text="${newProduct.price}+'￥'"></span>
+                            <span class="oprice" th:text="${newProduct.price}+'￥'"></span>
+                        </p>
+                    </li>
+                    <!--                    </c:forEach>-->
+                </ul>
+            </div>
+        </div>
+
+        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12" style="width: 17.5%;height: 100%; padding: 0;">
+            <div class="news">
+                <p class="title">最新动态</p>
+                <ul>
+                    <li>菜菜母婴商城正式上线</li>
+
+                </ul>
+            </div>
+            <div class="hot_book">
+                <p class="title">新品热卖</p>
+                <ul>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="row" style="margin-top: 30px;height: 500px;">
+        <div class="col-lg-10 col-md-12 col-sm-12 col-xs-12" style="width: 82.5%;padding-left: 0;">
+            <div class="index_product_top">
+                <span class="title">好货推荐</span>
+                <div class="div_hr"></div>
+            </div>
+            <div class="product_div">
+                <ul class="product_ul">
+                    <!--                    <c:forEach items="${bookInfos}" begin="8" end="17" var="bookInfo">-->
+                    <li class="product_li" th:each="recommended:${recommended}">
+                        <a th:href="'product/info2/'+${recommended.id}" class="img" target="_blank">
+                            <img th:src="${recommended.productImg}"/>
+                        </a>
+                        <p class="name">
+                            <a th:href="'product/info2/'+${recommended.id}" th:text="${recommended.productName}"></a>
+                        </p>
+                        <!--                        <p class="author">${bookInfo.author}</p>-->
+                        <p class="price">
+                            <span class="rob" th:text="${recommended.price}+'￥'"></span>
+                            <span class="oprice" th:text="${recommended.price}+'￥'"></span>
+                        </p>
+                    </li>
+                    <!--                    </c:forEach>-->
+                </ul>
+            </div>
+        </div>
+        <div class="col-lg-2 col-md-12 col-sm-12 col-xs-12" style="width: 17.5%;padding: 0;padding-top:20px ;">
+            <div class="hot_book">
+                <p class="title">畅销用品</p>
+                <ul>
+
+                    <li>妈妈买了都说好</li>
+                    <li>爸爸买了直叫妙</li>
+                    <li>宝宝用了直拍手</li>
+                    <!--                    <li>今日特惠，5折抢购</li>-->
+                    <!--                    <li>满100减50</li>-->
+                    <!--                    <li>满300减150</li>-->
+                    <!--                    <li>满400减210</li>-->
+                </ul>
+            </div>
+        </div>
+    </div>
+
+</div>
+</div>
+
+<div style="height: 3px; background-color: #ff2832;"></div>
+
+<!--<jsp:include page="footer.jsp"/>-->
+</body>
+
+</html>

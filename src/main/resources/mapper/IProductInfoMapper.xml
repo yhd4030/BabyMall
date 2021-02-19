@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cmx.mall.mapper.IProductInfoMapper">
+        <resultMap id="productMap" type="com.cmx.mall.model.ShopProduct">
+            <id property="id" column="id"></id>
+            <result property="productName" column="productName"></result>
+            <result property="productImg" column="productImg"></result>
+            <result property="typeId" column="typeId"></result>
+            <result property="price" column="price"></result>
+            <result property="description" column="description"></result>
+            <result property="discount" column="discount"></result>
+            <result property="detail_id" column="detail_id"></result>
+            <association property="productDetails" javaType="com.cmx.mall.model.ProductDetails">
+                <id property="d_id" column="d_id"></id>
+                <result property="d_productName" column="d_productName"></result>
+                <result property="d_brand" column="d_brand"></result>
+                <result property="d_age" column="d_age"></result>
+                <result property="d_placeOrigin" column="d_placeOrigin"></result>
+                <result property="d_gender" column="d_gender"></result>
+                <result property="d_weigth" column="d_weigth"></result>
+                <result property="d_manufacturerContact" column="d_manufacturerContact"></result>
+                <result property="d_manufacturerAddress" column="d_manufacturerAddress"></result>
+                <result property="d_manufacturerName" column="d_manufacturerName"></result>
+            </association>
+        </resultMap>
+
+
+        <select id="findNewProductById" resultMap="productMap">
+            select sn.*,spd.* from shop_newproduct sn, shop_productdetails spd WHERE sn.detail_id=spd.` d_id` AND sn.id=#{id};
+        </select>
+
+        <select id="findRecommendedById" resultMap="productMap">
+            select sr.*,spd.* from shop_recommended sr, shop_productdetails spd WHERE sr.detail_id=spd.` d_id` and sr.id=#{id};
+        </select>
+
+        <select id="countProduct" resultType="int">
+            select count(*) from shop_product;
+        </select>
+
+        <select id="findProductByRandom" resultType="com.cmx.mall.model.ShopProduct">
+            select * from shop_product
+            <where>
+                id in
+                <foreach item="item" collection="list" separator="," open="(" close=")" index="">
+                    #{item}
+                </foreach>
+            </where>
+        </select>
+        <select id="findProductById" resultMap="productMap">
+            select sp.*,spd.* from shop_product sp, shop_productdetails spd WHERE sp.detail_id=spd.` d_id` AND sp.id=#{id};
+        </select>
+
+</mapper>

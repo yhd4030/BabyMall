@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>用户注册</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/css/login.css}">
+    <link rel="stylesheet" th:href="@{/css/bs.css}"/>
+    <link rel="stylesheet" th:href="@{/css/mc-dialoger.css}"/>
+
+    <script type="text/javascript" th:src="@{/js/jquery-3.4.1.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/dialoger.js}"></script>
+</head>
+<body>
+<section>
+    <!-- 背景颜色 -->
+    <div class="color"></div>
+    <div class="color"></div>
+    <div class="color"></div>
+    <div class="box">
+        <!-- 背景圆 -->
+        <div class="circle" style="--x:0"></div>
+        <div class="circle" style="--x:1"></div>
+        <div class="circle" style="--x:2"></div>
+        <div class="circle" style="--x:3"></div>
+        <div class="circle" style="--x:4"></div>
+        <!-- 登录框 -->
+        <div class="container">
+            <div class="form" id="registerForm">
+                <h2>用户注册</h2>
+                <form id="registerMsg">
+                    <div class="inputBox">
+                        <input type="text" name="nickname" placeholder="昵称">
+
+                    </div>
+                    <div class="inputBox">
+                        <input type="test" name="username" placeholder="用户名">
+
+                    </div>
+                    <div class="inputBox">
+                        <input type="password" name="password" placeholder="密码">
+
+                    </div>
+                    <div class="inputBox">
+                        <input type="test" name="phone" placeholder="联系方式">
+                    </div>
+                    <div class="inputBox">
+                        <input type="button" value="注册" th:onclick="submitForm()">
+
+                    </div>
+                    <p class="forget">已有账号，现在登录<a href="/user/login">
+                        登录
+                    </a></p>
+                    <p class="forget">返回主页<a href="/">
+                        点击这里
+                    </a></p>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+<script>
+    function submitForm() {
+        var registerMsg = $("#registerMsg").serialize();
+        dialoger.$loading.open({mes: '请稍后'});
+        $.ajax({
+            type: "post",
+            url: "/user/register",
+            data:registerMsg,
+            success:function (data) {
+                if (data==true){
+                    dialoger.$toast({mes:'注册成功',type:'success'});
+                }else {
+                    dialoger.$toast({mes:'改账号已经注册',type:'error'});
+                }
+                dialoger.$loading.close();
+            }
+        });
+
+    }
+</script>
+</html>
