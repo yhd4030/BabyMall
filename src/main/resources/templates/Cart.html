@@ -169,26 +169,27 @@
 
 
         function submitOrder() {
-            var bookIdStr = "";
+            var pIdStr = "";
             var count = 0;
             var cks = document.getElementsByName("cks");
             for (var i = 0; i < cks.length; i++) {
                 if (cks[i].checked) {
-                    bookIdStr = $(cks[i]).attr("id") + "," + bookIdStr;
+                    pIdStr = $(cks[i]).attr("id") + "," + pIdStr;
                     count++;
                 }
             }
-            alert(bookIdStr)
+
             if (count == 0) {
-                dialoger.$toast({mes: '请选择商品', timeout: 3000});
+                dialoger.$toast({mes: '请选择商品', timeout: 1000});
             } else {
                 $.ajax({
                     method: "post",
-                    url: "/order/details",
-                    data: {bookIdStr: bookIdStr},
+                    url: "/order/commit",
+                    data: {pIdStr: pIdStr},
                     dataType: "json",
                     success: function (data) {
-                        window.location.href = "/order/info?source=buy";
+                        alert(data);
+                        window.location.href = "/order/commit?source=cart";
                     }
                 });
             }
@@ -269,12 +270,16 @@
             <tr class="cart_item" th:id="'cart_item'+${cart.id}" th:each="cart:${carts}">
                 <td class="tcol1 labelCenter">
                     <!--                            ${cartItem.value.checked?'checked':''} onchange="checkOrNot(${cartItem.value.bookInfo.bookId},${cartItem.value.bookInfo.price},this)"-->
-                    <input name="cks" type="checkbox" class="shop_checkbox" th:id="${cart.id}" th:onclick="|checkTotal(${cart.id})|"/>
+                    <input name="cks" type="checkbox" class="shop_checkbox" th:id="${cart.id}"
+                           th:onclick="|checkTotal(${cart.id})|"/>
                 </td>
                 <td class="labelCenter">
-                    <a href="#"><img th:src="${cart.PImg}" width="20%"/></a>
-                    <span th:text="${cart.getPName()}"
-                          style="white-space: nowrap;text-overflow: ellipsis;overflow: hidden;width: 260px;display: inline-block;"></span>
+                    <a th:href="'/product/info/'+${cart.id}"><img th:src="${cart.PImg}" width="20%"/></a>
+                    <a th:href="'/product/info/'+${cart.id}">
+                        <span th:text="${cart.getPName()}"
+                              style="white-space: nowrap;text-overflow: ellipsis;overflow: hidden;width: 260px;display: inline-block;"></span>
+                    </a>
+
                 </td>
                 <td class="labelCenter">
                     <span class="red" th:text="'￥'+${cart.getRealPrice()}"></span>
@@ -290,9 +295,10 @@
                     </div>
                 </td>
                 <td class="labelCenter">
+                    <span class="red subTotal">￥</span>
                     <span class="red" th:id="${'subTotal'+cart.id}"
-                          th:text="${cart.realPrice.multiply(cart.amount).setScale(2)}">￥</span>
-                    <span class="red subTotal"></span>
+                          th:text="${cart.realPrice.multiply(cart.amount).setScale(2)}"></span>
+
                 </td>
                 <td class="labelCenter">
                     <button class="delete_btn" th:onclick="|deleteCartItem(${cart.id})|">
@@ -308,8 +314,9 @@
                 <td></td>
                 <td></td>
                 <td></td>
-                <td id="total" class="shop_total" th:text="'￥'+${totalPrice}">
-                    <!--                        <fmt:formatNumber type="number" value="${cart.total}" pattern="0.00"/>-->
+                <td>
+                    <span id="total" class="red shop_total" th:text="${totalPrice}"></span>
+                    <span class="red">￥</span>
                 </td>
             </tr>
 

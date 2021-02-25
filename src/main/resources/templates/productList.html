@@ -7,9 +7,12 @@
     <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
     <link rel="stylesheet" th:href="@{/css/bs.css}"/>
     <link rel="stylesheet" th:href="@{/css/product_list.css}"/>
+    <link rel="stylesheet" th:href="@{/css/mc-dialoger.css}"/>
 
     <script type="text/javascript" th:src="@{/js/jquery-3.4.1.min.js}"></script>
     <script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/dialoger.js}"></script>
+
     <script type="text/javascript">
         // $(function () {
         //     $('.pagination li').find('a').each(function () {
@@ -29,6 +32,21 @@
         //     })
         //
         // }
+        function addCart(pid) {
+            $.ajax({
+                type: "post",
+                url: "/product/cart/addition",
+                data: {pid: pid,amount:1},
+                success: function (data) {
+                    if (data==true){
+                        dialoger.$toast({mes:'添加成功，赶快去看看吧',type:'success'});
+                    }else {
+                        dialoger.$toast({mes:'添加购物车失败',type:'error'});
+                    }
+                }
+            })
+            // location.href = "/cart/addition?pid=" + pid + "&buyNum=" + $("#buy_num").val();
+        }
     </script>
 </head>
 
@@ -83,7 +101,7 @@
                     </div>
                     <div class="shop_button">
                         <p class="bottom_p">
-                            <a class="search_btn_cart" href="cart/addition?bookId=${bookInfo.bookId}&buyNum=1">加入购物车</a>
+                            <a class="search_btn_cart" href="javascript:void(0);" th:onclick="|addCart(${product.detail_id})|">加入购物车</a>
                             <a class="search_btn_collect" href="javascript:void(0);">购买</a>
                         </p>
                     </div>

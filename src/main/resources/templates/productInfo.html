@@ -46,7 +46,6 @@
         }
 
         function addCart(pid) {
-
             $.ajax({
                 type: "post",
                 url: "/product/cart/addition",
@@ -57,10 +56,8 @@
                     }else {
                         dialoger.$toast({mes:'添加购物车失败',type:'error'});
                     }
-
                 }
             })
-
             // location.href = "/cart/addition?pid=" + pid + "&buyNum=" + $("#buy_num").val();
         }
     </script>
