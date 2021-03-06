@@ -20,4 +20,16 @@
     delete from shop_cart where username=#{username} and id=#{id};
 </delete>
 
+<delete id="deleteCartItemByIds">
+    delete from shop_cart
+    <where>
+          id in
+          <foreach item="item" collection="param1" separator="," open="(" close=")" index="">
+               #{item}
+          </foreach>
+    </where>
+
+    and username=#{username};
+</delete>
+
 </mapper>

@@ -1,0 +1,16 @@
+{
+  "id": "",
+  "name": "",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "9096739",
+      "name": "alipay",
+      "font_class": "alipay",
+      "unicode": "e666",
+      "unicode_decimal": 58982
+    }
+  ]
+}

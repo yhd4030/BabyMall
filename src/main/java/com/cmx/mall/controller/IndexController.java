@@ -4,6 +4,7 @@ import com.cmx.mall.model.ShopProduct;
 import com.cmx.mall.model.User;
 import com.cmx.mall.service.IndexService;
 import com.cmx.mall.service.LoginService;
+import com.cmx.mall.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,6 +19,7 @@ public class IndexController {
     private IndexService indexService;
 
 
+
     @GetMapping({"/", "/index"})
     public String index(HttpSession session, Model model) {
         List<ShopProduct> newProduct = indexService.findNewProduct();
@@ -28,7 +30,9 @@ public class IndexController {
         if (username!=null&&username!=""){
             User user = indexService.findUser(username);
             session.setAttribute("nickname",user.getNickname());
+
         }
+
         return "index";
     }
 

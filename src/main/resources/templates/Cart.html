@@ -184,12 +184,15 @@
             } else {
                 $.ajax({
                     method: "post",
-                    url: "/order/commit",
+                    url: "/order/details",
                     data: {pIdStr: pIdStr},
                     dataType: "json",
                     success: function (data) {
-                        alert(data);
-                        window.location.href = "/order/commit?source=cart";
+                        if (data==true){
+                            window.location.href = "/order/details?source=cart";
+                        }else{
+                            dialoger.$toast({mes: '提交订单出错啦', timeout: 1000});
+                        }
                     }
                 });
             }

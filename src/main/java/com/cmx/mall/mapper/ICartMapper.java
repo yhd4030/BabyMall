@@ -19,4 +19,6 @@ public interface ICartMapper {
     void updateAmount(@Param("id") Integer id, @Param("amount")Integer amount);
 
     boolean deleteCartItemById(@Param("id") Integer id,@Param("username") String username);
+
+    boolean deleteCartItemByIds(List<Integer> ids, @Param("username") String username);
 }

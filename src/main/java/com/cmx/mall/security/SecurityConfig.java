@@ -28,12 +28,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/**").permitAll()
+//                .antMatchers("/**").permitAll()
                 //主页和注册页不用拦截 其余全部拦截
-                /**
+
                 .antMatchers("/","index","/user/register").permitAll()
                 .antMatchers("/**").authenticated()
-                 */
+
 //                .antMatchers("/alipay_callback","/return_callback").permitAll()
 //
 ////                .antMatchers(HttpMethod.POST).permitAll()

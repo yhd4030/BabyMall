@@ -17,7 +17,6 @@
 
     <script type="application/javascript">
         $(function () {
-
             $(".book_message li").click(function () {
                 $(".book_message li").removeClass("active");
                 $(this).addClass("active");
@@ -41,8 +40,23 @@
             });
         });
 
-        function buyNow(bookId) {
-            location.href = +"order/info?bookId=" + bookId + "&buyNum=" + $("#buy_num").val();
+        function buyNow(pid) {
+            var buyNum = $("#buy_num").val();
+            var pIdStr=pid+',';
+                $.ajax({
+                    method: "post",
+                    url: "/order/toCheckOrder",
+                    data: {pIdStr: pIdStr,buyNum:buyNum},
+                    dataType: "json",
+                    success: function (data) {
+                        if (data==true){
+                            window.location.href = "/order/details?source=ProductInfo";
+                        }else{
+                            dialoger.$toast({mes: '提交订单出错啦', timeout: 1000});
+                        }
+                    }
+                });
+
         }
 
         function addCart(pid) {
@@ -140,7 +154,7 @@
                     </div>
                 </div>
                 <div class="buy_div buy_now_div">
-                    <a href="javascript:void(0);" onclick="buyNow(${bookInfo.bookId})" class="buy_now">立即购买</a>
+                    <a href="javascript:void(0);" th:onclick="|buyNow(${ProductInfo.detail_id})|" class="buy_now">立即购买</a>
                 </div>
                 <div class="clear"></div>
                 <div class="buy_tip">每账户最多可购买<b>10</b>件</div>

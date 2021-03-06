@@ -1,7 +1,9 @@
 package com.cmx.mall.controller;
 
+import com.cmx.mall.dao.OrderDAO;
 import com.cmx.mall.model.Cart;
 import com.cmx.mall.service.CartService;
+import com.cmx.mall.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,6 +20,9 @@ import java.util.List;
 public class CartController {
     @Autowired
     private CartService cartService;
+
+    @Autowired
+    private OrderService orderService;
 
     @GetMapping("/cart")
     public String cart(String username, Model model) {

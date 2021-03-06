@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>订单信息</title>
+    <link rel="stylesheet" th:href="@{/css/cart.css}"/>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/css/bs.css}"/>
+    <link rel="stylesheet" th:href="@{/css/mc-dialoger.css}"/>
+    <link rel="stylesheet" th:href="@{/css/orderInfo.css}">
+    <link rel="stylesheet" th:href="@{/fonts/icon/iconfont.css}">
+
+    <script type="text/javascript" th:src="@{/js/jquery-3.4.1.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/dialoger.js}"></script>
+    <script type="text/javascript" th:src="@{/js/domlastic.js}"></script>
+    <script type="application/javascript" th:src="@{/js/distpicker/distpicker.data.js}"></script>
+    <script type="application/javascript" th:src="@{/js/distpicker/distpicker.js}"></script>
+    <script type="application/javascript" th:src="@{/js/distpicker/main.js}"></script>
+
+</head>
+<body>
+<div th:insert="~{top ::top}"></div>
+<div class="container">
+    <!--
+        订单头部
+    -->
+    <div class="row" style="padding-left: 100px;">
+    </div>
+    <div class="row orderheader">
+        <div class="col-lg-2 col-md-4 col-sm-6 col-xs-12 img_div">
+            <a href="index.html" target="_blank"></a>
+        </div>
+        <div class="col-lg-2 col-md-4 col-sm-6 col-xs-12 order_text_div">
+            <span class="order_text_span">填写订单</span>
+        </div>
+        <div class="col-lg-8 col-md-12 col-sm-12 col-xs-12 process">
+            <span class="order_text">我的购物车</span>
+            <span class="order_text" id="this_process">填写订单</span>
+            <span class="order_text">完成订单</span>
+        </div>
+    </div>
+    <div class="clear"></div>
+
+</div>
+<div style="height: 3px; background-color: #ff2832;"></div>
+<div class="container">
+    <!--
+        收货人信息
+
+    <div class="row">
+        <h1 class="title order_title">收货人信息</h1>
+        <ul class="list-group" style="width: 600px">
+            <li th:each="address:${addressList}" th:if="not ${#lists.isEmpty(addressList)}"
+                class="list-group-item">
+                <input type="radio" name="addr" th:checked="${address.is_default}=='on'"
+                       th:value="${address.id}">
+                <span th:text=" ${address.receiver}+' '+ ${address.tel}+'  '+${address.province}+${address.city}+${address.area}+${address.detail_address}"></span>
+                <span th:if="${address.is_default}=='on'"><a href="#" style="font-size: 10px">默认地址</a></span>
+                <span><a href="javascript:void(0);" th:onclick="|addAddress(${address.id})|"
+                         style="font-size: 10px">修改</a></span>
+                <span><a href="javascript:void(0);" th:onclick="|delAddress(${address.id})|"
+                         style="font-size: 10px">删除</a></span>
+            </li>
+            <li th:if=" ${#lists.isEmpty(addressList)}" class="list-group-item">暂无地址，请添加。</li>
+        </ul>
+        <button type="button" class="btn btn-info" onclick="addAddress()">点击添加地址</button>
+    </div>
+    -->
+
+    <div class="row">
+        <h1 class="title order_title">订单详情</h1>
+    </div>
+
+    <div class="row" id="order_table_div">
+        <table id="order_table" border="0" cellpadding="0" cellspacing="0">
+            <thead>
+            <tr id="table_head">
+                <th width="20%" class="tcol1">商品信息</th>
+                <th width="10%">单价（元）</th>
+                <th width="10%">数量</th>
+                <th width="10%">总价（元）</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr th:each="checkByCart:${checkByCarts}" class="order_item">
+                <td>
+                    <a th:href="'/product/info/'+${checkByCart.pid}"><img th:src="${checkByCart.PImg}" width="20%"/></a>
+                    <a th:href="'/product/info/'+${checkByCart.pid}"><span th:text="${checkByCart.PName}"
+                                                                           class="product_name"></span></a>
+                </td>
+                <td>
+                    <span class="red">￥</span>
+                    <span class="red" th:text="${checkByCart.realPrice}"></span>
+                </td>
+                <td>
+                    <span th:text="${checkByCart.amount}"></span>
+                </td>
+                <td>
+                    <span class="red">￥</span>
+                    <span class="red" th:text="${checkByCart.realPrice.multiply(checkByCart.amount)}"></span>
+                </td>
+            </tr>
+
+            <tr class="tfoot">
+                <td class="tcol1">
+                    <span>店铺合计	</span>
+                </td>
+                <td></td>
+                <td></td>
+                <td class="shop_total">￥
+                    <span id="orderTotal" th:text="${countMoney}"></span>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div id="express">
+        <p style="line-height: 35px">
+            <span>支付方式：</span>
+            <span class="icon iconfont icon-alipay"></span>
+        </p>
+    </div>
+    <!--
+        作者：offline
+        时间：2018-10-28
+        描述：支付方式
+    -->
+    <!--    <div class="row" id="payment">-->
+    <!--        <h1 class="title order_title">支付方式</h1>-->
+    <!--        <dl>-->
+    <!--            <dt style="font-size: 16px;margin-top: 20px;">&nbsp;网上支付</dt>-->
+    <!--            &lt;!&ndash;                <dd><a href="javascript:;" class="pay_active">支付宝</a></dd>&ndash;&gt;-->
+    <!--            &lt;!&ndash;                <dd>&nbsp;&nbsp;&nbsp;<a href="javascript:;">微信</a></dd>- &ndash;&gt;-->
+    <!--            <select name="payMethod" style="width: 80px;height: 30px;font-size: 15px">-->
+    <!--                <option value="2">支付宝</option>-->
+    <!--                <option value="1">微信</option>-->
+    <!--            </select>-->
+    <!--        </dl>-->
+    <!--    </div>-->
+
+    <!--
+        作者：offline
+        时间：2018-10-28
+        描述：去支付
+    -->
+    <div class="row" id="to_paid_div">
+        <div id="to_paid_info">
+            共<span class="red" th:text="${checkByCarts.size()}"></span>件商品
+            应付金额
+            <span class="shop_total" th:text="${countMoney}"></span>
+            <span class="shop_total">￥
+            </span>
+            <a href="javascript:void(0);" class="total_btn" th:onclick="commitOrder()" id="checkout_btn">结算订单</a>
+        </div>
+        <div id="return_cart">
+            <a th:href="'/product/cart?username='+${#httpSession.getAttribute('username')}">返回购物车</a>
+        </div>
+    </div>
+    <div class="clear"></div>
+</div>
+<!--添加地址模态框-->
+<div id="addAddress" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="gridSystemModalLabel">添加地址</h4>
+            </div>
+            <div class="modal-body">
+                <form action="#" id="savaAddress" class="form-horizontal" role="form">
+                    <div class="form-group">
+                        <label class="col-md-2 control-label" style="width: 100px">所在地区：</label>
+                        <div data-toggle="distpicker" id="target">
+                            <div class="form-group col-sm-12 col-md-3">
+                                <label class="sr-only" for="province1">Province</label>
+                                <select class="form-control province1" id="province1" name="province"></select>
+                            </div>
+                            <div class="form-group col-sm-12 col-md-3">
+                                <label class="sr-only" for="city1">City</label>
+                                <select class="form-control city1" id="city1" name="city"></select>
+                            </div>
+                            <div class="form-group col-sm-12 col-md-3">
+                                <label class="sr-only" for="area1">Area</label>
+                                <select class="form-control area1" id="area1" name="area"></select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group has-feedback" style="">
+                        <label class="col-sm-2 control-label" style="width: 100px"> 地址编号：</label>
+                        <div class="col-sm-5" style="padding-left: 0px">
+                            <input type="text" class="form-control" id="addressId" name="id"
+                                   placeholder="地址编号" readonly>
+                            <span class=" form-control-feedback"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group has-feedback" style="">
+                        <label class="col-sm-2 control-label" style="width: 100px"> 详细地址：</label>
+                        <div class="col-sm-5" style="padding-left: 0px">
+                            <textarea class="form-control" id="deatails" name="detail_address"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-group has-feedback" style="">
+                        <label class="col-sm-2 control-label" style="width: 100px"> 姓名：</label>
+                        <div class="col-sm-5" style="padding-left: 0px">
+                            <input type="text" class="form-control" id="receiver" name="receiver"
+                                   placeholder="收货人姓名">
+                            <span class="glyphicon glyphicon-user form-control-feedback"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group has-feedback" style="">
+                        <label class="col-sm-2 control-label" style="width: 100px"> 电话：</label>
+                        <div class="col-sm-5" style="padding-left: 0px">
+                            <input type="text" class="form-control" id="tel" name="tel" placeholder="合法手机格式">
+                            <span class="glyphicon glyphicon-phone form-control-feedback"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" id="setDefaultAddr" name="is_default"><span
+                                        class="text-success">设置默认地址</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" th:onclick="savaAddress()">保存地址</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+</body>
+<script>
+
+    // 打开修改地址模态框
+    function addAddress(addressId) {
+        $("#addAddress").modal("show");
+        //data不为空修改地址 为空增加地址
+        if (addressId != null) {
+            $.ajax({
+                method: "post",
+                url: "/address/find",
+                data: {addressId: addressId},
+                success: function (data) {
+                    if (data != null) {
+                        $("#target").distpicker('destroy');
+                        $("#target").distpicker({
+                            province: data.province,
+                            city: data.city,
+                            district: data.area
+                        });
+                        $("#addressId").val(data.id);
+                        $("#deatails").val(data.detail_address);
+                        $("#receiver").val(data.receiver);
+                        $("#tel").val(data.tel);
+                        if (data.is_default == "on") {
+                            $("#setDefaultAddr").prop("checked", true);
+                        } else {
+                            $("#setDefaultAddr").prop("checked", false);
+                        }
+                    }
+                }
+            });
+        } else {
+            $("#target").distpicker('destroy');
+            $("#target").distpicker({
+                province: "",
+                city: "",
+                district: ""
+            });
+            $("#addressId").val("");
+            $("#deatails").val("");
+            $("#receiver").val("");
+            $("#tel").val("");
+        }
+
+    }
+
+    //提交地址
+    function savaAddress() {
+        var addressData = $("#savaAddress").serialize();
+        $.ajax({
+            method: "post",
+            url: "/address/add",
+            data: addressData,
+            success: function (data) {
+                if (data == "success") {
+                    window.location.reload(true)
+                }
+            }
+        })
+    }
+
+    //删除收货地址
+    function delAddress(addressId) {
+        $.confirm({
+            title: '删除',
+            content: '您确定删除这样商品？',
+            type: 'red',
+            buttons: {
+                ok: {
+                    text: "确定",
+                    btnClass: 'btn-danger',
+                    keys: ['enter'],
+                    action: function () {
+                        $.ajax({
+                            method: "post",
+                            url: "/address/del",
+                            data: {addressId: addressId},
+                            success: function (data) {
+                                if (data == true) {
+                                    window.location.reload(true)
+                                }
+                            }
+                        })
+                    }
+                },
+                cancel: {
+                    text: "取消"
+                }
+            }
+        });
+    }
+
+    function commitOrder() {
+        // $('input:radio[name="addr"]:checked').val();
+        var val = 1
+        var total = parseFloat($("#orderTotal").html());
+        if (val == null) {
+            confirm("请选择地址");
+        } else {
+            $.ajax({
+                method: "post",
+                url: "/order/commit",
+                data: {addressId: val, OrderTotal: total},
+                success: function (data) {
+                    if (data != null) {
+                        //支付连接
+                        window.location.href = "/order/toPayOrList?id=" + data;
+                    }
+                }
+            })
+            // window.location.href = "/order/commit?addressId=" + val + "&OrderTotal=" + total;
+        }
+    }
+</script>
+</html>
