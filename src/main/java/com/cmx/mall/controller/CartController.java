@@ -1,6 +1,5 @@
 package com.cmx.mall.controller;
 
-import com.cmx.mall.dao.OrderDAO;
 import com.cmx.mall.model.Cart;
 import com.cmx.mall.service.CartService;
 import com.cmx.mall.service.OrderService;

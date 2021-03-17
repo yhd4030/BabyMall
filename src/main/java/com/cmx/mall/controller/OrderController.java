@@ -5,8 +5,9 @@ import com.alipay.api.AlipayClient;
 import com.alipay.api.DefaultAlipayClient;
 import com.alipay.api.domain.AlipayTradeWapPayModel;
 import com.alipay.api.request.AlipayTradeWapPayRequest;
-import com.cmx.mall.dao.OrderDAO;
+import com.cmx.mall.dao.OrderDTO;
 import com.cmx.mall.model.*;
+import com.cmx.mall.service.AddressService;
 import com.cmx.mall.service.OrderService;
 import com.cmx.mall.service.UserService;
 import com.cmx.mall.utils.AlipayConfig;
@@ -17,6 +18,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
@@ -29,10 +31,13 @@ public class OrderController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private AddressService addressService;
+
     //在购物车里提交订单信息
     @PostMapping("/details")
     @ResponseBody
-    public boolean commitOrder(String pIdStr, Integer buyNum, HttpServletRequest request) {
+    public boolean commitOrder(String pIdStr, HttpServletRequest request) {
         String username = (String) request.getSession().getAttribute("username");
         String[] pIds = pIdStr.split(",");
         List<Cart> checkByCart = orderService.selectByPid(pIds, username);
@@ -44,6 +49,7 @@ public class OrderController {
             return false;
         }
     }
+
     //通过产品信息页面直接去提交订单信息
     @PostMapping("/toCheckOrder")
     @ResponseBody
@@ -64,7 +70,7 @@ public class OrderController {
     public String orderInfo(HttpServletRequest request, Model model) {
         Double countMoney = 0d;
         String username = (String) request.getSession().getAttribute("username");
-//        List<Address> address = addressService.findAddress(username);
+        List<Address> addressList = addressService.findAddressByUsername(username);
         List<Cart> checkByCart = (List<Cart>) request.getSession().getAttribute("checkByCart");
         for (Cart shopCart : checkByCart) {
             countMoney = countMoney + (shopCart.getRealPrice().intValue() * shopCart.getAmount());
@@ -73,7 +79,7 @@ public class OrderController {
         model.addAttribute("user", user);
         model.addAttribute("checkByCarts", checkByCart);
         model.addAttribute("countMoney", countMoney);
-//        model.addAttribute("addressList", address);
+        model.addAttribute("addressList", addressList);
         return "orderInfo";
     }
 
@@ -90,8 +96,9 @@ public class OrderController {
     @GetMapping("/toPayOrList")
     public String payOrList(Integer id, Model model, HttpSession session) {
         String username = (String) session.getAttribute("username");
-        List<OrderDAO> orderDAO = orderService.selectByOrderId(id, username);
-        model.addAttribute("orderDAO", orderDAO);
+        List<OrderDTO> orderDTO = orderService.selectByOrderId(id, username);
+        model.addAttribute("orderDTO", orderDTO);
+        System.out.println(orderDTO);
         return "payOrList";
     }
 
@@ -100,7 +107,7 @@ public class OrderController {
                             @RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
                             @RequestParam(value = "pageSize", defaultValue = "5") int pageSize) {
         String username = (String) session.getAttribute("username");
-        PageInfo<OrderDAO> orderList = orderService.selectByOrderList(username, pageNum, pageSize);
+        PageInfo<OrderDTO> orderList = orderService.selectByOrderList(username, pageNum, pageSize);
         model.addAttribute("orderLists", orderList);
         return "orderList";
     }
@@ -135,7 +142,7 @@ public class OrderController {
     //支付
     @RequestMapping("/aliPay")
     @ResponseBody
-    public String pay(Pay pay) throws AlipayApiException {
+    public String pay(Pay pay, HttpServletResponse response) throws AlipayApiException {
         AlipayConfig alipayConfig = new AlipayConfig();
         //1.封装Rsa签名方式
         AlipayClient alipayClient = new DefaultAlipayClient(
@@ -160,6 +167,7 @@ public class OrderController {
         request.setNotifyUrl(AlipayConfig.notify_url);
         request.setReturnUrl(AlipayConfig.return_url);
         String form = alipayClient.pageExecute(request).getBody();
+        response.setCharacterEncoding("UTF-8");
         System.out.println(form);
         return form;
     }

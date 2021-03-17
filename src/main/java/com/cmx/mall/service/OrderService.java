@@ -1,7 +1,6 @@
 package com.cmx.mall.service;
 
-import com.alipay.api.domain.Car;
-import com.cmx.mall.dao.OrderDAO;
+import com.cmx.mall.dao.OrderDTO;
 import com.cmx.mall.mapper.ICartMapper;
 import com.cmx.mall.mapper.IOrderMapper;
 import com.cmx.mall.model.Cart;
@@ -92,18 +91,23 @@ public class OrderService {
         return orderMapper.selectByOrderId(order_num);
     }
 
-    public List<OrderDAO> selectByOrderId(Integer id, String username) {
+    public List<OrderDTO> selectByOrderId(Integer id, String username) {
         return orderMapper.selectAllById(id, username);
     }
 
-    public PageInfo<OrderDAO> selectByOrderList(String username, int pageNum, int pageSize) {
+    public PageInfo<OrderDTO> selectByOrderList(String username, int pageNum, int pageSize) {
         PageHelper.startPage(pageNum, pageSize);
-        List<OrderDAO> orderDAOS = orderMapper.selectByOrderList(username);
+        List<OrderDTO> orderDAOS = orderMapper.selectByOrderList(username);
         return new PageInfo<>(orderDAOS);
     }
 
     public boolean updateOrderStatusById(Integer id, String username, int completeStatus) {
         boolean b = orderMapper.updateOrderStatusById(id, username, completeStatus);
+        return b;
+    }
+
+    public boolean updateOrderStatusByOrderId(String orderId, String username, int completeStatus) {
+        boolean b = orderMapper.updateOrderStatusByOrderId(orderId, username, completeStatus);
         return b;
     }
 

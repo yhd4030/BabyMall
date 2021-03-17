@@ -1,0 +1,12 @@
+package com.cmx.mall.mapper;
+
+import com.cmx.mall.model.Address;
+import org.apache.ibatis.annotations.Mapper;
+
+import java.util.List;
+
+@Mapper
+public interface IAddressMapper {
+
+    List<Address> findAddressByUsername(String username);
+}

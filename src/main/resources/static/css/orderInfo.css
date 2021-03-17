@@ -1,27 +1,33 @@
-.orderheader{
+.orderheader {
     width: 1050px;
     height: 140px;
-    padding-left:30px;
+    padding-left: 30px;
     margin: 0;
 }
-.orderheader div{
+
+.orderheader div {
     float: left;
 }
-.img_div{
+
+.img_div {
     width: 235px;
-    padding: 0;margin: 0;
+    padding: 0;
+    margin: 0;
 }
-.order_text_div{
+
+.order_text_div {
     height: 100%;
     width: 120px;
     padding-top: 50px;
     padding-left: 0px;
 }
-.order_text_span{
+
+.order_text_span {
     font: bold 24px "microsoft yahei";
 }
-.process{
-    float: right!important;
+
+.process {
+    float: right !important;
     width: 634px;
     height: 36px;
     background: url(/images/procedure_bg2.png) 0 0 no-repeat;
@@ -29,61 +35,71 @@
     color: #646464;
     margin-top: 50px;
 }
-.order_text{
+
+.order_text {
     color: #646464;
     width: 190px;
     display: inline-block;
     text-align: center;
 }
-#this_process{
+
+#this_process {
     color: #fff;
 }
 
 /**
  * table
  */
-#table_head th{
+#table_head th {
     padding: 20px 0 20px 0;
     font-size: 16px;
 }
-#order_table_div{
-    width: 1050px;
+
+#order_table_div {
+    width: auto;
     margin: 50px auto;
     border: 1px solid #CCCCCC;
     background-color: #fafafa;
 }
-.tcol1{
+
+.tcol1 {
     text-align: center;
 }
 
-.order_item{
+.order_item {
     border-bottom: 1px solid #ccc;
 }
 
-.order_item span{
+.order_item span {
     font: 14px/34px "microsoft yahei";
 }
-.order_item a{
+
+.order_item a {
     font: "microsoft yahei";
     color: #000000;
 }
-.order_item a:hover{
+
+.order_item a:hover {
     color: #FF0000;
 }
-.shop_intro td{
+
+.shop_intro td {
     padding-top: 30px;
     font-size: 16px;
     font-weight: 400;
 }
-.tfoot{
+
+.tfoot {
     height: 50px;
 }
-.shop_total{
+
+.shop_total {
     color: red;
     font-size: 16px;
     font-weight: bold;
 }
-#order_table{
+
+#order_table {
     border-collapse: collapse;
     width: 100%;
 }
@@ -97,27 +113,31 @@
     background: url(/images/shopping_total.png) 0 center no-repeat;
     position: relative;
 }
-#batch{
+
+#batch {
     float: left;
 }
-#shopping_total{
+
+#shopping_total {
     float: right;
 }
-.total_p{
+
+.total_p {
     float: left;
-    padding:10px 10px 0px 0px;
+    padding: 10px 10px 0px 0px;
 }
 
 
-.order_title{
+.order_title {
     margin-top: 20px;
 }
-.pay_active{
-    color: #FFFFFF!important;
-    background-color: #FF0000!important;
+
+.pay_active {
+    color: #FFFFFF !important;
+    background-color: #FF0000 !important;
 }
 
-#payment a{
+#payment a {
     display: inline-block;
     width: 80px;
     height: 30px;
@@ -129,33 +149,38 @@
     color: black;
     text-align: center;
 }
-#payment a:hover{
-    background-color:#FF0000;
+
+#payment a:hover {
+    background-color: #FF0000;
 }
-#to_paid_div{
+
+#to_paid_div {
     height: 100px;
     background-color: #fafafa;
     border: 1px solid #CCCCCC;
     margin-top: 50px;
 }
 
-#to_paid_info{
+#to_paid_info {
     float: right;
-    padding-top:30px ;
+    padding-top: 30px;
     text-align: center;
     line-height: 50px;
     padding-right: 30px;
 }
-#return_cart{
+
+#return_cart {
     float: left;
     padding: 30px;
 }
 
-#express{
+#express {
     font-size: 20px;
     height: 35px;
 }
+
 .product_name {
+    text-align: center;
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
@@ -163,23 +188,49 @@
     display: inline-block;
 
 }
-.toCart{
+
+.toCart {
     display: inline-block;
     width: 150px;
     height: 40px;
     line-height: 40px;
-    background-color: #FF8800;
-    color: #fff!important;
+    background-color: #5cb85c;
+    border-color: #4cae4c;
+    color: #fff !important;
     border-radius: 3px;
     text-align: center;
-    margin-right:30px;
+    margin-left: 30px;
     font-size: 20px;
 }
-.orderList_product_name{
+
+.orderList_product_name {
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
     width: 260px;
     display: inline-block;
+}
+
+.input-group {
+    margin: 0 auto;
+
+}
+
+.orderButton_1 {
+    margin-top: 1%;
+    margin-bottom: 4%;
+}
+
+.orderButton_2 {
+    margin-right: 8%;
+    float: right;
+}
+
+.orderLabel {
+    width: 200px;
+}
+
+.input-group .orderInput {
+    width: 600px;
 }
 

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.cmx.mall.mapper.IOrderMapper">
-<resultMap id="orderMap" type="com.cmx.mall.dao.OrderDAO">
+<resultMap id="orderMap" type="com.cmx.mall.dao.OrderDTO">
     <id property="id" column="soid"></id>
     <result property="order_num" column="order_num"></result>
     <result property="create_date" column="create_date"></result>
@@ -9,6 +9,17 @@
     <result property="address_id" column="address_id"></result>
     <result property="order_status" column="order_status"></result>
     <result property="order_total" column="order_total"></result>
+    <association property="address" javaType="com.cmx.mall.model.Address">
+        <id property="id" column="said"></id>
+        <result property="user_id" column="user_id"></result>
+        <result property="province" column="province"></result>
+        <result property="city" column="city"></result>
+        <result property="area" column="area"></result>
+        <result property="detail_address" column="detail_address"></result>
+        <result property="receiver" column="receiver"></result>
+        <result property="tel" column="tel"></result>
+        <result property="is_default" column="is_default"></result>
+    </association>
     <collection property="orderItems" ofType="com.cmx.mall.model.OrderItem">
         <id property="id" column="soiid"></id>
         <result property="order_id" column="order_id"></result>
@@ -63,11 +74,13 @@
 
      select
      so.id,so.order_num,so.create_date,so.user_id,so.order_total,so.order_status,
+     sa.id said,sa.user_id,sa.province,sa.city,sa.area,sa.detail_address,sa.receiver,sa.tel,sa.is_default,
      soi.product_id,soi.amount,
      sp.productName,sp.productImg,sp.typeId,sp.price,sp.description,sp.discount
-     from shop_order so,shop_orderitem soi,shop_product sp
+     from shop_order so,shop_orderitem soi,shop_product sp,shop_address sa
       where so.order_num=soi.order_id
        and soi.product_id=sp.id
+       AND so.address_id=sa.id
        and  so.user_id=#{username}
         and so.id=#{id}
 
@@ -84,6 +97,12 @@
     <update id="updateOrderStatusById">
 
         update shop_order set order_status=#{status} where user_id=#{username} and id=#{id}
+
+    </update>
+
+    <update id="updateOrderStatusByOrderId">
+
+        update shop_order set order_status=#{status} where user_id=#{username} and order_num=#{orderId}
 
     </update>
 
