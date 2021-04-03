@@ -1,6 +1,6 @@
 package com.cmx.mall.service;
 
-import com.cmx.mall.dao.OrderDTO;
+import com.cmx.mall.dto.OrderDTO;
 import com.cmx.mall.mapper.ICartMapper;
 import com.cmx.mall.mapper.IOrderMapper;
 import com.cmx.mall.model.Cart;

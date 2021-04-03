@@ -1,5 +1,6 @@
 package com.cmx.mall.service;
 
+import com.cmx.mall.dto.UserDTO;
 import com.cmx.mall.mapper.ILoginMapper;
 import com.cmx.mall.mapper.IRegisterMapper;
 import com.cmx.mall.model.User;
@@ -23,7 +24,7 @@ public class RegisterService {
     }
 
     public boolean checkUser(String username) {
-        User user = loginMapper.checkUser(username);
+        UserDTO user = loginMapper.checkUser(username);
         if (user!=null){
             return false;
         }

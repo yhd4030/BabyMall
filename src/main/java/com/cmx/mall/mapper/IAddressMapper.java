@@ -9,4 +9,16 @@ import java.util.List;
 public interface IAddressMapper {
 
     List<Address> findAddressByUsername(String username);
+
+    void savaAddress(Address address);
+
+    Address findById(Integer id);
+
+    void updateAddress(Address address);
+
+    Boolean delById(Integer addressId);
+
+    Address findIsDefault();
+
+    void updateIsDefault(Address address);
 }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.cmx.mall.mapper.ILoginMapper">
-<resultMap id="userMap" type="com.cmx.mall.model.User">
+<resultMap id="userMap" type="com.cmx.mall.dto.UserDTO">
     <id property="id" column="id"></id>
     <result property="username" column="username"></result>
     <result property="password" column="password"></result>
@@ -12,11 +12,11 @@
     <result property="detail_address" column="detail_address"></result>
     <association property="role" javaType="com.cmx.mall.model.Role">
         <id property="id" column="id"></id>
-        <result property="level" column="level"></result>
+        <result property="role" column="role"></result>
     </association>
 </resultMap>
 
 <select id="checkUser" resultMap="userMap">
-    select su.*,sr.level from shop_user su,shop_role sr where su.roleId=sr.id and username=#{s};
+    select su.*,sr.role from shop_user su,shop_role sr where su.roleId=sr.id and username=#{s};
 </select>
 </mapper>

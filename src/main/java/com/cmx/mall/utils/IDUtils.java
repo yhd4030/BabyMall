@@ -1,6 +1,7 @@
 package com.cmx.mall.utils;
 
 import java.util.Random;
+import java.util.UUID;
 
 public class IDUtils {
     /**
@@ -18,5 +19,14 @@ public class IDUtils {
         //如果不足两位前面补0
         String str = millis + String.format("%02d", end2);
         return str;
+    }
+
+    public static String genShortUUID() {
+        String[] split = UUID.randomUUID().toString().split("-");
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < 3; i++) {
+            sb.append(split[i]);
+        }
+        return sb.toString();
     }
 }

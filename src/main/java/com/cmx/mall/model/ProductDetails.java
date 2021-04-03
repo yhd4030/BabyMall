@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class ProductDetails {
-    private int d_id;
+    private Integer d_id;
     private String d_productName;
     private String d_brand;
     private String d_age;
@@ -14,4 +14,5 @@ public class ProductDetails {
     private String d_manufacturerContact;
     private String d_manufacturerAddress;
     private String d_manufacturerName;
+    private Integer pid;
 }

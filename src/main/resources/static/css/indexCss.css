@@ -1,0 +1,132 @@
+html{
+    /*background-color: rgba(60,179,113,0.1);*/
+}
+body{
+    background-color: rgba(0,0,0,0.1);
+}
+#bd_auto{
+    width: 100%;
+    margin: 0 auto;
+    /*background-color: rgba(60,179,113,0.1);*/
+}
+.layui-nav-item a:hover,.layui-nav-item a:active{
+    text-decoration: none;
+}
+#indexDiv{
+    width: 100%;
+    height: 100%;
+    position: relative;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    border: 2px black solid;
+    text-align: center;
+}
+/*#indexDiv ul {*/
+/*    display: inline-block;*/
+/*    width: 200px;*/
+/*    height: 400px;*/
+/*    !*position: absolute;*!*/
+/*    margin-right: 150px;*/
+/*    margin-left: 140px;*/
+/*    border: 2px black solid;*/
+/*}*/
+#slideshowDiv{
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+}
+#imageDiv div img{
+    background-color: #f8f8f8;
+    height: 100%;
+    width: 100%;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+}
+#classifyHead{
+    width: 1200px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.layui-tab-content{
+    width: 1200px;
+    margin: 0 auto;
+}
+#tab1_bookClassify li,#tab2_bookClassify li,#tab3_bookClassify li,#tab4_bookClassify li,#tab5_bookClassify li{
+    float: left;
+    width: 150px;
+    height: 270px;
+    margin-right: 47px;
+    position: relative;
+    border: 1px #1b6d85 solid;
+}
+#tab1_bookClassify li a,#tab2_bookClassify li a,#tab3_bookClassify li a,#tab4_bookClassify li a,#tab5_bookClassify li a{
+    width: 150px;
+    height: 150px;
+    display: block;
+}
+#tab1_bookClassify li a img,#tab2_bookClassify li a img,#tab3_bookClassify li a img,#tab4_bookClassify li a img,#tab5_bookClassify li a img{
+    width: 150px;
+    height: 150px;
+    display: block;
+}
+#tab1_bookClassify,#tab2_bookClassify,#tab3_bookClassify,#tab4_bookClassify,#tab5_bookClassify{
+    margin-left: 10%;
+}
+.bookName{
+    padding: 7px 20px 0;
+    height: 25px;
+    line-height: 18px;
+    overflow: hidden;
+    font-size: 100%;
+}
+.bookPrice{
+    top: 20px;
+    padding: 5px 0 0 20px;
+    height: 36px;
+    line-height: 16px;
+    overflow: hidden;
+    font-family: "Arial";
+    font-size: 14px;
+    position: relative;
+}
+#dropdown-menu li a{
+    color: black;
+    position: relative;
+    padding-left: 9px;
+}
+#dropdown-menu li a:hover{
+    color: #5FB878;
+}
+#dropdown-menu li a span{
+    top: 18%;
+    left: 37%;
+    position: absolute;
+    font-size: 17px;
+}
+.rob{
+    color: #c30;
+    float: left;
+    margin-right: 12px;
+    font-weight: bold;
+}
+.bookName a:hover{
+    color: #a94442;
+}
+.bookName a{
+    color: black;
+    font-family: Arial;
+    font-size: 13px;
+}
+#classifyHead .layui-this{
+    color: #5FB878; font-weight: bold;
+}
+

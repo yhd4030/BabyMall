@@ -1,9 +1,9 @@
 package com.cmx.mall.service;
 
+import com.cmx.mall.dto.UserDTO;
 import com.cmx.mall.mapper.IIndexMapper;
 import com.cmx.mall.mapper.ILoginMapper;
 import com.cmx.mall.model.ShopProduct;
-import com.cmx.mall.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,8 +26,8 @@ public class IndexService {
         return indexMapper.findRecommended();
     }
 
-    public User findUser(String username) {
-        User user = loginMapper.checkUser(username);
+    public UserDTO findUser(String username) {
+        UserDTO user = loginMapper.checkUser(username);
         return user;
     }
 }

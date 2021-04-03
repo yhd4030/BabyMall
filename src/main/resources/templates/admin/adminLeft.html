@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <link rel="stylesheet" th:href="@{/layui/css/layui.css}">
+    <link rel="stylesheet" th:href="@{/layui/css/dropdown.css}">
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/css/indexCss.css}">
+    <link rel="stylesheet" th:href="@{/css/bs.css}">
+
+    <script th:src="@{/js/jquery-3.4.1.min.js}" type="application/javascript"></script>
+    <script th:src="@{/js/bootstrap.min.js}" type="text/javascript"></script>
+
+    <style>
+        #left-menu {
+            font-size: 13px;
+            line-height: 18px;
+            color: #fff;
+        }
+
+        #left-menu-main {
+        }
+
+        .left-menu-main-list {
+            background-color: #0A0A0A;
+        }
+
+        .panel-body li:hover {
+            background-color: #222222;
+        }
+
+        .panel-body a {
+            display: inline-block;
+            width: 218px;
+            color: #fff;
+            font-size: 20px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body style="background-color: white;">
+<div  class="container" id="left-menu" style="padding-right:20px ;">
+
+    <div class="row" id="center_header1" style="height: 100px;border-bottom: 1px solid #CCCCCC;">
+    </div>
+    <div class="row" id="left-menu-main">
+        <div class="panel panel-default left-menu-main-list">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a data-toggle="collapse" data-parent="#accordion"
+                       href="#collapseOne">
+                        <span class="glyphicon glyphicon-user"></span> 用户管理
+                    </a>
+                </h4>
+            </div>
+            <div id="collapseOne" class="panel-collapse collapse">
+                <div class="panel-body">
+                    <ul>
+                        <li>
+                            <a href="/admin/user/list" target="centerFrame">用户列表</a>
+                        </li>
+                        <li>
+                            <a href="/admin/user/add" target="centerFrame">添加用户</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="panel panel-default left-menu-main-list">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a data-toggle="collapse" data-parent="#accordion"
+                       href="#collapseThree">
+                        <span class="glyphicon glyphicon-cog"></span> 角色权限
+                    </a>
+                </h4>
+            </div>
+            <div id="collapseThree" class="panel-collapse collapse">
+                <div class="panel-body">
+                    <ul>
+                        <li>
+                            <a href="admin/role/list" target="centerFrame">角色列表</a>
+                        </li>
+                        <li>
+                            <a href="admin/role/toAddition" target="centerFrame">添加角色</a>
+                        </li>
+                        <li>
+                            <a href="admin/privilege/list" target="centerFrame">权限管理</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!--        <c:if test="${sessionScope.loginStore != null }">-->
+        <div class="panel panel-default left-menu-main-list">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a data-toggle="collapse" data-parent="#accordion"
+                       href="#collapseFour">
+                        <span class="glyphicon glyphicon-asterisk"></span> 我的店铺
+                    </a>
+                </h4>
+            </div>
+            <div id="collapseFour" class="panel-collapse collapse">
+                <div class="panel-body">
+                    <ul>
+
+                        <li>
+                            <a href="admin/store/${sessionScope.loginStore.storeId}" target="centerFrame">店铺信息</a>
+                        </li>
+                        <li>
+                            <a href="/admin/product/list" target="centerFrame">我的商品</a>
+                        </li>
+                        <li>
+                            <a href="admin/book/toAddition" target="centerFrame">商品上新</a>
+                        </li>
+                        <li>
+                            <a href="admin/order/list" target="centerFrame">订单管理</a>
+                        </li>
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="panel panel-default left-menu-main-list">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a data-toggle="collapse" data-parent="#accordion"
+                       href="#collapseFive">
+                        <span class="glyphicon glyphicon-list-alt"></span> 报表统计
+                    </a>
+                </h4>
+            </div>
+            <div id="collapseFive" class="panel-collapse collapse">
+                <div class="panel-body">
+                    <ul>
+                        <li>
+                            <a href="admin/report/views" target="centerFrame">访问量</a>
+                        </li>
+                        <li>
+                            <a href="admin/report/sales" target="centerFrame">销售量</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!--        </c:if>-->
+
+        <div class="panel panel-default left-menu-main-list">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a data-toggle="collapse" data-parent="#accordion"
+                       href="#collapseSix">
+                        <span class="glyphicon glyphicon-user"></span> 个人中心
+                    </a>
+                </h4>
+            </div>
+            <div id="collapseSix" class="panel-collapse collapse">
+                <div class="panel-body">
+                    <ul>
+                        <li>
+                            <a href="admin/user/echo/${sessionScope.loginUser.userId}" target="centerFrame">我的信息</a>
+                        </li>
+                        <%--
+                        <li>
+                            <a href="admin/user/password" target="centerFrame">修改密码</a>
+                        </li>
+                        --%>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel panel-default left-menu-main-list">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a data-toggle="collapse" data-parent="#accordion"
+                       href="#collapseSeven">
+                        <span class="glyphicon glyphicon-home"></span> 前往
+                    </a>
+                </h4>
+            </div>
+            <div id="collapseSeven" class="panel-collapse collapse">
+                <div class="panel-body">
+                    <ul>
+                        <li>
+                            <a href="/" target="_blank">前台首页</a>
+                        </li>
+                        <li>
+                            <a href="/admin/center" target="centerFrame">后台首页</a>
+                        </li>
+                        <li>
+                            <a href="/user/logout" target="_top">注销</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+</body>
+<script>
+    $(document).ready(function(){
+        //页面加载的时候，内容框默认显示 a.html
+        $('#con').load('./a.html');
+        //单击 a 链接，加载 a.html
+        $("#a1").click(function(){
+            $('#con').load('./a.html');
+        });
+        //单击 b 链接，加载 b.html
+        $("#a2").click(function(){
+            $('#con').load('./b.html');
+        });
+    })
+</script>
+</html>

@@ -1,5 +1,6 @@
 package com.cmx.mall.controller;
 
+import com.cmx.mall.dto.ProductDTO;
 import com.cmx.mall.model.ShopProduct;
 import com.cmx.mall.service.ProductInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,7 @@ public class ProductInfoController {
 
     @GetMapping("/info/{id}")
     public String productInfo(@PathVariable Integer id, Model model) {
-        ShopProduct productInfo = productInfoService.findProduct(id);
+        ProductDTO productInfo = productInfoService.findProduct(id);
         List<ShopProduct> productByRandom = productInfoService.findProductByRandom();
         model.addAttribute("productByRandom",productByRandom);
         model.addAttribute("ProductInfo", productInfo);
@@ -28,7 +29,7 @@ public class ProductInfoController {
 
     @GetMapping("/info1/{id}")
     public String newProductInfo(@PathVariable Integer id, Model model) {
-        ShopProduct newProductInfo = productInfoService.findNewProduct(id);
+        ProductDTO newProductInfo = productInfoService.findNewProduct(id);
         List<ShopProduct> productByRandom = productInfoService.findProductByRandom();
         model.addAttribute("productByRandom",productByRandom);
         model.addAttribute("ProductInfo", newProductInfo);
@@ -37,7 +38,7 @@ public class ProductInfoController {
 
     @GetMapping("/info2/{id}")
     public String recommendedInfo(@PathVariable Integer id, Model model) {
-        ShopProduct recommendedInfo = productInfoService.findRecommended(id);
+        ProductDTO recommendedInfo = productInfoService.findRecommended(id);
         List<ShopProduct> productByRandom = productInfoService.findProductByRandom();
         model.addAttribute("productByRandom",productByRandom);
         model.addAttribute("ProductInfo", recommendedInfo);

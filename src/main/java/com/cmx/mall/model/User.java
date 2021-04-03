@@ -11,7 +11,8 @@ public class User {
     private Integer gender;
     private String phone;
     private String email;
+    private String zip_code;
     private String location;
     private String detail_address;
-    private Role role;
+    private Integer roleId;
 }

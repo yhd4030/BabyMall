@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.cmx.mall.mapper.IProductInfoMapper">
-        <resultMap id="productMap" type="com.cmx.mall.model.ShopProduct">
+        <resultMap id="productMap" type="com.cmx.mall.dto.ProductDTO">
             <id property="id" column="id"></id>
             <result property="productName" column="productName"></result>
             <result property="productImg" column="productImg"></result>
             <result property="typeId" column="typeId"></result>
             <result property="price" column="price"></result>
             <result property="description" column="description"></result>
+            <result property="amount" column="amount"></result>
+            <result property="isShelf" column="isShelf"></result>
             <result property="discount" column="discount"></result>
             <result property="detail_id" column="detail_id"></result>
             <association property="productDetails" javaType="com.cmx.mall.model.ProductDetails">
@@ -21,6 +23,10 @@
                 <result property="d_manufacturerContact" column="d_manufacturerContact"></result>
                 <result property="d_manufacturerAddress" column="d_manufacturerAddress"></result>
                 <result property="d_manufacturerName" column="d_manufacturerName"></result>
+            </association>
+            <association property="category" javaType="com.cmx.mall.model.Category">
+                <id property="id" column="id"></id>
+                <result property="type" column="type"></result>
             </association>
         </resultMap>
 
@@ -46,8 +52,14 @@
                 </foreach>
             </where>
         </select>
+
         <select id="findProductById" resultMap="productMap">
-            select sp.*,spd.* from shop_product sp, shop_productdetails spd WHERE sp.detail_id=spd.` d_id` AND sp.id=#{id};
+            select sp.*,spd.*,spc.id,spc.type from shop_product sp, shop_productdetails spd,shop_productcategory spc WHERE sp.typeId=spc.id AND sp.detail_id=spd.` d_id` AND sp.id=#{id};
+        </select>
+
+        <!--查询种类-->
+        <select id="findCategory" resultType="com.cmx.mall.model.Category">
+        select * from shop_productcategory
         </select>
 
 </mapper>

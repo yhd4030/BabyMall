@@ -1,6 +1,6 @@
 package com.cmx.mall.mapper;
 
-import com.cmx.mall.dao.OrderDTO;
+import com.cmx.mall.dto.OrderDTO;
 import com.cmx.mall.model.Cart;
 import com.cmx.mall.model.Order;
 import com.cmx.mall.model.OrderItem;

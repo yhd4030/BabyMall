@@ -19,7 +19,6 @@ public class SuccessHandle implements AuthenticationSuccessHandler {
         HttpSession session = httpServletRequest.getSession(true);
         session.setAttribute("username", username);
         httpServletResponse.sendRedirect("../");
-
     }
 
 }

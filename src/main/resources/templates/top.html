@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 
 <body>
 <div id="header" th:fragment="top">
@@ -12,14 +13,18 @@
         </li>
         <li role="presentation">
             <a class="navFont" th:if="${#httpServletRequest.session.getAttribute('username')==null}" href="/user/login">登录</a>
-            <a class="dropdown-toggle navFont" data-toggle="dropdown" th:if="${#httpServletRequest.session.getAttribute('username')!=null}" href="/user/login" role="button"
+            <a class="dropdown-toggle navFont" data-toggle="dropdown"
+               th:if="${#httpServletRequest.session.getAttribute('username')!=null}" href="/user/login" role="button"
                aria-haspopup="true"
                aria-expanded="false" th:text="${#httpSession.getAttribute('nickname')}">
                 <span class="caret"></span>
             </a>
             <ul class="dropdown-menu">
                 <li role="presentation">
-                    <a href="#">个人信息</a>
+                    <a href="/user/information">个人信息</a>
+                </li>
+                <li th:if="${#httpSession.getAttribute('role')}=='管理员'">
+                    <a href="/admin/home">后台管理</a>
                 </li>
                 <li role="presentation">
                     <a href="/user/logout">退出登录</a>

@@ -1,5 +1,7 @@
 package com.cmx.mall.mapper;
 
+import com.cmx.mall.dto.ProductDTO;
+import com.cmx.mall.model.Category;
 import com.cmx.mall.model.ShopProduct;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -7,13 +9,15 @@ import java.util.List;
 
 @Mapper
 public interface IProductInfoMapper {
-    ShopProduct findNewProductById(Integer id);
+    ProductDTO findNewProductById(Integer id);
 
-    ShopProduct findRecommendedById(Integer id);
+    ProductDTO findRecommendedById(Integer id);
 
     int countProduct();
 
     List<ShopProduct> findProductByRandom(List<Integer> numList);
 
-    ShopProduct findProductById(Integer id);
+    ProductDTO findProductById(Integer id);
+
+    List<Category> findCategory();
 }

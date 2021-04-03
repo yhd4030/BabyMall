@@ -1,6 +1,8 @@
 package com.cmx.mall.service;
 
+import com.cmx.mall.dto.ProductDTO;
 import com.cmx.mall.mapper.IProductInfoMapper;
+import com.cmx.mall.model.Category;
 import com.cmx.mall.model.ShopProduct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,11 +16,11 @@ public class ProductInfoService {
     @Autowired
     private IProductInfoMapper productInfoMapper;
 
-    public ShopProduct findNewProduct(Integer id) {
+    public ProductDTO findNewProduct(Integer id) {
         return productInfoMapper.findNewProductById(id);
     }
 
-    public ShopProduct findRecommended(Integer id) {
+    public ProductDTO findRecommended(Integer id) {
         return productInfoMapper.findRecommendedById(id);
     }
 
@@ -35,7 +37,13 @@ public class ProductInfoService {
 
     }
 
-    public ShopProduct findProduct(Integer id) {
+    public ProductDTO findProduct(Integer id) {
         return productInfoMapper.findProductById(id);
+    }
+
+    public List<Category> findCategory() {
+        List<Category> categories = productInfoMapper.findCategory();
+
+        return categories;
     }
 }

@@ -1,13 +1,85 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.cmx.mall.mapper.IProductListMapper">
-
-
-<select id="findProductByTypeId" resultType="com.cmx.mall.model.ShopProduct">
+    <select id="findProductByTypeId" resultType="com.cmx.mall.model.ShopProduct">
     select * from shop_product where typeId=#{typeId}
-</select>
-<select id="findAllProduct" resultType="com.cmx.mall.model.ShopProduct">
+    </select>
+
+    <select id="findAllProduct" resultType="com.cmx.mall.model.ShopProduct">
     select * from shop_product
-</select>
+    </select>
+
+    <update id="updateIsShelf">
+    update shop_product set isShelf=#{isShelf} where id=#{id}
+    </update>
+
+    <update id="updateProduct">
+    update shop_product
+        <set>
+            <if test="productName != null and productName != ''">
+                productName=#{productName},
+            </if>
+            <if test="productImg != null and productImg != ''">
+                productImg=#{productImg},
+            </if>
+            <if test="typeId != null">
+                typeId=#{typeId},
+            </if>
+            <if test="price != null">
+                price=#{price},
+            </if>
+            <if test="description != null and description != ''">
+                description=#{description},
+            </if>
+            <if test="discount != null">
+                discount=#{discount},
+            </if>
+           <if test="detail_id != null">
+                detail_id=#{detail_id},
+           </if>
+           <if test="amount != null">
+            amount=#{amount},
+           </if>
+           <if test="isShelf != null">
+            isShelf=#{isShelf},
+           </if>
+        </set>
+        where id=#{id}
+    </update>
+<!--    <update id="updateCategory">-->
+<!--        update shop_productcategory set `type`=#{type}-->
+<!--    </update>-->
+
+    <update id="updateProductDetailsById">
+        update shop_productdetails
+        <set>
+            <if test="d_brand != null and d_brand != ''">
+                d_brand=#{d_brand},
+            </if>
+            <if test="d_age != null and d_age != ''">
+                d_age=#{d_age},
+            </if>
+            <if test="d_placeOrigin != null and d_placeOrigin != ''">
+                d_placeOrigin=#{d_placeOrigin},
+            </if>
+            <if test="d_gender != null and d_gender != ''">
+                   d_gender=#{d_gender},
+            </if>
+            <if test="d_weigth != null and d_weigth != ''">
+                    d_weigth=#{d_weigth},
+            </if>
+            <if test="d_manufacturerContact != null and d_manufacturerContact != ''">
+                    d_manufacturerContact=#{d_manufacturerContact},
+            </if>
+            <if test="d_manufacturerAddress != null and d_manufacturerAddress != ''">
+                    d_manufacturerAddress=#{d_manufacturerAddress},
+            </if>
+            <if test="d_manufacturerName != null and d_manufacturerName != ''">
+                    d_manufacturerName=#{d_manufacturerName},
+            </if>
+        </set>
+        where pid=#{pid}
+    </update>
+
 
 </mapper>

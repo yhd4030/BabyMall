@@ -5,7 +5,8 @@ import com.alipay.api.AlipayClient;
 import com.alipay.api.DefaultAlipayClient;
 import com.alipay.api.domain.AlipayTradeWapPayModel;
 import com.alipay.api.request.AlipayTradeWapPayRequest;
-import com.cmx.mall.dao.OrderDTO;
+import com.cmx.mall.dto.OrderDTO;
+import com.cmx.mall.dto.UserDTO;
 import com.cmx.mall.model.*;
 import com.cmx.mall.service.AddressService;
 import com.cmx.mall.service.OrderService;
@@ -75,7 +76,7 @@ public class OrderController {
         for (Cart shopCart : checkByCart) {
             countMoney = countMoney + (shopCart.getRealPrice().intValue() * shopCart.getAmount());
         }
-        User user = userService.findUserByUsername(username);
+        UserDTO user = userService.findUserByUsername(username);
         model.addAttribute("user", user);
         model.addAttribute("checkByCarts", checkByCart);
         model.addAttribute("countMoney", countMoney);

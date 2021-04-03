@@ -45,12 +45,12 @@
 <div th:insert="~{top ::top}"></div>
 <div class="container">
     <div class="row">
-        <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 logo">
+        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 logo">
             <a href="/" target="_blank"><img
                     src="https://img.alicdn.com/tfs/TB1QP0Jq4jaK1RjSZKzXXXVwXXa-430-180.png" width="90%"
                     alt="cc.com"/></a>
         </div>
-        <div class="col-lg-6 col-md-6 col-xs-12 search">
+        <div class="col-lg-6 col-md-6 col-xs-6 search">
             <form action="book/list" class="form-inline" id="searchForm" role="form" method="get">
                 <div class="form-group">
                     <label class="sr-only" for="keywords">关键字</label>
@@ -63,7 +63,7 @@
                 </button>
             </form>
         </div>
-        <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12 search" xmlns:th="http://www.thymeleaf.org">
+        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 search" xmlns:th="http://www.thymeleaf.org">
             <a th:href="${#httpSession.getAttribute('username')==null?'/user/login':'/product/cart?username='+#httpSession.getAttribute('username')}">
                 <button type="button"
                         style="background-color: #ff2832;border-color: #ff2832" class="btn btn-info">

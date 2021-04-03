@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,9 +7,16 @@
     <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
     <link rel="stylesheet" th:href="@{/css/login.css}">
     <link rel="stylesheet" th:href="@{/css/bs.css}"/>
+    <link rel="stylesheet" th:href="@{/css/mc-dialoger.css}"/>
 
-    <script type="text/javascript" th:src="@{/js/jquery-3.4.1.min.js}"></script>
-    <script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
+    <script type="application/javascript" th:src="@{/js/jquery-3.4.1.min.js}"></script>
+    <script type="application/javascript" th:src="@{/js/bootstrap.min.js}"></script>
+    <script type="application/javascript" th:src="@{/js/dialoger.js}"></script>
+   <script>
+       function  loginLoad(){
+           dialoger.$loading.open({mes: '登录中'});
+       }
+   </script>
 </head>
 <body>
 <section>
@@ -30,6 +36,9 @@
             <div class="form">
                 <h2>登录</h2>
                 <form method="post" action="/user/login">
+                    <script th:if="${error}">
+                        dialoger.$toast({mes:'登录失败',type:'error'});
+                    </script>
 
                     <div class="inputBox">
                         <input type="text" name="username" placeholder="用户名">
@@ -40,7 +49,7 @@
                     </div>
 
                     <div class="inputBox">
-                        <input type="submit" value="登录">
+                        <input type="submit" value="登录" onclick="loginLoad()">
                     </div>
                     <p class="forget">没有账号，现在注册<a href="/user/register">
                         注册

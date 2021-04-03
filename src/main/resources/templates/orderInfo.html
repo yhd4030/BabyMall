@@ -9,6 +9,7 @@
     <link rel="stylesheet" th:href="@{/css/mc-dialoger.css}"/>
     <link rel="stylesheet" th:href="@{/css/orderInfo.css}">
     <link rel="stylesheet" th:href="@{/fonts/icon/iconfont.css}">
+    <link rel="stylesheet" th:href="@{/css/jquery-confirm.css}">
 
     <script type="text/javascript" th:src="@{/js/jquery-3.4.1.min.js}"></script>
     <script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
@@ -17,6 +18,7 @@
     <script type="application/javascript" th:src="@{/js/distpicker/distpicker.data.js}"></script>
     <script type="application/javascript" th:src="@{/js/distpicker/distpicker.js}"></script>
     <script type="application/javascript" th:src="@{/js/distpicker/main.js}"></script>
+    <script type="text/javascript" th:src="@{/js/jquery-confirm.js}"></script>
 
 </head>
 <body>
@@ -46,7 +48,7 @@
 <div style="height: 3px; background-color: #ff2832;"></div>
 <div class="container">
 
-<!--        收货人信息-->
+    <!--        收货人信息-->
     <div class="row">
         <h1 class="title order_title">收货人信息</h1>
         <ul class="list-group" style="width: 600px">
@@ -188,7 +190,7 @@
                         </div>
                     </div>
 
-                    <div class="form-group has-feedback" style="">
+                    <div hidden class="form-group has-feedback" style="">
                         <label class="col-sm-2 control-label" style="width: 100px"> 地址编号：</label>
                         <div class="col-sm-5" style="padding-left: 0px">
                             <input type="text" class="form-control" id="addressId" name="id"
@@ -335,8 +337,7 @@
     }
 
     function commitOrder() {
-        // $('input:radio[name="addr"]:checked').val();
-        var val = 1
+        var val = $('input:radio[name="addr"]:checked').val();
         var total = parseFloat($("#orderTotal").html());
         if (val == null) {
             confirm("请选择地址");
