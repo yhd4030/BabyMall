@@ -22,7 +22,7 @@ class ProductListServiceTest {
         ProductDetails productDetails = new ProductDetails();
         productDTO.setAmount(20000L);
         productDTO.setId(1);
-        productDetails.setD_id(1);
-        productListService.updateProduct(productDTO,productDetails);
+        productDetails.setDid(1);
+        productListService.updateOrAddProduct(productDTO,productDetails);
     }
 }

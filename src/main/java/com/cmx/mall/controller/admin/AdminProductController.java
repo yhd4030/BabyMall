@@ -37,9 +37,11 @@ public class AdminProductController {
 
     @GetMapping("/list")
     public String productList(Model model,
+                              @RequestParam(value = "errorMsg",required = false)String errorMsg,
                               @RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
                               @RequestParam(value = "pageSize", defaultValue = "6") int pageSize) {
         PageInfo<ShopProduct> pageInfo = productListService.findAllProduct(pageNum, pageSize);
+        System.out.println("errorMsg = " + errorMsg);
         model.addAttribute("productList", pageInfo);
         return "admin/product/list";
     }
@@ -56,23 +58,52 @@ public class AdminProductController {
     public String productEdit(Integer pId, Model model) {
         ProductDTO productInfo = productInfoService.findProduct(pId);
         List<Category> categories = productInfoService.findCategory();
+
         model.addAttribute("ProductInfo", productInfo);
         model.addAttribute("categories", categories);
         return "admin/product/edit";
     }
-
-    @PostMapping("/edit")
-    public String productUpdateOrSave(ProductDTO productDTO, Category category,
+    @GetMapping("/add")
+    public String productAdd( Model model) {
+        List<Category> categories = productInfoService.findCategory();
+        model.addAttribute("categories", categories);
+        model.addAttribute("ProductInfo", new ProductDTO(new ProductDetails(),new Category()));
+        return "admin/product/edit";
+    }
+    @PostMapping("/editOrAdd")
+    public String productUpdateOrSave(ProductDTO productDTO,
                                       ProductDetails productDetails, MultipartFile pictureFile,
                                       HttpServletRequest request, Model model) {
         if (pictureFile!=null&&pictureFile.getSize()!=0){
             String imgUrl = uploadPicture(pictureFile, request);
             productDTO.setProductImg(imgUrl);
         }
-        productListService.updateProduct(productDTO,productDetails);
+        try{
+            productListService.updateOrAddProduct(productDTO,productDetails);
+        }catch (Exception e){
+            List<Category> categories = productInfoService.findCategory();
+            model.addAttribute("categories", categories);
+            Category category = new Category();
+            if (productDTO!=null){
+                if (productDTO.getTypeId()!=null){
+                    for (Category cItem : categories) {
+                        if (cItem.getId()==productDTO.getTypeId()){
+                            category.setId(cItem.getId());
+                            category.setType(cItem.getType());
+                        }
+                    }
+                }
+            }
+            model.addAttribute("ProductInfo", new ProductDTO(new ProductDetails(),category));
+            model.addAttribute("errorMsg",e.getMessage());
+            return "/admin/product/edit";
+        }
+
         return "redirect:/admin/product/list";
 
     }
+
+
 
     private String uploadPicture(MultipartFile pictureFile, HttpServletRequest request) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd/");

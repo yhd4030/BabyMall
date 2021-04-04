@@ -78,8 +78,102 @@
                     d_manufacturerName=#{d_manufacturerName},
             </if>
         </set>
-        where pid=#{pid}
+        where did=#{did}
     </update>
+
+    <insert id="addProductDetails" keyProperty="did" useGeneratedKeys="true">
+        insert into shop_productdetails
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="d_productName != null and d_productName != ''">
+                d_productName,
+            </if>
+            <if test="d_brand != null and d_brand != ''">
+                d_brand,
+            </if>
+           <if test="d_age != null and d_age != ''">
+                d_age,
+            </if>
+            <if test="d_placeOrigin != null and d_placeOrigin != ''">
+                d_placeOrigin,
+            </if>
+            <if test="d_gender != null and d_gender != ''">
+                   d_gender,
+            </if>
+            <if test="d_weigth != null and d_weigth != ''">
+                    d_weigth,
+            </if>
+            <if test="d_manufacturerContact != null and d_manufacturerContact != ''">
+                    d_manufacturerContact,
+            </if>
+            <if test="d_manufacturerAddress != null and d_manufacturerAddress != ''">
+                    d_manufacturerAddress,
+            </if>
+            <if test="d_manufacturerName != null and d_manufacturerName != ''">
+                    d_manufacturerName
+            </if>
+        </trim>
+        values
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="d_productName != null and d_productName != ''">
+                #{d_productName},
+            </if>
+            <if test="d_brand != null and d_brand != ''">
+                #{d_brand},
+            </if>
+            <if test="d_age != null and d_age != ''">
+                #{d_age},
+            </if>
+            <if test="d_placeOrigin != null and d_placeOrigin != ''">
+                #{d_placeOrigin},
+            </if>
+            <if test="d_gender != null and d_gender != ''">
+                   #{d_gender},
+            </if>
+            <if test="d_weigth != null and d_weigth != ''">
+                    #{d_weigth},
+            </if>
+            <if test="d_manufacturerContact != null and d_manufacturerContact != ''">
+                    #{d_manufacturerContact},
+            </if>
+            <if test="d_manufacturerAddress != null and d_manufacturerAddress != ''">
+                    #{d_manufacturerAddress},
+            </if>
+            <if test="d_manufacturerName != null and d_manufacturerName != ''">
+                    #{d_manufacturerName}
+            </if>
+        </trim>
+    </insert>
+
+    <insert id="addProduct">
+        insert into shop_product
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+           <if test="productName != null and productName != ''">productName,</if>
+           <if test="productImg != null and productImg != ''">productImg,</if>
+           <if test="typeId != null">typeId,</if>
+           <if test="price != null">price,</if>
+           <if test="description != null and description != ''">description,</if>
+           <if test="discount != null">discount,</if>
+           <if test="detail_id != null">detail_id,</if>
+           <if test="amount != null">amount,</if>
+           <if test="isShelf != null">isShelf</if>
+        </trim>
+        values
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="productName != null and productName != ''">#{productName},</if>
+           <if test="productImg != null and productImg != ''">#{productImg},</if>
+           <if test="typeId != null">#{typeId},</if>
+           <if test="price != null">#{price},</if>
+           <if test="description != null and description != ''">#{description},</if>
+           <if test="discount != null">#{discount},</if>
+           <if test="detail_id != null">#{detail_id},</if>
+           <if test="amount != null">#{amount},</if>
+           <if test="isShelf != null">#{isShelf}</if>
+
+        </trim>
+
+    </insert>
+
+
 
 
 </mapper>

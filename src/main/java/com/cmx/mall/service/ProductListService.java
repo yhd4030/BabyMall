@@ -1,5 +1,6 @@
 package com.cmx.mall.service;
 
+import com.alipay.api.domain.BillAmtVo;
 import com.cmx.mall.dto.ProductDTO;
 import com.cmx.mall.mapper.IProductListMapper;
 import com.cmx.mall.model.Category;
@@ -40,19 +41,39 @@ public class ProductListService {
         return updateIsShelf;
     }
 
-    public void updateProduct(ProductDTO productDTO, ProductDetails productDetails) {
-        System.out.println("productDTO = " + productDTO);
-        System.out.println("productDetails = " + productDetails);
-        if (productDTO != null) {
-            productDetails.setPid(productDTO.getId());
-            boolean isUpdateProduct = productListMapper.updateProduct(productDTO);
-            System.out.println("isUpdateProduct = " + isUpdateProduct);
+    public boolean updateOrAddProduct(ProductDTO productDTO, ProductDetails productDetails) {
+        if (productDTO.getProductName() == null||productDTO.getProductName().equals("")) {
+            System.out.println("productDTO.getProductName等于空");
+            throw new RuntimeException("输入的商品信息不完整，请重新输入！");
         }
-        if (productDetails!=null){
+        if (productDTO.getId() != null && productDetails.getDid() != null) {
+            Boolean isUpdateProductDetails = null;
+            Boolean isUpdateProduct = null;
+            isUpdateProduct = productListMapper.updateProduct(productDTO);
+            if (productDetails != null) {
+                isUpdateProductDetails = productListMapper.updateProductDetailsById(productDetails);
+            }
+            return isUpdateProduct && isUpdateProductDetails;
 
-            boolean isUpdateProductDetails = productListMapper.updateProductDetailsById(productDetails);
-            System.out.println("isUpdateProductDetails = " + isUpdateProductDetails);
+        } else {
+            Boolean isAddProduct = null;
+            if (productDetails != null) {
+                if (productDTO.getProductName() != null) {
+                    productDetails.setD_productName(productDTO.getProductName());
+                }
+                productListMapper.addProductDetails(productDetails);
+            }
+            if (productDetails.getDid() != null) {
+                //根据商品详情插入返回的id设置商品详情id
+                productDTO.setDetail_id(productDetails.getDid());
+            }
+            productDTO.setIsShelf(0);
+            isAddProduct = productListMapper.addProduct(productDTO);
+
+            return isAddProduct;
+
         }
+
 
     }
 }

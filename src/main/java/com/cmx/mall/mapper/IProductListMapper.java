@@ -21,4 +21,8 @@ public interface IProductListMapper {
 
 
     boolean updateProductDetailsById(ProductDetails productDetails);
+
+    Integer addProductDetails(ProductDetails productDetails);
+
+    boolean addProduct(ProductDTO productDTO);
 }

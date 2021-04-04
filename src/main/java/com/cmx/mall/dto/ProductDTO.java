@@ -21,4 +21,12 @@ public class ProductDTO {
     private Integer isShelf;
     private ProductDetails productDetails;
     private Category category;
+
+    public ProductDTO() {
+    }
+
+    public ProductDTO(ProductDetails productDetails, Category category) {
+        this.productDetails = productDetails;
+        this.category = category;
+    }
 }

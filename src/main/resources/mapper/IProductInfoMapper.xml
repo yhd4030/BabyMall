@@ -13,7 +13,7 @@
             <result property="discount" column="discount"></result>
             <result property="detail_id" column="detail_id"></result>
             <association property="productDetails" javaType="com.cmx.mall.model.ProductDetails">
-                <id property="d_id" column="d_id"></id>
+                <id property="did" column="did"></id>
                 <result property="d_productName" column="d_productName"></result>
                 <result property="d_brand" column="d_brand"></result>
                 <result property="d_age" column="d_age"></result>
@@ -32,11 +32,11 @@
 
 
         <select id="findNewProductById" resultMap="productMap">
-            select sn.*,spd.* from shop_newproduct sn, shop_productdetails spd WHERE sn.detail_id=spd.` d_id` AND sn.id=#{id};
+            select sn.*,spd.* from shop_newproduct sn, shop_productdetails spd WHERE sn.detail_id=spd.did AND sn.id=#{id};
         </select>
 
         <select id="findRecommendedById" resultMap="productMap">
-            select sr.*,spd.* from shop_recommended sr, shop_productdetails spd WHERE sr.detail_id=spd.` d_id` and sr.id=#{id};
+            select sr.*,spd.* from shop_recommended sr, shop_productdetails spd WHERE sr.detail_id=spd.did and sr.id=#{id};
         </select>
 
         <select id="countProduct" resultType="int">
@@ -54,7 +54,7 @@
         </select>
 
         <select id="findProductById" resultMap="productMap">
-            select sp.*,spd.*,spc.id,spc.type from shop_product sp, shop_productdetails spd,shop_productcategory spc WHERE sp.typeId=spc.id AND sp.detail_id=spd.` d_id` AND sp.id=#{id};
+            select sp.*,spd.*,spc.id,spc.type from shop_product sp, shop_productdetails spd,shop_productcategory spc WHERE sp.typeId=spc.id AND sp.detail_id=spd.did AND sp.id=#{id};
         </select>
 
         <!--查询种类-->

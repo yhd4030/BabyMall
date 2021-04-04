@@ -287,6 +287,7 @@
     border-radius: 4px;
     -webkit-animation: zoomIn .06s ease forwards;
     animation: zoomIn .06s ease forwards;
+    z-index: 1500;
 }
 .mc-dialoger-toast .toast-icon{
     width: 150px;

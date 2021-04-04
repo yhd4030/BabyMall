@@ -32,30 +32,30 @@
                 },
                 errorClass: "red",
                 rules: {
-                    name: {
+                    productName: {
                         required: true
                     },
                     price: {
                         required: true,
                         number: true
                     },
-                    marketPrice: {
+                    discount: {
                         required: true,
                         number: true
                     },
-                    storeMount: {
+                    amount: {
                         required: true,
                         number: true
                     },
-                    author: {
+                    typeId: {
                         required: true
                     },
-                    publishDate: {
+                    pictureFile: {
                         required: true,
-                        date: true
+                        image:true
                     },
-                    press: {
-                        required: true
+                    description: {
+                        required: false
                     },
                     bookCategoryId: {
                         required: true
@@ -68,33 +68,33 @@
                     }
                 },
                 messages: {
-                    name: {
-                        required: "请输入书名"
+                    productName: {
+                        required: "请输入商品名"
                     },
                     price: {
                         required: "请输入价格",
                         number: "必须是数字"
                     },
-                    marketPrice: {
-                        required: "请输入定价",
+                    discount: {
+                        required: "请输入折扣，没有折扣则请输入1",
                         number: "必须是数字"
                     },
-                    storeMount: {
-                        required: "请输入定价",
+                    amount: {
+                        required: "请输入库存",
                         number: "必须是数字"
                     },
-                    author: {
-                        required: "请输入作者"
+                    typeId: {
+                        required: "请选择类型"
                     },
-                    publishDate: {
-                        required: "请填写出版时间",
-                        date: "时间格式不正确"
+                    pictureFile: {
+                        required: "请上传商品图片",
+                        image:"这不是图片"
                     },
-                    press: {
+                    description: {
                         required: "请输入出版社"
                     },
                     bookCategoryId: {
-                        required: "请选择类别"
+                        default: "请输入简介"
                     },
                     outline: {
                         required: "请填写书籍概要"
@@ -125,12 +125,19 @@
     </script>
 </head>
 <body>
+<script th:inline="javascript" th:if="${errorMsg!=null}">
+    var v = [[${errorMsg}]]
+    dialoger.$toast({mes: v})
+</script>
 <div class="container" style="border: 1px solid #CCCCCC; margin-top: 5%">
-    <form class="form-horizontal" role="form" id="productForm" method="post" action="/admin/product/edit"
+    <div id="searchBook" style="height:100px;border-bottom: 1px solid #CCCCCC;">
+        <span th:text="${ProductInfo.id!=null?'商品编辑':'商品添加'}" style="font-size: 30px;line-height: 100px;color: #4E5465"></span>
+    </div>
+    <form class="form-horizontal" role="form" id="productForm" method="post" action="/admin/product/editOrAdd"
           enctype="multipart/form-data">
         <!--        <input type="hidden" name="storeId" value="${bookInfo.storeId}">-->
         <input type="hidden" name="id" th:value="${ProductInfo.id}">
-        <input type="text" name="d_id" th:value="${ProductInfo.productDetails.d_id}">
+        <input type="hidden" name="did" th:value="${ProductInfo.productDetails.did}">
         <div class="form-group">
             <label for="productName" class="col-sm-1 control-label">商品名称：</label>
             <div class="col-sm-5">
@@ -174,7 +181,6 @@
                     <option>--------请选择种类--------</option>
                     <option th:each="category:${categories}" th:value="${category.id}" th:text="${category.type}"
                             th:selected="${category.type==ProductInfo.category.type}"></option>
-
                 </select>
             </div>
             <span></span>
@@ -183,14 +189,15 @@
             <label for="pictureFile" class="col-sm-1 control-label">图片：</label>
             <div class="col-sm-5">
                 <input type="file" id="pictureFile" name="pictureFile" onchange="changImg(event)">
-                图片预览:<img alt="暂无图片" id="myImg" th:src="${ProductInfo.productImg}" height="100px" ,width="100px">
+                图片预览:<img  alt="暂无图片" id="myImg"
+                          th:src="${ProductInfo.productImg}" height="100px" ,width="100px">
             </div>
         </div>
         <div class="form-group">
             <label for="outline" class="col-sm-1 control-label">概述：</label>
             <div class="col-sm-5">
                  <textarea class="form-control" id="outline" name="description" rows="4"
-                           style="padding:0px" th:value="${ProductInfo.description}"></textarea>
+                           style="padding:0px" th:value="${ProductInfo.description}" placeholder="请输入商品概述"></textarea>
             </div>
             <span></span>
         </div>
@@ -264,7 +271,7 @@
 
         <div class="form-group">
             <div class="col-sm-5">
-                <button type="submit"  class="btn btn-lg btn-default"
+                <button type="submit" class="btn btn-lg btn-default"
                         style="margin-top: 20px;">
                     保存修改
                 </button>
