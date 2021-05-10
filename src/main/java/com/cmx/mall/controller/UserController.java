@@ -19,7 +19,7 @@ public class UserController {
     @Autowired
     private UserService userInfoService;
 
-
+    //打开个人信息界面
     @GetMapping("/information")
     public String imformation(Model model, HttpSession session) {
         String username = (String) session.getAttribute("username");
@@ -33,7 +33,7 @@ public class UserController {
     @ResponseBody
     public Boolean savaUser(UserDTO userDTO, HttpSession session) {
         String username = (String) session.getAttribute("username");
-//        userDTO.setUsername(username);
+        userDTO.setUsername(username);
         Boolean aBoolean = userInfoService.updateUser(userDTO);
         return aBoolean;
     }

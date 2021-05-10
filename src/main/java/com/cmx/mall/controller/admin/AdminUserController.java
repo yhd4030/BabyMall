@@ -19,9 +19,11 @@ public class AdminUserController {
     @GetMapping("/list")
     public String userList(Model model,
                            @RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
-                           @RequestParam(value = "pageSize", defaultValue = "10") int pageSize) {
-        PageInfo<UserDTO> userList = userInfoService.userList(pageNum, pageSize);
+                           @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
+                           @RequestParam(value = "keywords", defaultValue = "", required = false) String keywords) {
+        PageInfo<UserDTO> userList = userInfoService.userList(pageNum, pageSize,keywords);
         model.addAttribute("userList", userList);
+        model.addAttribute("keywords", keywords);
         return "admin/user/list";
     }
 
@@ -43,9 +45,9 @@ public class AdminUserController {
     public String addition(User user, Model model) {
         Boolean isSuccess = userInfoService.addUser(user);
         if (isSuccess) {
-            model.addAttribute("addSuccess","success");
-        }else {
-            model.addAttribute("addFail","fail");
+            model.addAttribute("addSuccess", "success");
+        } else {
+            model.addAttribute("addFail", "fail");
         }
         System.out.println(user);
         return "redirect:/admin/user/list";
@@ -59,6 +61,7 @@ public class AdminUserController {
         return "admin/user/edit";
     }
 
+    //添加用户时 检查用户名是否存在
     @PostMapping("/checkUserExist")
     @ResponseBody
     public boolean checkUserExist(String username) {

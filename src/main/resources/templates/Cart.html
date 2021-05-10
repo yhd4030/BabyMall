@@ -7,11 +7,12 @@
     <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
     <link rel="stylesheet" th:href="@{/css/bs.css}"/>
     <link rel="stylesheet" th:href="@{/css/mc-dialoger.css}"/>
-
+    <link rel="stylesheet" th:href="@{/js/sweetalert2/sweetalert2.min.css}"/>
     <script type="text/javascript" th:src="@{/js/jquery-3.4.1.min.js}"></script>
     <script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
     <script type="text/javascript" th:src="@{/js/dialoger.js}"></script>
     <script type="text/javascript" th:src="@{/js/domlastic.js}"></script>
+    <script type="text/javascript" th:src="@{/js/sweetalert2/sweetalert2.all.min.js}"></script>
     <script type="text/javascript">
 
         /**
@@ -90,7 +91,7 @@
                 $("#subTotal" + id).html((Math.floor((parseFloat(buyNum) - 1) * unitPrice) * 100) / 100);
                 if ($checkbox.prop("checked")) {
                     if (allTotal > 0) {
-                        $("#all_total").text((parseFloat($("#all_total").text()) - unitPrice) + "￥");
+                        $("#all_total").text((parseFloat($("#all_total").text()) - unitPrice).toFixed(2) + "￥");
                     } else {
                         $("#all_total").text(0 + "￥");
                     }
@@ -115,20 +116,29 @@
 
         //计算总金额
         function checkTotal(id) {
-            var $cartItem = $("#cart_item" + id);
-            var $checkbox = $($cartItem).find(".shop_checkbox");
-            var subTotal = parseFloat($("#subTotal" + id).html());
-            var allTotal = parseFloat($("#all_total").html());
-            if ($checkbox.prop("checked")) {
-                $("#all_total").text(subTotal + allTotal + "￥");
-            } else {
-                if (allTotal - subTotal > 0) {
-                    $("#all_total").text((allTotal - subTotal) + '￥');
+            if (id) {
+                var $cartItem = $("#cart_item" + id);
+                var $checkbox = $($cartItem).find(".shop_checkbox");
+                var subTotal = parseFloat($("#subTotal" + id).html());
+                var allTotal = parseFloat($("#all_total").html());
+                if ($checkbox.prop("checked")) {
+                    $("#all_total").text((subTotal + allTotal).toFixed(2) + "￥");
                 } else {
-                    $("#all_total").text(0 + '￥');
+                    if (allTotal - subTotal > 0) {
+                        $("#all_total").text((allTotal - subTotal).toFixed(2) + '￥');
+                    } else {
+                        $("#all_total").text(0 + '￥');
+                    }
                 }
-
+            } else {
+                var allSubTotalVal = $(".cart_item .subTotalTd .subTotalVal");
+                var countSubTotal = 0;
+                allSubTotalVal.each(function (i, domEle) {
+                    countSubTotal = countSubTotal + parseFloat($(domEle).text());
+                });
+                $("#all_total").text(countSubTotal.toFixed(2) + '￥');
             }
+
         }
 
         function deleteCartItem(id) {
@@ -188,16 +198,69 @@
                     data: {pIdStr: pIdStr},
                     dataType: "json",
                     success: function (data) {
-                        if (data==true){
+                        if (data == true) {
                             window.location.href = "/order/details?source=cart";
-                        }else{
+                        } else {
                             dialoger.$toast({mes: '提交订单出错啦', timeout: 1000});
                         }
                     }
                 });
             }
+        }
 
+        $(function () {
+            $("#checkAllProduct").click(function () {
+                var isCheck = $("#checkAllProduct").prop("checked");
+                if (isCheck) {
+                    $("#cart_table input[name='cks']").prop("checked", true);
+                    checkTotal();
+                } else {
+                    $("#cart_table input[name='cks']").prop("checked", false);
+                    $("#all_total").text(0 + '￥');
+                }
+            });
+            $("#cart_table input[name='cks']").click(function () {
+                var allCheck = $("#cart_table input[name='cks']");
+                var isAll = true;
+                allCheck.each(function (i, domEle) {
+                    isAll = isAll && $(domEle).prop("checked");
+                });
+                $("#checkAllProduct").prop("checked", isAll);
+            })
+        });
 
+        function deleteAll() {
+            var allCheck = $("#cart_table input[name='cks']");
+            var ids = [];
+            allCheck.each(function (i, domEle) {
+                if ($(domEle).prop("checked")) {
+                    ids.push($(domEle).attr("id"));
+                }
+            });
+            Swal.fire({
+                title: '确定删除所有?',
+                text: "不在考虑考虑吗？",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: '确定',
+                cancelButtonText: '取消'
+            }).then((result) => {
+                if (result.value) {
+                    $.post("/product/cart/deleteAll", {idStr: JSON.stringify(ids,)}, function (data) {
+                        if (data.success) {
+                            window.location.reload();
+                        } else {
+                            Swal.fire(
+                                '删除失败!',
+                                '服务器可能出错了',
+                                'warning'
+                            )
+                        }
+                    })
+                }
+            })
         }
     </script>
 </head>
@@ -245,7 +308,7 @@
             <thead>
             <tr id="table_head">
                 <th width="10%">
-                    <input type="checkbox" class="select_all" checked/>店铺全选
+                    店铺全选
                 </th>
                 <th class="labelCenter" width="30%">商品信息</th>
                 <th class="labelCenter" width="10%">单价（元）</th>
@@ -257,12 +320,10 @@
             <tbody>
             <tr class="shop_intro">
                 <td class="tcol1">
-                    <input type="checkbox" class="select_all_oneShop" checked/>
+                    <input id="checkAllProduct" type="checkbox" class="select_all_oneShop"/>
                     <span>全选</span>
                 </td>
-                <td>
-                    <span>dd(店铺)</span>
-                </td>
+                <td></td>
                 <td></td>
                 <td></td>
                 <td></td>
@@ -297,9 +358,9 @@
                            th:onclick="|sub(${cart.id},${cart.realPrice})|">-</a>
                     </div>
                 </td>
-                <td class="labelCenter">
+                <td class="labelCenter subTotalTd">
                     <span class="red subTotal">￥</span>
-                    <span class="red" th:id="${'subTotal'+cart.id}"
+                    <span class="red subTotalVal" th:id="${'subTotal'+cart.id}"
                           th:text="${cart.realPrice.multiply(cart.amount).setScale(2)}"></span>
 
                 </td>
@@ -318,7 +379,7 @@
                 <td></td>
                 <td></td>
                 <td>
-                    <span id="total" class="red shop_total" th:text="${totalPrice}"></span>
+                    <span id="total" class="red shop_total" th:text="${totalPrice.setScale(2)}"></span>
                     <span class="red">￥</span>
                 </td>
             </tr>
@@ -333,7 +394,7 @@
     -->
     <div class="row account_div">
         <div id="batch">
-            <a href="cart/clear">清空购物车</a>
+            <a href="javascript:deleteAll();">清空购物车</a>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="" style="font-size: 20px;color: #000000">继续购物</a>
         </div>
         <div id="shopping_total">

@@ -18,6 +18,7 @@ public class ProductInfoController {
     @Autowired
     private ProductInfoService productInfoService;
 
+    //所有商品区的商品信息
     @GetMapping("/info/{id}")
     public String productInfo(@PathVariable Integer id, Model model) {
         ProductDTO productInfo = productInfoService.findProduct(id);
@@ -26,7 +27,7 @@ public class ProductInfoController {
         model.addAttribute("ProductInfo", productInfo);
         return "productInfo";
     }
-
+    //新品上架区的商品信息
     @GetMapping("/info1/{id}")
     public String newProductInfo(@PathVariable Integer id, Model model) {
         ProductDTO newProductInfo = productInfoService.findNewProduct(id);
@@ -35,7 +36,7 @@ public class ProductInfoController {
         model.addAttribute("ProductInfo", newProductInfo);
         return "productInfo";
     }
-
+    //好货推荐区的商品信息
     @GetMapping("/info2/{id}")
     public String recommendedInfo(@PathVariable Integer id, Model model) {
         ProductDTO recommendedInfo = productInfoService.findRecommended(id);

@@ -1,283 +1,358 @@
-<!DOCTYPE html>
+<!DOCTYPE html >
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>商品编辑</title>
-    <link rel="stylesheet" th:href="@{/layui/css/layui.css}">
-    <link rel="stylesheet" th:href="@{/layui/css/dropdown.css}">
-    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>后台主页</title>
     <link rel="stylesheet" th:href="@{/css/indexCss.css}">
     <link rel="stylesheet" th:href="@{/css/bs.css}">
-    <link rel="stylesheet" th:href="@{/css/jquery-confirm.css}">
-    <link rel="stylesheet" th:href="@{/css/mc-dialoger.css}"/>
-
-    <script th:src="@{/js/jquery-3.4.1.min.js}" type="application/javascript"></script>
-    <script th:src="@{/js/bootstrap.min.js}" type="text/javascript"></script>
+    <link rel="stylesheet" th:href="@{/js/sweetalert2/sweetalert2.min.css}"/>
+    <script type="text/javascript" th:src="@{/js/sweetalert2/sweetalert2.all.min.js}"></script>
+    <!--    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">-->
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <link rel="stylesheet" th:href="@{/js/fontawesome-free/css/all.min.css}">
+    <link rel="stylesheet" th:href="@{/js/adminLTE-master/css/adminlte.min.css}">
+    <script th:src="@{/js/jquery-3.4.1.min.js}"></script>
+    <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+    <script th:src="@{/js/adminLTE-master/js/adminlte.min.js}"></script>
     <script th:src="@{/js/domlastic.js}" type="text/javascript"></script>
-    <script th:src="@{/js/distpicker/distpicker.data.js}" type="application/javascript"></script>
-    <script th:src="@{/js/distpicker/distpicker.js}" type="application/javascript"></script>
-    <script th:src="@{/js/distpicker/main.js}" type="application/javascript"></script>
-    <script th:src="@{/js/jquery-confirm.js}" type="text/javascript"></script>
     <script th:src="@{/js/validate/jquery.validate.js}" type="text/javascript"></script>
-    <script type="text/javascript" th:src="@{/js/dialoger.js}"></script>
-    <script type="text/javascript">
-        $(function () {
-            $("#productForm").validate({
-                //一失去焦点就校验
-                onfocusout: function (element) {
-                    $(element).valid();
-                },
-                errorPlacement: function (error, element) {	//错误信息位置设置方法
-                    error.appendTo(element.parent().next());//这里的error是生成的错误对象，element是录入数据的对象,parent父元素，next()下一个
-                },
-                errorClass: "red",
-                rules: {
-                    productName: {
-                        required: true
-                    },
-                    price: {
-                        required: true,
-                        number: true
-                    },
-                    discount: {
-                        required: true,
-                        number: true
-                    },
-                    amount: {
-                        required: true,
-                        number: true
-                    },
-                    typeId: {
-                        required: true
-                    },
-                    pictureFile: {
-                        required: true,
-                        image:true
-                    },
-                    description: {
-                        required: false
-                    },
-                    bookCategoryId: {
-                        required: true
-                    },
-                    outline: {
-                        required: true
-                    },
-                    bookDesc: {
-                        required: true
-                    }
-                },
-                messages: {
-                    productName: {
-                        required: "请输入商品名"
-                    },
-                    price: {
-                        required: "请输入价格",
-                        number: "必须是数字"
-                    },
-                    discount: {
-                        required: "请输入折扣，没有折扣则请输入1",
-                        number: "必须是数字"
-                    },
-                    amount: {
-                        required: "请输入库存",
-                        number: "必须是数字"
-                    },
-                    typeId: {
-                        required: "请选择类型"
-                    },
-                    pictureFile: {
-                        required: "请上传商品图片",
-                        image:"这不是图片"
-                    },
-                    description: {
-                        required: "请输入出版社"
-                    },
-                    bookCategoryId: {
-                        default: "请输入简介"
-                    },
-                    outline: {
-                        required: "请填写书籍概要"
-                    },
-                    bookDesc: {
-                        required: "请添加书籍详情"
-                    }
-                }
-
-            });
-        });
-
-        function changImg(e) {
-            for (var i = 0; i < e.target.files.length; i++) {
-                var file = e.target.files.item(i);
-                if (!(/^image\/.*$/i.test(file.type))) {
-                    continue; //不是图片 就跳出这一次循环
-                }
-                //实例化FileReader API
-                var freader = new FileReader();
-                freader.readAsDataURL(file);
-                freader.onload = function (e) {
-                    $("#myImg").attr("src", e.target.result);
-                }
-            }
-        }
-
-    </script>
 </head>
-<body>
-<script th:inline="javascript" th:if="${errorMsg!=null}">
-    var v = [[${errorMsg}]]
-    dialoger.$toast({mes: v})
-</script>
-<div class="container" style="border: 1px solid #CCCCCC; margin-top: 5%">
-    <div id="searchBook" style="height:100px;border-bottom: 1px solid #CCCCCC;">
-        <span th:text="${ProductInfo.id!=null?'商品编辑':'商品添加'}" style="font-size: 30px;line-height: 100px;color: #4E5465"></span>
-    </div>
-    <form class="form-horizontal" role="form" id="productForm" method="post" action="/admin/product/editOrAdd"
-          enctype="multipart/form-data">
-        <!--        <input type="hidden" name="storeId" value="${bookInfo.storeId}">-->
-        <input type="hidden" name="id" th:value="${ProductInfo.id}">
-        <input type="hidden" name="did" th:value="${ProductInfo.productDetails.did}">
-        <div class="form-group">
-            <label for="productName" class="col-sm-1 control-label">商品名称：</label>
-            <div class="col-sm-5">
-                <input type="text" class="form-control" id="productName" name="productName"
-                       th:value="${ProductInfo.productName}"
-                       placeholder="请输入商品名称">
-            </div>
-            <span></span>
-        </div>
-        <div class="form-group">
-            <label for="price" class="col-sm-1 control-label">原价：</label>
-            <div class="col-sm-5">
-                <input type="text" class="form-control" id="price" name="price" th:value="${ProductInfo.price}"
-                       placeholder="请输入价格">
-            </div>
-            <span></span>
-        </div>
+<body class="hold-transition sidebar-mini">
+<div class="wrapper">
+    <!--导航栏和菜单-->
+    <div th:include="~{admin/template ::navbarAndMenu}"></div>
 
-        <div class="form-group">
-            <label for="discount" class="col-sm-1 control-label">折扣：</label>
-            <div class="col-sm-5">
-                <input type="text" class="form-control" id="discount" name="discount" th:value="${ProductInfo.discount}"
-                       placeholder="请输入优惠折扣">
-            </div>
-            <span></span>
+    <!--中间主要内容-->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <div class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1 class="m-0" th:text="${ProductInfo.id!=null?'商品编辑':'商品添加'}"></h1>
+                    </div><!-- /.col -->
+                </div><!-- /.row -->
+            </div><!-- /.container-fluid -->
         </div>
+        <!-- /.content-header -->
 
-        <div class="form-group">
-            <label for="storeMount" class="col-sm-1 control-label">库存：</label>
-            <div class="col-sm-5">
-                <input type="text" class="form-control" id="storeMount" name="amount" th:value="${ProductInfo.amount}"
-                       placeholder="库存">
-            </div>
-            <span></span>
-        </div>
+        <!-- Main content -->
+        <div class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <!-- /.card-header -->
+                            <div class="card-body table-responsive p-0">
+                                <div class="col-md-6" style="margin: 0 auto">
+                                    <div class="card card-primary">
+                                        <div class="card-header">
+                                            <h3 class="card-title">用户编辑</h3>
+                                        </div>
+                                        <!-- /.card-header -->
+                                        <!-- form start -->
+                                        <form class="form-horizontal" role="form" id="productForm" method="post"
+                                              action="/admin/product/editOrAdd"
+                                              enctype="multipart/form-data">
+                                            <!--        <input type="hidden" name="storeId" value="${bookInfo.storeId}">-->
+                                            <input type="hidden" name="id" th:value="${ProductInfo.id}">
+                                            <input type="hidden" name="did"
+                                                   th:value="${ProductInfo.productDetails.did}">
+                                            <div class="form-group">
+                                                <label for="productName">商品名称：</label>
+                                                <div class="col-sm-10">
+                                                    <input type="text" class="form-control" id="productName"
+                                                           name="productName"
+                                                           th:value="${ProductInfo.productName}"
+                                                           placeholder="请输入商品名称">
+                                                </div>
+                                                <span></span>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="price" >原价：</label>
+                                                <div class="col-sm-10">
+                                                    <input type="text" class="form-control" id="price" name="price"
+                                                           th:value="${ProductInfo.price}"
+                                                           placeholder="请输入价格">
+                                                </div>
+                                                <span></span>
+                                            </div>
 
-        <div class="form-group">
-            <label for="bookCategoryId" class="col-sm-1 control-label">类型：</label>
-            <div class="col-sm-5">
-                <select name="typeId" id="bookCategoryId" class="form-control" style="width: 200px;">
-                    <option>--------请选择种类--------</option>
-                    <option th:each="category:${categories}" th:value="${category.id}" th:text="${category.type}"
-                            th:selected="${category.type==ProductInfo.category.type}"></option>
-                </select>
-            </div>
-            <span></span>
-        </div>
-        <div class="form-group">
-            <label for="pictureFile" class="col-sm-1 control-label">图片：</label>
-            <div class="col-sm-5">
-                <input type="file" id="pictureFile" name="pictureFile" onchange="changImg(event)">
-                图片预览:<img  alt="暂无图片" id="myImg"
-                          th:src="${ProductInfo.productImg}" height="100px" ,width="100px">
-            </div>
-        </div>
-        <div class="form-group">
-            <label for="outline" class="col-sm-1 control-label">概述：</label>
-            <div class="col-sm-5">
+                                            <div class="form-group">
+                                                <label for="discount" >折扣：</label>
+                                                <div class="col-sm-10">
+                                                    <input type="text" class="form-control" id="discount"
+                                                           name="discount" th:value="${ProductInfo.discount}"
+                                                           placeholder="请输入优惠折扣">
+                                                </div>
+                                                <span></span>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="storeMount" >库存：</label>
+                                                <div class="col-sm-10">
+                                                    <input type="text" class="form-control" id="storeMount"
+                                                           name="amount" th:value="${ProductInfo.amount}"
+                                                           placeholder="库存">
+                                                </div>
+                                                <span></span>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="bookCategoryId" >类型：</label>
+                                                <div class="col-sm-10">
+                                                    <select name="typeId" id="bookCategoryId" class="form-control"
+                                                            style="width: 200px;">
+                                                        <option>--------请选择种类--------</option>
+                                                        <option th:each="category:${categories}"
+                                                                th:value="${category.id}" th:text="${category.type}"
+                                                                th:selected="${category.type==ProductInfo.category.type}"></option>
+                                                    </select>
+                                                </div>
+                                                <span></span>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="pictureFile" >图片：</label>
+                                                <div class="col-sm-5">
+                                                    <input type="file" id="pictureFile" name="pictureFile"
+                                                           onchange="changImg(event)">
+                                                    图片预览:<img alt="暂无图片" id="myImg"
+                                                              th:src="${ProductInfo.productImg}" height="100px"
+                                                              ,width="100px">
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="outline" >概述：</label>
+                                                <div class="col-sm-10">
                  <textarea class="form-control" id="outline" name="description" rows="4"
                            style="padding:0px" th:value="${ProductInfo.description}" placeholder="请输入商品概述"></textarea>
-            </div>
-            <span></span>
-        </div>
-        <!--        <div class="form-group">-->
-        <!--            <label for="bookDesc" class="col-sm-1 control-label" style="padding: 0">商品详情：</label>-->
-        <!--        </div>-->
-        <div class="form-group">
-            <label for="d_brand" class="col-sm-1 control-label">商品品牌：</label>
-            <div class="col-sm-5">
-                <input type="text" class="form-control" id="d_brand" name="d_brand"
-                       th:value="${ProductInfo.productDetails.d_brand}" placeholder="请输入商品品牌">
-            </div>
-        </div>
+                                                </div>
+                                                <span></span>
+                                            </div>
+                                            <!--        <div class="form-group">-->
+                                            <!--            <label for="bookDesc"  style="padding: 0">商品详情：</label>-->
+                                            <!--        </div>-->
+                                            <div class="form-group">
+                                                <label for="d_brand" >商品品牌：</label>
+                                                <div class="col-sm-10">
+                                                    <input type="text" class="form-control" id="d_brand" name="d_brand"
+                                                           th:value="${ProductInfo.productDetails.d_brand}"
+                                                           placeholder="请输入商品品牌">
+                                                </div>
+                                            </div>
 
-        <div class="form-group">
-            <label for="d_age" class="col-sm-1 control-label">商品适用年龄：</label>
-            <div class="col-sm-5">
-                <input type="text" class="form-control" id="d_age" name="d_age"
-                       th:value="${ProductInfo.productDetails.d_age}" placeholder="请输入商品适用年龄">
+                                            <div class="form-group">
+                                                <label for="d_age" >商品适用年龄：</label>
+                                                <div class="col-sm-10">
+                                                    <input type="text" class="form-control" id="d_age" name="d_age"
+                                                           th:value="${ProductInfo.productDetails.d_age}"
+                                                           placeholder="请输入商品适用年龄">
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="d_placeOrigin" >商品产地：</label>
+                                                <div class="col-sm-10">
+                                                    <input type="text" class="form-control" id="d_placeOrigin"
+                                                           name="d_placeOrigin"
+                                                           th:value="${ProductInfo.productDetails.d_placeOrigin}"
+                                                           placeholder="请输入商品产地">
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="d_gender" >商品适用性别：</label>
+                                                <div class="col-sm-10">
+                                                    <input type="text" class="form-control" id="d_gender"
+                                                           name="d_gender"
+                                                           th:value="${ProductInfo.productDetails.d_gender}"
+                                                           placeholder="请输入商品适用性别">
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="d_weigth" >商品适合体重：</label>
+                                                <div class="col-sm-10">
+                                                    <input type="text" class="form-control" id="d_weigth"
+                                                           name="d_weigth"
+                                                           th:value="${ProductInfo.productDetails.d_weigth}"
+                                                           placeholder="请输入商品适合体重">
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="d_manufacturerContact" >商品厂家联系方式：</label>
+                                                <div class="col-sm-10">
+                                                    <input type="text" class="form-control" id="d_manufacturerContact"
+                                                           name="d_manufacturerContact"
+                                                           th:value="${ProductInfo.productDetails.d_manufacturerContact}"
+                                                           placeholder="请输入商品厂家联系方式">
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="d_manufacturerAddress" >商品生产厂家地址：</label>
+                                                <div class="col-sm-10">
+                                                    <input type="text" class="form-control" id="d_manufacturerAddress"
+                                                           name="d_manufacturerAddress"
+                                                           th:value="${ProductInfo.productDetails.d_manufacturerAddress}"
+                                                           placeholder="请输入商品生产厂家地址">
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="d_manufacturerName"
+                                                       >商品生产厂家名称：</label>
+                                                <div class="col-sm-10">
+                                                    <input type="text" class="form-control" id="d_manufacturerName"
+                                                           name="d_manufacturerName"
+                                                           th:value="${ProductInfo.productDetails.d_manufacturerName}"
+                                                           placeholder="请输入商品生产厂家名称">
+                                                </div>
+                                            </div>
+
+
+                                            <div class="form-group">
+                                                <div class="col-sm-10">
+                                                    <button type="submit" class="btn btn-lg btn-default"
+                                                            style="margin-top: 20px;">
+                                                        保存修改
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </form>
+
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
+    </div>
 
-        <div class="form-group">
-            <label for="d_placeOrigin" class="col-sm-1 control-label">商品产地：</label>
-            <div class="col-sm-5">
-                <input type="text" class="form-control" id="d_placeOrigin" name="d_placeOrigin"
-                       th:value="${ProductInfo.productDetails.d_placeOrigin}" placeholder="请输入商品产地">
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label for="d_gender" class="col-sm-1 control-label">商品适用性别：</label>
-            <div class="col-sm-5">
-                <input type="text" class="form-control" id="d_gender" name="d_gender"
-                       th:value="${ProductInfo.productDetails.d_gender}" placeholder="请输入商品适用性别">
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label for="d_weigth" class="col-sm-1 control-label">商品适合体重：</label>
-            <div class="col-sm-5">
-                <input type="text" class="form-control" id="d_weigth" name="d_weigth"
-                       th:value="${ProductInfo.productDetails.d_weigth}" placeholder="请输入商品适合体重">
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label for="d_manufacturerContact" class="col-sm-1 control-label">商品厂家联系方式：</label>
-            <div class="col-sm-5">
-                <input type="text" class="form-control" id="d_manufacturerContact" name="d_manufacturerContact"
-                       th:value="${ProductInfo.productDetails.d_manufacturerContact}" placeholder="请输入商品厂家联系方式">
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label for="d_manufacturerAddress" class="col-sm-1 control-label">商品生产厂家地址：</label>
-            <div class="col-sm-5">
-                <input type="text" class="form-control" id="d_manufacturerAddress" name="d_manufacturerAddress"
-                       th:value="${ProductInfo.productDetails.d_manufacturerAddress}" placeholder="请输入商品生产厂家地址">
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label for="d_manufacturerName" class="col-sm-1 control-label">商品生产厂家名称：</label>
-            <div class="col-sm-5">
-                <input type="text" class="form-control" id="d_manufacturerName" name="d_manufacturerName"
-                       th:value="${ProductInfo.productDetails.d_manufacturerName}" placeholder="请输入商品生产厂家名称">
-            </div>
-        </div>
-
-
-        <div class="form-group">
-            <div class="col-sm-5">
-                <button type="submit" class="btn btn-lg btn-default"
-                        style="margin-top: 20px;">
-                    保存修改
-                </button>
-            </div>
-        </div>
-    </form>
+    <!--底部-->
+    <div th:include="~{admin/template ::footer}"></div>
 </div>
+<!--<div th:include="~{admin/template ::currentMenu}"></div>-->
+<script th:inline="javascript">
+    if ([[${ProductInfo.id}]]){
+        var cuLi = $(".productList");
+    }else {
+        var cuLi = $(".productAdd");
+    }
+
+    cuLi.addClass("active");
+    $(".adminProduct>a").addClass("active");
+    $(".adminProduct").addClass("menu-open");
+</script>
 </body>
+<script type="text/javascript">
+    $(function () {
+        $("#productForm").validate({
+            //一失去焦点就校验
+            onfocusout: function (element) {
+                $(element).valid();
+            },
+            errorPlacement: function (error, element) {	//错误信息位置设置方法
+                error.appendTo(element.parent().next());//这里的error是生成的错误对象，element是录入数据的对象,parent父元素，next()下一个
+            },
+            errorClass: "red",
+            rules: {
+                productName: {
+                    required: true
+                },
+                price: {
+                    required: true,
+                    number: true
+                },
+                discount: {
+                    required: true,
+                    number: true
+                },
+                amount: {
+                    required: true,
+                    number: true
+                },
+                typeId: {
+                    required: true
+                },
+                pictureFile: {
+                    // required: true,
+                    image: true
+                },
+                description: {
+                    required: false
+                },
+                bookCategoryId: {
+                    required: true
+                },
+                outline: {
+                    required: true
+                },
+                bookDesc: {
+                    required: true
+                }
+            },
+            messages: {
+                productName: {
+                    required: "请输入商品名"
+                },
+                price: {
+                    required: "请输入价格",
+                    number: "必须是数字"
+                },
+                discount: {
+                    required: "请输入折扣，没有折扣则请输入1",
+                    number: "必须是数字"
+                },
+                amount: {
+                    required: "请输入库存",
+                    number: "必须是数字"
+                },
+                typeId: {
+                    required: "请选择类型"
+                },
+                pictureFile: {
+                    // required: "请上传商品图片",
+                    image: "这不是图片"
+                },
+                description: {
+                    required: "请输入出版社"
+                },
+                bookCategoryId: {
+                    default: "请输入简介"
+                },
+                outline: {
+                    required: "请填写书籍概要"
+                },
+                bookDesc: {
+                    required: "请添加书籍详情"
+                }
+            }
+
+        });
+    });
+
+    function changImg(e) {
+        for (var i = 0; i < e.target.files.length; i++) {
+            var file = e.target.files.item(i);
+            if (!(/^image\/.*$/i.test(file.type))) {
+                continue; //不是图片 就跳出这一次循环
+            }
+            //实例化FileReader API
+            var freader = new FileReader();
+            freader.readAsDataURL(file);
+            freader.onload = function (e) {
+                $("#myImg").attr("src", e.target.result);
+            }
+        }
+    }
+
+</script>
+
 </html>

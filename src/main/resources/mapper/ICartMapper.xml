@@ -1,36 +1,53 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.cmx.mall.mapper.ICartMapper">
+    <select id="findProductById" resultType="com.cmx.mall.model.ShopProduct">
+        select *
+        from shop_product
+        where id = #{pid};
+    </select>
 
-<select id="findProductById" resultType="com.cmx.mall.model.ShopProduct">
-    select * from shop_product where id=#{pid};
-</select>
+    <insert id="addCart">
+        insert into shop_cart(pid, username, pName, pImg, realPrice, amount)
+        VALUES (#{pid}, #{username}, #{pName}, #{pImg}, #{realPrice}, #{amount});
+    </insert>
 
-<insert id="addCart">
-    insert into shop_cart(pid,username,pName,pImg,realPrice,amount) VALUES (#{pid},#{username},#{pName},#{pImg},#{realPrice},#{amount});
-</insert>
+    <select id="showCartByUsername" resultType="com.cmx.mall.model.Cart">
+        select *
+        from shop_cart
+        where username = #{username};
+    </select>
+    <update id="updateAmount">
+        update shop_cart
+        set amount=#{amount}
+        where id = #{id};
+    </update>
 
-<select id="showCartByUsername" resultType="com.cmx.mall.model.Cart">
-    select * from shop_cart where username=#{username};
-</select>
-<update id="updateAmount">
-    update shop_cart set amount=#{amount} where id=#{id};
-</update>
+    <delete id="deleteCartItemById">
+        delete
+        from shop_cart
+        where username = #{username}
+          and id = #{id};
+    </delete>
 
-<delete id="deleteCartItemById">
-    delete from shop_cart where username=#{username} and id=#{id};
-</delete>
+    <delete id="deleteCartItemByIds">
+        delete
+        from shop_cart
+        <where>
+            id in
+            <foreach item="item" collection="param1" separator="," open="(" close=")" index="">
+                #{item}
+            </foreach>
+        </where>
 
-<delete id="deleteCartItemByIds">
-    delete from shop_cart
-    <where>
-          id in
-          <foreach item="item" collection="param1" separator="," open="(" close=")" index="">
-               #{item}
-          </foreach>
-    </where>
-
-    and username=#{username};
-</delete>
-
+        and username = #{username};
+    </delete>
+    <delete id="deleteAll">
+        delete
+        from shop_cart
+                where id in
+        <foreach collection="ids" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </delete>
 </mapper>

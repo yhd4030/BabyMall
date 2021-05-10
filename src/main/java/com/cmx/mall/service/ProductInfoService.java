@@ -46,4 +46,8 @@ public class ProductInfoService {
 
         return categories;
     }
+
+    public void deleteById(Integer id) {
+        productInfoMapper.deleteById(id);
+    }
 }

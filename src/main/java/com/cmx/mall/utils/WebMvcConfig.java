@@ -1,9 +1,14 @@
 package com.cmx.mall.utils;
 
+import com.cmx.mall.listener.VisitCountListener;
+import org.springframework.boot.web.servlet.ServletListenerRegistrationBean;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
+
+import javax.servlet.ServletRequestListener;
 
 @Configuration
 public class WebMvcConfig extends WebMvcConfigurationSupport {
@@ -29,5 +34,12 @@ public class WebMvcConfig extends WebMvcConfigurationSupport {
         super.addResourceHandlers(registry);
     }
 
+//    @SuppressWarnings({ "rawtypes", "unchecked" })
+//    @Bean
+//    public ServletListenerRegistrationBean listenerRegistrationBean() {
+//        ServletListenerRegistrationBean listenerRegistrationBean = new ServletListenerRegistrationBean();
+//        listenerRegistrationBean.setListener(new VisitCountListener());
+//        return listenerRegistrationBean;
+//    }
 
 }

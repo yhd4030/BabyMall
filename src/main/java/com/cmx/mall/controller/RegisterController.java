@@ -14,12 +14,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class RegisterController {
     @Autowired
     private RegisterService registerService;
-
+    //打开注册界面
     @GetMapping("/register")
     public String register() {
         return "register";
     }
-
+    //注册数据处理，保存到数据库
     @RequestMapping(value = "/register")
     @ResponseBody
     public boolean register(User user) {

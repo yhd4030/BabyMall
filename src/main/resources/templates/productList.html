@@ -8,10 +8,12 @@
     <link rel="stylesheet" th:href="@{/css/bs.css}"/>
     <link rel="stylesheet" th:href="@{/css/product_list.css}"/>
     <link rel="stylesheet" th:href="@{/css/mc-dialoger.css}"/>
+    <link rel="stylesheet" th:href="@{/js/sweetalert2/sweetalert2.min.css}"/>
 
     <script type="text/javascript" th:src="@{/js/jquery-3.4.1.min.js}"></script>
     <script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
     <script type="text/javascript" th:src="@{/js/dialoger.js}"></script>
+    <script type="text/javascript" th:src="@{/js/sweetalert2/sweetalert2.all.min.js}"></script>
 
     <script type="text/javascript">
         // $(function () {
@@ -39,7 +41,13 @@
                 data: {pid: pid,amount:1},
                 success: function (data) {
                     if (data==true){
-                        dialoger.$toast({mes:'添加成功，赶快去看看吧',type:'success'});
+                        Swal.fire({
+                            position: 'top-end',
+                            icon: 'success',
+                            title: '添加成功',
+                            showConfirmButton: false,
+                            timer: 1500
+                        })
                     }else {
                         dialoger.$toast({mes:'添加购物车失败',type:'error'});
                     }
@@ -116,105 +124,31 @@
             </div>
             <ul class="pagination pull-right no-margin" style="margin: 0px">
                 <li th:if="${productList.hasPreviousPage}">
-                    <a th:href="'?pageNum=1'">首页</a>
+                    <a th:href="'?pageNum=1&keywords='+${#httpServletRequest.getAttribute('keywords')}">首页</a>
                 </li>
 
                 <li class="prev" th:if="${productList.hasPreviousPage}">
-                    <a th:href="'?pageNum='+${productList.prePage}">
+                    <a th:href="'?pageNum='+${productList.prePage}+'&keywords='+${#httpServletRequest.getAttribute('keywords')}">
                         <i class="glyphicon glyphicon-menu-left"></i>
                     </a>
                 </li>
                 <!--遍历条数-->
                 <li th:each="nav:${productList.navigatepageNums}">
-                    <a th:href="'?pageNum='+${nav}" th:text="${nav}" th:if="${nav != productList.pageNum}"></a>
+                    <a th:href="'?pageNum='+${nav}+'&keywords='+${#httpServletRequest.getAttribute('keywords')}" th:text="${nav}" th:if="${nav != productList.pageNum}"></a>
                     <span style="font-weight: bold;background: #6faed9;" th:if="${nav == productList.pageNum}" th:text="${nav}" ></span>
                 </li>
 
                 <li class="next" th:if="${productList.hasNextPage}">
-                    <a th:href="'?pageNum='+${productList.nextPage}">
+                    <a th:href="'?pageNum='+${productList.nextPage}+'&keywords='+${#httpServletRequest.getAttribute('keywords')}">
                         <i class="glyphicon glyphicon-menu-right"></i>
                     </a>
                 </li>
 
                 <li>
-                    <a th:href="'?pageNum='+${productList.pages}">尾页</a>
+                    <a th:href="'?pageNum='+${productList.pages}+'&keywords='+${#httpServletRequest.getAttribute('keywords')}">尾页</a>
                 </li>
             </ul>
         </div>
-<!--        <nav aria-label="Page navigation" style="text-align: center">-->
-<!--            <ul class="pagination">-->
-<!--                <li th:if="${productList.hasPreviousPage}">-->
-<!--                    <a th:href="'?pageNum=1'" aria-label="Previous">-->
-<!--                        <span aria-hidden="true">&laquo;</span>-->
-<!--                    </a>-->
-<!--                </li>-->
-<!--                <li th:if="${productList.hasPreviousPage}"><a th:href="'?pageNum='+${productList.prePage}"><</a></li>-->
-<!--                <li class="" th:each="nav : ${productList.navigatepageNums}" th:id="'page'+${nav}"-->
-<!--                    th:onclick="|pageActive(${nav})|">-->
-<!--                    <a th:href="'?pageNum='+${nav}" th:text="${nav}"-->
-<!--                       th:if="${nav != productList.pageNum}">-->
-<!--                    </a>-->
-<!--                    <span style="font-weight: bold" th:if="${nav == productList.pageNum}" th:text="${nav}"></span>-->
-<!--                </li>-->
-<!--                <li th:if="${productList.hasNextPage}">-->
-<!--                    <a th:href="'?pageNum='+${productList.nextPage}">-->
-<!--                        >-->
-<!--                    </a>-->
-<!--                </li>-->
-<!--                <li th:if="${productList.hasNextPage}">-->
-<!--                    <a th:href="'?pageNum='+${productList.pages}" aria-label="Next">-->
-<!--                        <span aria-hidden="true">&raquo;</span>-->
-<!--                    </a>-->
-<!--                </li>-->
-<!--            </ul>-->
-<!--        </nav>-->
-        <!--        <ul class="pagination pagination-lg">-->
-
-        <!--            &lt;!&ndash;           上一页&ndash;&gt;-->
-        <!--            &lt;!&ndash;            <c:if test="${bookPageInfo.isFirstPage}">&ndash;&gt;-->
-        <!--            <li class="disabled"><a href="javascript:void(0);">前一页</a></li>-->
-        <!--            &lt;!&ndash;            </c:if>&ndash;&gt;-->
-
-        <!--            &lt;!&ndash;            <c:if test="${!bookPageInfo.isFirstPage}">&ndash;&gt;-->
-        <!--            <li>-->
-        <!--                <a href="book/list?keywords=${keywords}&cateId=${cateId}&page=${bookPageInfo.prePage}">前一页</a>-->
-        <!--            </li>-->
-        <!--            &lt;!&ndash;            </c:if>&ndash;&gt;-->
-
-        <!--            &lt;!&ndash;           <c:forEach&ndash;&gt;-->
-        <!--&lt;!&ndash;            begin="${bookPageInfo.pageNum}"&ndash;&gt;-->
-        <!--&lt;!&ndash;            end="${bookPageInfo.pageNum+5 < bookPageInfo.pages ? bookPageInfo.pageNum+5 : bookPageInfo.pages }"&ndash;&gt;-->
-        <!--&lt;!&ndash;            var="current">&ndash;&gt;-->
-        <!--            <li-->
-        <!--                    class="${(current == bookPageInfo.pageNum) ? 'active':''}">-->
-        <!--                <a href="book/list?keyword=${keywords}&cateId=${cateId}&page=${current}">-->
-        <!--                    ${current}-->
-        <!--                </a>-->
-        <!--            </li>-->
-        <!--            &lt;!&ndash;        </c:forEach>&ndash;&gt;-->
-        <!--            &lt;!&ndash;            <c:forEach&ndash;&gt;-->
-        <!--            &lt;!&ndash;                    begin="${bookPageInfo.pageNum < 6 ? 1 :bookPageInfo.pageNum-5}"&ndash;&gt;-->
-        <!--            &lt;!&ndash;                    end="${bookPageInfo.pages<6?bookPageInfo.pages:(bookPageInfo.pageNum < 6 ? 6 :bookPageInfo.pageNum) }"&ndash;&gt;-->
-        <!--            &lt;!&ndash;                    var="current">&ndash;&gt;-->
-        <!--            <li-->
-        <!--                    class="${(current == bookPageInfo.pageNum) ? 'active':''}">-->
-        <!--                <a href="book/list?keywords=${keywords}&cateId=${cateId}&page=${current}">-->
-        <!--                    ${current}-->
-        <!--                </a>-->
-        <!--            </li>-->
-        <!--            &lt;!&ndash;            </c:forEach>&ndash;&gt;-->
-        <!--            &lt;!&ndash;            下一页&ndash;&gt;-->
-        <!--            &lt;!&ndash;            <c:if test="${bookPageInfo.isLastPage}">&ndash;&gt;-->
-        <!--            <li class="disabled"><a href="javascript:void(0);">下一页</a></li>-->
-        <!--            &lt;!&ndash;            </c:if>&ndash;&gt;-->
-
-        <!--            &lt;!&ndash;            <c:if test="${!bookPageInfo.isLastPage}">&ndash;&gt;-->
-        <!--            <li><a href="book/list?keywords=${keywords}&cateId=${cateId}&page=${bookPageInfo.nextPage}">下一页</a>-->
-        <!--            </li>-->
-        <!--            &lt;!&ndash;            </c:if>&ndash;&gt;-->
-
-        <!--            <li class="disabled"><a href="javascript:void(0);">共${bookPageInfo.pages}页</a></li>-->
-        <!--        </ul>-->
     </div>
 </div>
 </body>

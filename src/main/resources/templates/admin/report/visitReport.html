@@ -1,0 +1,134 @@
+<!DOCTYPE html >
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>后台主页</title>
+    <link rel="stylesheet" th:href="@{/js/sweetalert2/sweetalert2.min.css}"/>
+    <script type="text/javascript" th:src="@{/js/sweetalert2/sweetalert2.all.min.js}"></script>
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <link rel="stylesheet" th:href="@{/js/fontawesome-free/css/all.min.css}">
+    <link rel="stylesheet" th:href="@{/js/adminLTE-master/css/adminlte.min.css}">
+    <script th:src="@{/js/jquery-3.4.1.min.js}"></script>
+    <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+    <script th:src="@{/js/adminLTE-master/js/adminlte.min.js}"></script>
+    <script th:src="@{/js/echarts/echarts.common.min.js}" type="text/javascript"></script>
+    <script th:src="@{/js/echarts/theme/vintage.js}" type="text/javascript"></script>
+    <style>
+        #currentPage {
+            background-color: rgba(0, 123, 255, 0.5);
+        }
+    </style>
+</head>
+<body class="hold-transition sidebar-mini">
+<div class="wrapper">
+    <!--导航栏和菜单-->
+    <div th:include="~{admin/template ::navbarAndMenu}"></div>
+
+    <!--中间主要内容-->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <div class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1 class="m-0">报表</h1>
+                    </div><!-- /.col -->
+                </div><!-- /.row -->
+            </div><!-- /.container-fluid -->
+        </div>
+        <!-- /.content-header -->
+
+        <!-- Main content -->
+        <div class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">访问量报表</h3>
+                            </div>
+
+                            <div class="card-body table-responsive p-0">
+                                <div id="main" style="margin: 0 auto;width: 800px;height:600px;"></div>
+                            </div>
+                            <div class="card-footer clearfix">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--底部-->
+    <div th:include="~{admin/template ::footer}"></div>
+</div>
+</body>
+<script th:inline="javascript">
+
+    var cuLi = $(".visitReport");
+    cuLi.addClass("active");
+    $(".adminReport>a").addClass("active");
+    $(".adminReport").addClass("menu-open");
+
+    $(function () {
+        option = {
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'cross',
+                    crossStyle: {
+                        color: '#999'
+                    }
+                }
+            },
+            toolbox: {
+                feature: {
+                    dataView: {show: true, readOnly: false},
+                    magicType: {show: true, type: ['line', 'bar']},
+                    restore: {show: true},
+                    saveAsImage: {show: true}
+                }
+            },
+            legend: {
+                data: ['访问量']
+            },
+            xAxis: [
+                {
+                    type: 'category',
+                    data: [[${groupType}]],
+                    axisPointer: {
+                        type: 'shadow'
+                    }
+                }
+            ],
+            yAxis: [
+                {
+                    type: 'value',
+                    name: '访问量',
+                    min: 0,
+                    max: 500,
+                    interval: 50,
+                    axisLabel: {
+                        formatter: '{value}'
+                    }
+                }
+            ],
+            series: [
+                {
+                    name: '访问量',
+                    type: 'bar',
+                    data: [[${counts}]]
+                },
+            ]
+        };
+        // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById('main'), 'vintage');
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
+    })
+
+</script>
+</html>

@@ -34,23 +34,27 @@ public class CartService {
     }
 
     public void updateAmount(Cart cart) {
-        cartMapper.updateAmount(cart.getId(),cart.getAmount());
+        cartMapper.updateAmount(cart.getId(), cart.getAmount());
     }
 
-    public Double calTotalPrice(Cart cart) {
-        double total=0;
+    public BigDecimal calTotalPrice(Cart cart) {
+        BigDecimal total = new BigDecimal("0");
         List<Cart> carts = cartMapper.showCartByUsername(cart.getUsername());
         for (Cart cartItem : carts) {
-            total =total + cartItem.getRealPrice().doubleValue() * cartItem.getAmount();
+            BigDecimal amount = new BigDecimal(cartItem.getAmount().toString());
+            total = total.add(cartItem.getRealPrice().multiply(amount));
         }
-
         return total;
 
     }
 
-    public boolean deleteCartItemById(Integer id,String username) {
+    public boolean deleteCartItemById(Integer id, String username) {
 
-        return cartMapper.deleteCartItemById(id,username);
+        return cartMapper.deleteCartItemById(id, username);
 
+    }
+
+    public void deleteAll(List<Integer> ids) {
+        cartMapper.deleteAll(ids);
     }
 }

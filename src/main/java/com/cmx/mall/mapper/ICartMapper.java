@@ -16,9 +16,11 @@ public interface ICartMapper {
 
     List<Cart> showCartByUsername(String username);
 
-    void updateAmount(@Param("id") Integer id, @Param("amount")Integer amount);
+    void updateAmount(@Param("id") Integer id, @Param("amount") Integer amount);
 
-    boolean deleteCartItemById(@Param("id") Integer id,@Param("username") String username);
+    boolean deleteCartItemById(@Param("id") Integer id, @Param("username") String username);
 
     boolean deleteCartItemByIds(List<Integer> ids, @Param("username") String username);
+
+    void deleteAll(@Param("ids") List<Integer> ids);
 }

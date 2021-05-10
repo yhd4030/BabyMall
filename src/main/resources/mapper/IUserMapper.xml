@@ -1,96 +1,144 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.cmx.mall.mapper.IUserMapper">
+    <resultMap id="userMap" type="com.cmx.mall.dto.UserDTO">
+        <id property="id" column="id"/>
+        <result property="username" column="username"/>
+        <result property="password" column="password"/>
+        <result property="nickname" column="nickname"/>
+        <result property="gender" column="gender"/>
+        <result property="phone" column="phone"/>
+        <result property="location" column="location"/>
+        <result property="detail_address" column="detail_address"/>
+        <result property="email" column="email"/>
+        <result property="zip_code" column="zip_code"/>
+        <result property="roleId" column="roleId"/>
+        <association property="role" javaType="com.cmx.mall.model.Role">
+            <result property="role" column="role"/>
+        </association>
+        <collection property="address" ofType="com.cmx.mall.model.Address">
+            <id property="id" column="addressId"/>
+            <result property="user_id" column="user_id"/>
+            <result property="province" column="province"/>
+            <result property="city" column="city"/>
+            <result property="area" column="area"/>
+            <result property="detail_address" column="detail_address"/>
+            <result property="receiver" column="receiver"/>
+            <result property="tel" column="tel"/>
+            <result property="is_default" column="is_default"/>
+        </collection>
+    </resultMap>
 
-<resultMap id="userMap" type="com.cmx.mall.dto.UserDTO">
-    <id property="id" column="id"></id>
-    <result property="username" column="username"></result>
-    <result property="password" column="password"></result>
-    <result property="nickname" column="nickname"></result>
-    <result property="gender" column="gender"></result>
-    <result property="phone" column="phone"></result>
-    <result property="location" column="location"></result>
-    <result property="detail_address" column="detail_address"></result>
-    <result property="email" column="email"></result>
-    <result property="zip_code" column="zip_code"></result>
-    <result property="roleId" column="roleId"></result>
-    <association property="role" javaType="com.cmx.mall.model.Role">
-        <result property="role" column="role"></result>
-</association>
-    <collection property="address" ofType="com.cmx.mall.model.Address">
-            <id property="id" column="addressId"></id>
-            <result property="user_id" column="user_id"></result>
-            <result property="province" column="province"></result>
-            <result property="city" column="city"></result>
-            <result property="area" column="area"></result>
-            <result property="detail_address" column="detail_address"></result>
-            <result property="receiver" column="receiver"></result>
-            <result property="tel" column="tel"></result>
-            <result property="is_default" column="is_default"></result>
-    </collection>
-</resultMap>
-
-        <!--用户注册完第一次登录时进入个人信息模块-->
-        <select id="findUser" resultMap="userMap">
-            select * from shop_user where username=#{username}
-        </select>
-        <!--个人信息模块查询-->
-        <select id="findUserByUsername" resultMap="userMap">
-            select
-            su.id,su.username,su.password,su.nickname,su.gender,su.phone,su.location,su.email,su.zip_code,
-            sa.id addressId,sa.user_id,sa.province,sa.city,sa.area,sa.detail_address ,sa.receiver,sa.tel,sa.is_default
-            from shop_user su,shop_address sa
-            where
-            su.username=sa.user_id and
-             username=#{username};
-        </select>
+    <!--用户注册完第一次登录时进入个人信息模块-->
+    <select id="findUser" resultMap="userMap">
+        select *
+        from shop_user
+        where username = #{username}
+    </select>
+    <!--个人信息模块查询-->
+    <select id="findUserByUsername" resultMap="userMap">
+        select su.id,
+               su.username,
+               su.password,
+               su.nickname,
+               su.gender,
+               su.phone,
+               su.location,
+               su.email,
+               su.zip_code,
+               sa.id addressId,
+               sa.user_id,
+               sa.province,
+               sa.city,
+               sa.area,
+               sa.detail_address,
+               sa.receiver,
+               sa.tel,
+               sa.is_default
+        from shop_user su,
+             shop_address sa
+        where su.username = sa.user_id
+          and username = #{username};
+    </select>
 
 
-        <update id="updateUser">
-            update shop_user
-             <set>
-                 <if test="nickname != null and nickname != ''">nickname=#{nickname},</if>
-                 <if test="gender != null">gender=#{gender},</if>
-                 <if test="phone != null and phone != ''">phone=#{phone},</if>
-                 <if test="email != null and email != ''">email=#{email},</if>
-                 <if test="zip_code != null and zip_code != ''">zip_code=#{zip_code},</if>
-                 <if test="location != null and location != ''">location=#{location},</if>
-                 <if test="detail_address != null and detail_address != ''">detail_address=#{detail_address},</if>
-                 <if test="roleId != null">roleId=#{roleId}</if>
-             </set>
-             where username=#{username}
-        </update>
+    <update id="updateUser">
+        update shop_user
+        <set>
+            <if test="nickname != null and nickname != ''">
+                nickname=#{nickname},
+            </if>
+            <if test="gender != null">
+                gender=#{gender},
+            </if>
+            <if test="phone != null and phone != ''">
+                phone=#{phone},
+            </if>
+            <if test="email != null and email != ''">
+                email=#{email},
+            </if>
+            <if test="zip_code != null and zip_code != ''">
+                zip_code=#{zip_code},
+            </if>
+            <if test="location != null and location != ''">
+                location=#{location},
+            </if>
+            <if test="detail_address != null and detail_address != ''">
+                detail_address=#{detail_address},
+            </if>
+            <if test="roleId != null">
+                roleId=#{roleId}
+            </if>
+        </set>
+        where username = #{username}
+    </update>
 
     <update id="updatepwd">
-    update shop_user set password=#{password} where username=#{username}
+        update shop_user
+        set password=#{password}
+        where username = #{username}
     </update>
 
     <select id="checkPwd" resultMap="userMap">
-        select password from shop_user where username=#{username}
+        select password
+        from shop_user
+        where username = #{username}
     </select>
 
     <select id="findAllUser" resultMap="userMap">
-        select * from shop_user
+        select *
+        from shop_user
+        <where>
+            <if test="keywords != null and keywords != ''">
+                (nickname like concat('%', #{keywords}, '%') or username like concat('%', #{keywords}, '%'))
+            </if>
+        </where>
     </select>
 
     <delete id="deleteById">
-        delete from shop_user where id=#{id}
+        delete
+        from shop_user
+        where id = #{id}
     </delete>
 
     <insert id="addUser">
-        insert into shop_user (username,password,nickname,gender,phone,location,detail_address,email,zip_code,roleId) values(#{username},#{password},#{nickname},#{gender},#{phone},#{location},#{detail_address},#{email},#{zip_code},#{roleId})
+        insert into shop_user (username, password, nickname, gender, phone, location, detail_address, email, zip_code,
+                               roleId)
+        values (#{username}, #{password}, #{nickname}, #{gender}, #{phone}, #{location}, #{detail_address}, #{email},
+                #{zip_code}, #{roleId})
     </insert>
 
-<!--    <resultMap id="UserRoleMap" type="com.cmx.mall.dto.UserDTO">-->
-<!--    -->
-<!--    -->
-<!--</resultMap>-->
+    <!--    <resultMap id="UserRoleMap" type="com.cmx.mall.dto.UserDTO">-->
+    <!--    -->
+    <!--    -->
+    <!--</resultMap>-->
 
 
     <select id="findUserById" resultMap="userMap">
-        select su.*,sr.role
-         from shop_user su,shop_role sr where su.roleId=sr.id and su.id=#{id}
+        select su.*, sr.role
+        from shop_user su,
+             shop_role sr
+        where su.roleId = sr.id
+          and su.id = #{id}
     </select>
-
-
 </mapper>

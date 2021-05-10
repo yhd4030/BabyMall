@@ -66,7 +66,7 @@ public class OrderController {
             return false;
         }
     }
-
+    //打开订单信息界面
     @RequestMapping("/details")
     public String orderInfo(HttpServletRequest request, Model model) {
         Double countMoney = 0d;
@@ -84,7 +84,7 @@ public class OrderController {
         return "orderInfo";
     }
 
-    //订单提交
+    //订单的提交
     @PostMapping("/commit")
     @ResponseBody
     public Integer commitOrder(Integer addressId, Double OrderTotal, HttpServletRequest request, Model model) {
@@ -93,7 +93,7 @@ public class OrderController {
         Order order = orderService.findIdByOrderNum(buy.getOrder_num());
         return order.getId();
     }
-
+    //打开订单去支付界面
     @GetMapping("/toPayOrList")
     public String payOrList(Integer id, Model model, HttpSession session) {
         String username = (String) session.getAttribute("username");
@@ -102,7 +102,7 @@ public class OrderController {
         System.out.println(orderDTO);
         return "payOrList";
     }
-
+    //在去支付界面中，去订单列表
     @GetMapping("/toOrderList")
     public String OrderList(Model model, HttpSession session,
                             @RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
@@ -131,7 +131,7 @@ public class OrderController {
         return operateStatus;
     }
 
-    //
+    //删除订单
     @PostMapping("/deleteOrder")
     @ResponseBody
     public boolean deleteOrder(Integer id, HttpSession session) {
@@ -140,7 +140,7 @@ public class OrderController {
         return operateStatus;
     }
 
-    //支付
+    //支付宝支付
     @RequestMapping("/aliPay")
     @ResponseBody
     public String pay(Pay pay, HttpServletResponse response) throws AlipayApiException {

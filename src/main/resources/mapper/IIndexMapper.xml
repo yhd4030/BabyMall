@@ -1,15 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.cmx.mall.mapper.IIndexMapper">
-
-
+    <resultMap id="productMap" type="com.cmx.mall.dto.ProductDTO">
+        <id property="id" column="id"/>
+        <result property="productName" column="productName"/>
+        <result property="productImg" column="productImg"/>
+        <result property="typeId" column="typeId"/>
+        <result property="price" column="price"/>
+        <result property="description" column="description"/>
+        <result property="amount" column="amount"/>
+        <result property="isShelf" column="isShelf"/>
+        <result property="discount" column="discount"/>
+        <result property="detail_id" column="detail_id"/>
+        <association property="productDetails" javaType="com.cmx.mall.model.ProductDetails">
+            <id property="did" column="did"/>
+            <result property="d_productName" column="d_productName"/>
+            <result property="d_brand" column="d_brand"/>
+            <result property="d_age" column="d_age"/>
+            <result property="d_placeOrigin" column="d_placeOrigin"/>
+            <result property="d_gender" column="d_gender"/>
+            <result property="d_weigth" column="d_weigth"/>
+            <result property="d_manufacturerContact" column="d_manufacturerContact"/>
+            <result property="d_manufacturerAddress" column="d_manufacturerAddress"/>
+            <result property="d_manufacturerName" column="d_manufacturerName"/>
+        </association>
+        <association property="category" javaType="com.cmx.mall.model.Category">
+            <id property="id" column="id"/>
+            <result property="type" column="type"/>
+        </association>
+    </resultMap>
 
 
     <select id="findNewProduct" resultType="com.cmx.mall.model.ShopProduct">
-        select * from shop_newproduct;
+        SELECT p.*
+        FROM shop_newproduct n
+                     JOIN shop_product p on n.pid = p.id
     </select>
     <select id="findRecommended" resultType="com.cmx.mall.model.ShopProduct">
-        select * from shop_recommended;
+        SELECT p.*
+        FROM shop_recommended r
+                     JOIN shop_product p on r.pid = p.id
     </select>
-
 </mapper>

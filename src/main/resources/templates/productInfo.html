@@ -42,20 +42,20 @@
 
         function buyNow(pid) {
             var buyNum = $("#buy_num").val();
-            var pIdStr=pid+',';
-                $.ajax({
-                    method: "post",
-                    url: "/order/toCheckOrder",
-                    data: {pIdStr: pIdStr,buyNum:buyNum},
-                    dataType: "json",
-                    success: function (data) {
-                        if (data==true){
-                            window.location.href = "/order/details?source=ProductInfo";
-                        }else{
-                            dialoger.$toast({mes: '提交订单出错啦', timeout: 1000});
-                        }
+            var pIdStr = pid + ',';
+            $.ajax({
+                method: "post",
+                url: "/order/toCheckOrder",
+                data: {pIdStr: pIdStr, buyNum: buyNum},
+                dataType: "json",
+                success: function (data) {
+                    if (data == true) {
+                        window.location.href = "/order/details?source=ProductInfo";
+                    } else {
+                        dialoger.$toast({mes: '提交订单出错啦', timeout: 1000});
                     }
-                });
+                }
+            });
 
         }
 
@@ -63,12 +63,12 @@
             $.ajax({
                 type: "post",
                 url: "/product/cart/addition",
-                data: {pid: pid,amount:$("#buy_num").val()},
+                data: {pid: pid, amount: $("#buy_num").val()},
                 success: function (data) {
-                    if (data==true){
-                        dialoger.$toast({mes:'添加成功，赶快去看看吧',type:'success'});
-                    }else {
-                        dialoger.$toast({mes:'添加购物车失败',type:'error'});
+                    if (data == true) {
+                        dialoger.$toast({mes: '添加成功，赶快去看看吧', type: 'success'});
+                    } else {
+                        dialoger.$toast({mes: '添加购物车失败', type: 'error'});
                     }
                 }
             })
@@ -154,7 +154,8 @@
                     </div>
                 </div>
                 <div class="buy_div buy_now_div">
-                    <a href="javascript:void(0);" th:onclick="|buyNow(${ProductInfo.detail_id})|" class="buy_now">立即购买</a>
+                    <a href="javascript:void(0);" th:onclick="|buyNow(${ProductInfo.detail_id})|"
+                       class="buy_now">立即购买</a>
                 </div>
                 <div class="clear"></div>
                 <div class="buy_tip">每账户最多可购买<b>10</b>件</div>
@@ -175,7 +176,7 @@
                         <p class="price">
                             <span class="rob"
                                   th:text="'￥'+${randomDisplay.price.multiply(randomDisplay.discount).setScale(2)}"></span>
-                            <span class="oprice" th:text="'￥'+${ProductInfo.price}"></span>
+                            <span class="oprice" th:text="'￥'+${randomDisplay.price}"></span>
                         </p>
                         <p class="name">
                             <a th:href="'/product/info/'+${randomDisplay.id}"
@@ -206,30 +207,30 @@
                                         th:text="'产品名称:&nbsp;'+${ProductInfo.productDetails.d_productName}"></li>
 
                                     <li class="details_list" th:title="${ProductInfo.productDetails.d_brand}"
-                                        th:text="'品牌:&nbsp;'+${ProductInfo.productDetails.d_brand}"></li>
+                                        th:text="'品牌:&nbsp;'+${ProductInfo.productDetails.d_brand!=null?ProductInfo.productDetails.d_brand:'无'}"></li>
 
                                     <li class="details_list" th:title="${ProductInfo.productDetails.d_age}"
-                                        th:text="'适用年龄:&nbsp;'+${ProductInfo.productDetails.d_age}"></li>
+                                        th:text="'适用年龄:&nbsp;'+${ProductInfo.productDetails.d_age!=null?ProductInfo.productDetails.d_age:'无'}"></li>
 
                                     <li class="details_list" th:title="${ProductInfo.productDetails.d_placeOrigin}"
-                                        th:text="'产地:&nbsp;'+${ProductInfo.productDetails.d_placeOrigin}"></li>
+                                        th:text="'产地:&nbsp;'+${ProductInfo.productDetails.d_placeOrigin!=null?ProductInfo.productDetails.d_placeOrigin:'无'}"></li>
 
                                     <li class="details_list" th:title="${ProductInfo.productDetails.d_gender}"
-                                        th:text="'适用性别:&nbsp;'+${ProductInfo.productDetails.d_gender}"></li>
+                                        th:text="'适用性别:&nbsp;'+${ProductInfo.productDetails.d_gender!=null?ProductInfo.productDetails.d_gender:'无'}"></li>
 
                                     <li class="details_list" th:title="${ProductInfo.productDetails.d_weigth}"
-                                        th:text="'适合体重:&nbsp;'+${ProductInfo.productDetails.d_weigth}"></li>
+                                        th:text="'适合体重:&nbsp;'+${ProductInfo.productDetails.d_weigth!=null?ProductInfo.productDetails.d_weigth:'无'}"></li>
 
                                     <li class="details_list"
                                         th:title="${ProductInfo.productDetails.d_manufacturerContact}"
-                                        th:text="'厂家联系方式:&nbsp;'+${ProductInfo.productDetails.d_manufacturerContact}"></li>
+                                        th:text="'厂家联系方式:&nbsp;'+${ProductInfo.productDetails.d_manufacturerContact!=null?ProductInfo.productDetails.d_manufacturerContact:'无'}"></li>
 
                                     <li class="details_list"
                                         th:title="${ProductInfo.productDetails.d_manufacturerAddress}"
-                                        th:text="'生产厂家地址:&nbsp;'+${ProductInfo.productDetails.d_manufacturerAddress}"></li>
+                                        th:text="'生产厂家地址:&nbsp;'+${ProductInfo.productDetails.d_manufacturerAddress!=null?ProductInfo.productDetails.d_manufacturerAddress:'无'}"></li>
 
                                     <li class="details_list" th:title="${ProductInfo.productDetails.d_manufacturerName}"
-                                        th:text="'生产厂家名称:&nbsp;'+${ProductInfo.productDetails.d_manufacturerName}"></li>
+                                        th:text="'生产厂家名称:&nbsp;'+${ProductInfo.productDetails.d_manufacturerName!=null?ProductInfo.productDetails.d_manufacturerName:'无'}"></li>
                                 </ul>
                             </div>
                         </div>

@@ -16,7 +16,7 @@ public class IndexController {
     @Autowired
     private IndexService indexService;
 
-
+    //打开首页界面
     @GetMapping({"/", "/index"})
     public String index(HttpSession session, Model model) {
         List<ShopProduct> newProduct = indexService.findNewProduct();

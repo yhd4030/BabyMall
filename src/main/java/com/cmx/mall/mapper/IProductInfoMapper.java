@@ -20,4 +20,6 @@ public interface IProductInfoMapper {
     ProductDTO findProductById(Integer id);
 
     List<Category> findCategory();
+
+    void deleteById(Integer id);
 }

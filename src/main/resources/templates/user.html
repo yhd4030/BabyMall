@@ -25,7 +25,7 @@
     <style>
         .form-control {
             display: inline-block;
-            width: 50%;
+            /*width: 50%;*/
         }
     </style>
 </head>
@@ -33,7 +33,7 @@
 <!--导航-->
 <div th:insert="~{header::head}"></div>
 
-<div class="container">
+<div th:fragment="information" class="container">
 
     <div class="row">
         <form class="form-horizontal" role="form" id="userInfoForm">
@@ -287,263 +287,262 @@
             </div>
         </div>
     </div>
-</div>
+    <script type="text/javascript">
 
 
-</body>
-<script type="text/javascript">
+        // 打开修改地址模态框
+        function addAddress(addressId) {
+            $("#addAddress").modal("show");
+            //data不为空修改地址 为空增加地址
+            if (addressId != null) {
+                $.ajax({
+                    method: "post",
+                    url: "/address/find",
+                    data: {addressId: addressId},
+                    success: function (data) {
+                        if (data != null) {
+                            $("#target").distpicker('destroy');
+                            $("#target").distpicker({
+                                province: data.province,
+                                city: data.city,
+                                district: data.area
+                            })
+                            $("#addressId").val(data.id)
+                            $("#deatails").val(data.detail_address)
+                            $("#receiver").val(data.receiver)
+                            $("#tel").val(data.tel)
+                            if (data.is_default == "on") {
+                                $("#setDefaultAddr").prop("checked", true);
+                            }
+                        }
+                    }
+                });
+            } else {
+                $("#target").distpicker('destroy');
+                $("#target").distpicker({
+                    province: "",
+                    city: "",
+                    district: ""
+                })
+                $("#deatails").val("")
+                $("#receiver").val("")
+                $("#tel").val("")
+            }
 
+        }
 
-    // 打开修改地址模态框
-    function addAddress(addressId) {
-        $("#addAddress").modal("show");
-        //data不为空修改地址 为空增加地址
-        if (addressId != null) {
+        //修改地址模态框
+        function savaAddress() {
+            var addressData = $("#savaAddress").serialize();
             $.ajax({
                 method: "post",
-                url: "/address/find",
-                data: {addressId: addressId},
+                url: "/address/add",
+                data: addressData,
                 success: function (data) {
-                    if (data != null) {
-                        $("#target").distpicker('destroy');
-                        $("#target").distpicker({
-                            province: data.province,
-                            city: data.city,
-                            district: data.area
-                        })
-                        $("#addressId").val(data.id)
-                        $("#deatails").val(data.detail_address)
-                        $("#receiver").val(data.receiver)
-                        $("#tel").val(data.tel)
-                        if (data.is_default == "on") {
-                            $("#setDefaultAddr").prop("checked", true);
+                    if (data == "success") {
+                        window.location.reload(true)
+                    }
+                }
+            })
+        }
+
+        //删除收货地址
+        function delAddress(addressId) {
+            $.confirm({
+                title: '删除',
+                content: '您确定删除这样商品？',
+                type: 'red',
+                buttons: {
+                    ok: {
+                        text: "确定",
+                        btnClass: 'btn-danger',
+                        keys: ['enter'],
+                        action: function () {
+                            $.ajax({
+                                method: "post",
+                                url: "/address/del",
+                                data: {addressId: addressId},
+                                success: function (data) {
+                                    if (data == true) {
+                                        window.location.reload(true)
+                                    }
+                                }
+                            })
                         }
+                    },
+                    cancel: {
+                        text: "取消"
                     }
                 }
             });
-        } else {
-            $("#target").distpicker('destroy');
-            $("#target").distpicker({
-                province: "",
-                city: "",
-                district: ""
-            })
-            $("#deatails").val("")
-            $("#receiver").val("")
-            $("#tel").val("")
         }
 
-    }
+        $(function () {
+            jQuery.validator.addMethod("isMobile", function (value, element) {
+                var length = value.length;
+                var mobile = /^(13[0-9]{9})|(18[0-9]{9})|(14[0-9]{9})|(17[0-9]{9})|(15[0-9]{9})$/;
+                return this.optional(element) || (length == 11 && mobile.test(value));
+            }, "请正确填写手机号码");
 
-    //修改地址模态框
-    function savaAddress() {
-        var addressData = $("#savaAddress").serialize();
-        $.ajax({
-            method: "post",
-            url: "/address/add",
-            data: addressData,
-            success: function (data) {
-                if (data == "success") {
-                    window.location.reload(true)
-                }
-            }
-        })
-    }
+            $("#userInfoForm").validate({
+                //一失去焦点就校验
+                onfocusout: function (element) {
+                    console.log(element);
+                    $(element).valid();
+                },
+                errorPlacement: function (error, element) {	//错误信息位置设置方法
+                    error.appendTo(element.next());//这里的error是生成的错误对象，element是录入数据的对象,parent父元素，next()下一个
+                },
+                errorClass: "red",
+                rules: {
+                    nickname: {
+                        required: true
+                    },
+                    phone: {
+                        required: true,
+                        isMobile: true
+                    },
+                    sex: {
+                        required: true
+                    },
+                    email: {
+                        required: true
+                    },
+                    location: {
+                        required: true
 
-    //删除收货地址
-    function delAddress(addressId) {
-        $.confirm({
-            title: '删除',
-            content: '您确定删除这样商品？',
-            type: 'red',
-            buttons: {
-                ok: {
-                    text: "确定",
-                    btnClass: 'btn-danger',
-                    keys: ['enter'],
-                    action: function () {
-                        $.ajax({
-                            method: "post",
-                            url: "/address/del",
-                            data: {addressId: addressId},
-                            success: function (data) {
-                                if (data == true) {
-                                    window.location.reload(true)
-                                }
-                            }
-                        })
+                    },
+                    detail_address: {
+                        required: true
+
+                    },
+                    zip_code: {
+                        required: true
+                    },
+                    identity: {
+                        required: true
                     }
                 },
-                cancel: {
-                    text: "取消"
-                }
-            }
-        });
-    }
-
-    $(function () {
-        jQuery.validator.addMethod("isMobile", function (value, element) {
-            var length = value.length;
-            var mobile = /^(13[0-9]{9})|(18[0-9]{9})|(14[0-9]{9})|(17[0-9]{9})|(15[0-9]{9})$/;
-            return this.optional(element) || (length == 11 && mobile.test(value));
-        }, "请正确填写手机号码");
-
-        $("#userInfoForm").validate({
-            //一失去焦点就校验
-            onfocusout: function (element) {
-                console.log(element);
-                $(element).valid();
-            },
-            errorPlacement: function (error, element) {	//错误信息位置设置方法
-                error.appendTo(element.next());//这里的error是生成的错误对象，element是录入数据的对象,parent父元素，next()下一个
-            },
-            errorClass: "red",
-            rules: {
-                nickname: {
-                    required: true
-                },
-                phone: {
-                    required: true,
-                    isMobile: true
-                },
-                sex: {
-                    required: true
-                },
-                email: {
-                    required: true
-                },
-                location: {
-                    required: true
-
-                },
-                detail_address: {
-                    required: true
-
-                },
-                zip_code: {
-                    required: true
-                },
-                identity: {
-                    required: true
-                }
-            },
-            messages: {
-                nickname: {
-                    required: "请输入用户名"
-                },
-                phone: {
-                    required: "请输入电话号码"
-                },
-                sex: {
-                    required: "请输入性别"
-                },
-                email: {
-                    required: "请填写邮箱"
-                },
-                location: {
-                    required: "请输入地方"
-                },
-                detail_address: {
-                    required: "请输入居住城市"
-                },
-                detail_address: {
-                    required: "请输入详细地址"
-                },
-                zip_code: {
-                    required: "请输入邮政编码"
-                }
-            }
-        });
-        $("#passwordForm").validate({
-            //一失去焦点就校验
-            onfocusout: function (element) {
-                $(element).valid();
-            },
-            errorPlacement: function (error, element) {	//错误信息位置设置方法
-                error.appendTo(element.parent().next());//这里的error是生成的错误对象，element是录入数据的对象,parent父元素，next()下一个
-            },
-            errorClass: "red",
-            rules: {
-                oldPassword: {
-                    required: true,
-                    rangelength: [3, 15]
-                },
-                newPassword: {
-                    required: true,
-                    rangelength: [3, 15]
-                },
-                rePassword: {
-                    equalTo: "[name='newPassword']",
-                    required: true
-                }
-            },
-            messages: {
-                oldPassword: {
-                    required: "旧密码不能为空",
-                    rangelength: "密码长度在{0}~{1}之间"
-                },
-                newPassword: {
-                    required: "新密码不能为空",
-                    rangelength: [3, 15]
-                },
-                rePassword: {
-                    equalTo: "两次输入密码不一致",
-                    required: "确认密码"
-                }
-            },
-            submitHandler: function (form) {
-                $.ajax({
-                    type: 'post',
-                    url: '/user/updatePwd',
-                    data: $("#passwordForm").serialize(),
-                    success: function (data) {
-                        if (data == true) {
-                            $('#passwordModal').modal('hide');
-                            // $("#saveMsg").text("修改密码成功！！");
-                            dialoger.$toast({mes: '修改成功', timeout: 3000});
-                            setTimeout(function () {
-                                $("#saveMsg").hide()
-                            }, 2000)
-                        } else {
-                            $('#passwordModal').modal('hide');
-                            // $("#saveMsg").text("修改密码失败！！");
-                            dialoger.$toast({mes: '修改失败', timeout: 3000});
-                            setTimeout(function () {
-                                $("#saveMsg").clear();
-                            }, 2000)
-                        }
-                        $('#oldPassword').val("");
-                        $('#oldPassword').focus();
-                        $('#newPassword').val("");
-                        $('#rePassword').val("");
+                messages: {
+                    nickname: {
+                        required: "请输入用户名"
                     },
-                    dataType: "json"
-                });
-            }
-        });
-    });
-
-    function saveUser() {
-        $.ajax({
-            type: 'post',
-            url: '/user/update',
-            data: $("#userInfoForm").serialize(),
-            success: function (data) {
-                if (data == true) {
-                    window.location.reload(true)
-                } else {
-                    alert("保存失败")
+                    phone: {
+                        required: "请输入电话号码"
+                    },
+                    sex: {
+                        required: "请输入性别"
+                    },
+                    email: {
+                        required: "请填写邮箱"
+                    },
+                    location: {
+                        required: "请输入地方"
+                    },
+                    detail_address: {
+                        required: "请输入居住城市"
+                    },
+                    detail_address: {
+                        required: "请输入详细地址"
+                    },
+                    zip_code: {
+                        required: "请输入邮政编码"
+                    }
                 }
-            },
-            dataType: "json"
+            });
+            $("#passwordForm").validate({
+                //一失去焦点就校验
+                onfocusout: function (element) {
+                    $(element).valid();
+                },
+                errorPlacement: function (error, element) {	//错误信息位置设置方法
+                    error.appendTo(element.parent().next());//这里的error是生成的错误对象，element是录入数据的对象,parent父元素，next()下一个
+                },
+                errorClass: "red",
+                rules: {
+                    oldPassword: {
+                        required: true,
+                        rangelength: [3, 15]
+                    },
+                    newPassword: {
+                        required: true,
+                        rangelength: [3, 15]
+                    },
+                    rePassword: {
+                        equalTo: "[name='newPassword']",
+                        required: true
+                    }
+                },
+                messages: {
+                    oldPassword: {
+                        required: "旧密码不能为空",
+                        rangelength: "密码长度在{0}~{1}之间"
+                    },
+                    newPassword: {
+                        required: "新密码不能为空",
+                        rangelength: [3, 15]
+                    },
+                    rePassword: {
+                        equalTo: "两次输入密码不一致",
+                        required: "确认密码"
+                    }
+                },
+                submitHandler: function (form) {
+                    $.ajax({
+                        type: 'post',
+                        url: '/user/updatePwd',
+                        data: $("#passwordForm").serialize(),
+                        success: function (data) {
+                            if (data == true) {
+                                $('#passwordModal').modal('hide');
+                                // $("#saveMsg").text("修改密码成功！！");
+                                dialoger.$toast({mes: '修改成功', timeout: 3000});
+                                setTimeout(function () {
+                                    $("#saveMsg").hide()
+                                }, 2000)
+                            } else {
+                                $('#passwordModal').modal('hide');
+                                // $("#saveMsg").text("修改密码失败！！");
+                                dialoger.$toast({mes: '修改失败', timeout: 3000});
+                                setTimeout(function () {
+                                    $("#saveMsg").clear();
+                                }, 2000)
+                            }
+                            $('#oldPassword').val("");
+                            $('#oldPassword').focus();
+                            $('#newPassword').val("");
+                            $('#rePassword').val("");
+                        },
+                        dataType: "json"
+                    });
+                }
+            });
         });
-    }
 
-</script>
+        function saveUser() {
+            $.ajax({
+                type: 'post',
+                url: '/user/update',
+                data: $("#userInfoForm").serialize(),
+                success: function (data) {
+                    if (data == true) {
+                        window.location.reload(true)
+                    } else {
+                        alert("保存失败")
+                    }
+                },
+                dataType: "json"
+            });
+        }
 
-<style type="text/css">
-    .modal.fade.in {
-        top: 200px;
-    }
-</style>
+    </script>
+
+    <style type="text/css">
+        .modal.fade.in {
+            top: 200px;
+        }
+    </style>
+</div>
+</body>
+
 </html>

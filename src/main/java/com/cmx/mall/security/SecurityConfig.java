@@ -28,8 +28,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .authorizeRequests()
                 //.antMatchers("/**").permitAll()
-                //主页和注册页不用拦截 其余全部拦截
 
+                //主页和注册页不用拦截 其余全部拦截
                 .antMatchers("/","index","/user/register").permitAll()
                 .antMatchers("/**").authenticated()
 

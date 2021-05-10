@@ -34,7 +34,7 @@
     function submitSearchForm() {
         var keywords = $("#keywords").val();
         if ("" == keywords.trim()) {
-            $("#keywords").val("java");
+            $("#keywords").val("奶粉");
         }
 
         $("#searchForm").submit();
@@ -43,7 +43,7 @@
 
 </script>
 <div th:insert="~{top ::top}"></div>
-<div class="container">
+<div class="container" xmlns:th="http://www.thymeleaf.org">
     <div class="row">
         <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 logo">
             <a href="/" target="_blank"><img
@@ -51,10 +51,10 @@
                     alt="cc.com"/></a>
         </div>
         <div class="col-lg-6 col-md-6 col-xs-6 search">
-            <form action="book/list" class="form-inline" id="searchForm" role="form" method="get">
+            <form action="/product/list" class="form-inline" id="searchForm" role="form" method="get">
                 <div class="form-group">
                     <label class="sr-only" for="keywords">关键字</label>
-                    <input type="text" class="form-control" id="keywords" name="keywords" value="" size="55"
+                    <input type="text" class="form-control" id="keywords" name="keywords"  th:value="${#httpServletRequest.getAttribute('keywords')}" size="55"
                            placeholder="奶粉">
                 </div>
                 <button type="button" onclick="submitSearchForm()" class="btn btn-info">

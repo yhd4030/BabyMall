@@ -1,0 +1,612 @@
+<!DOCTYPE html >
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>后台主页</title>
+    <link rel="stylesheet" th:href="@{/css/cart.css}"/>
+    <link rel="stylesheet" th:href="@{/css/bs.css}"/>
+    <link rel="stylesheet" th:href="@{/css/mc-dialoger.css}"/>
+    <link rel="stylesheet" th:href="@{/css/orderInfo.css}">
+    <link rel="stylesheet" th:href="@{/fonts/icon/iconfont.css}">
+    <link rel="stylesheet" th:href="@{/css/jquery-confirm.css}">
+    <link rel="stylesheet" th:href="@{/js/sweetalert2/sweetalert2.min.css}"/>
+    <script type="text/javascript" th:src="@{/js/sweetalert2/sweetalert2.all.min.js}"></script>
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <link rel="stylesheet" th:href="@{/js/fontawesome-free/css/all.min.css}">
+    <link rel="stylesheet" th:href="@{/js/adminLTE-master/css/adminlte.min.css}">
+    <script th:src="@{/js/jquery-3.4.1.min.js}"></script>
+    <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+    <script th:src="@{/js/adminLTE-master/js/adminlte.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/dialoger.js}"></script>
+    <script type="text/javascript" th:src="@{/js/domlastic.js}"></script>
+    <script type="application/javascript" th:src="@{/js/distpicker/distpicker.data.js}"></script>
+    <script type="application/javascript" th:src="@{/js/distpicker/distpicker.js}"></script>
+    <script type="application/javascript" th:src="@{/js/distpicker/main.js}"></script>
+    <script type="text/javascript" th:src="@{/js/jquery-confirm.js}"></script>
+    <script type="application/javascript" th:src="@{/js/validate/jquery.validate.js}"></script>
+    <script type="application/javascript" th:src="@{/js/validate/additional-methods.js}"></script>
+    <style>
+        #currentPage {
+            background-color: rgba(0, 123, 255, 0.5);
+        }
+
+        .form-control {
+            display: inline-block;
+            /*width: 50%;*/
+        }
+    </style>
+</head>
+<body class="hold-transition sidebar-mini">
+<div class="wrapper">
+    <!--导航栏和菜单-->
+    <div th:include="~{admin/template ::navbarAndMenu}"></div>
+
+    <!--中间主要内容-->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <div class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1 class="m-0">个人信息</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Main content -->
+        <div class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">个人信息</h3>
+
+                                <div class="card-tools">
+                                    <div class="input-group input-group-sm" style="width: 150px;">
+                                        <input type="text" name="table_search" class="form-control float-right"
+                                               placeholder="Search">
+
+                                        <div class="input-group-append">
+                                            <button type="submit" class="btn btn-default">
+                                                <i class="fas fa-search"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card-body table-responsive p-0">
+
+                                <form class="form-horizontal" role="form" id="userInfoForm">
+                                    <div class=""
+                                         style="width: 850px;margin: 0 auto;border-radius: 5%;border: 1px solid #eee;padding-left: 40px">
+                                        <div class="page-header">
+
+                                        </div>
+                                        <!--                -->
+                                        <div class="form-group" style="margin-left: -33px;">
+                                            <label class="col-sm-2 control-label">用户名:</label>
+                                            <div class="col-sm-8">
+                                                <input type="text" class="form-control" name="nickname" id="nickname"
+                                                       th:value="${userDTO.nickname}" placeholder="用户名">
+                                                <span class="errorMsg"></span>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group" style="margin-left: -33px;">
+                                            <label for="username" class="col-sm-2 control-label">账号:</label>
+                                            <div class="col-sm-8">
+                                                <p class="form-control-static" id="username"
+                                                   th:text="${userDTO.username}"></p>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group" style="margin-left: -33px;">
+                                            <label for="phone" class="col-sm-2 control-label">电话号码:</label>
+                                            <div class="col-sm-8">
+                                                <input type="text" class="form-control" name="phone" id="phone"
+                                                       th:value="${userDTO.phone}" placeholder="电话号码">
+                                                <span class="errorMsg"></span>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group" style="margin-left: -33px;">
+                                            <label class="col-sm-2 control-label">性别:</label>
+                                            <div class="col-sm-8">
+                                                <!--                        <input type="text" class="form-control" name="gender" id="gender"-->
+                                                <!--                               th:value="${userDTO.gender}==1?'男':'女'" placeholder="性别">-->
+                                                <!--                        <span class="errorMsg"></span>-->
+                                                <input type="radio" name="gender" th:checked="${userDTO.gender==1}"
+                                                       value="1">男
+                                                <input type="radio" name="gender" th:checked="${userDTO.gender==0}"
+                                                       value="0">女
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group" style="margin-left: -33px;">
+                                            <label for="Email" class="col-sm-2 control-label">邮箱:</label>
+                                            <div class="col-sm-8">
+                                                <input type="text" class="form-control" name="email" id="Email"
+                                                       th:value="${userDTO.email}" placeholder="邮箱">
+                                                <span class="errorMsg"></span>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group" style="margin-left: -33px;">
+                                            <label for="location" class="col-sm-2 control-label">居住地:</label>
+                                            <div class="col-sm-8">
+                        <textarea class="form-control" name="location" id="location"
+                                  th:text="${userDTO.detail_address}" placeholder="居住地:">
+                        </textarea>
+                                                <span class="errorMsg"></span>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group" style="margin-left: -33px;">
+                                            <label for="detailAddress" class="col-sm-2 control-label">详细住址:</label>
+                                            <div class="col-sm-8">
+                        <textarea class="form-control" name="detail_address" id="detailAddress"
+                                  th:text="${userDTO.detail_address}" placeholder="详细住址:">
+                        </textarea>
+                                                <span class="errorMsg"></span>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group" style="margin-left: -33px;">
+                                            <label for="zip_code" class="col-sm-2 control-label">邮政编码:</label>
+                                            <div class="col-sm-8">
+                                                <input type="text" class="form-control" name="zip_code" id="zip_code"
+                                                       th:value="${userDTO.zip_code}" placeholder="邮政编码">
+                                                <span class="errorMsg"></span>
+                                            </div>
+                                        </div>
+
+                                        <div class="">
+                                            <button type="button" th:onclick="saveUser()" class="btn btn-default">
+                                                保存基本信息
+                                            </button>
+                                            <button type="button" class="btn btn-default" data-toggle="modal"
+                                                    data-target="#passwordModal">修改密码
+                                            </button>
+                                            <button type="button" class="btn btn-default" data-toggle="modal"
+                                                    data-target="#addressManageModal">
+                                                地址管理
+                                            </button>
+                                            <span class="red" id="saveMsg"></span>
+                                        </div>
+                                    </div>
+                                </form>
+
+                            </div>
+                            <div class="card-footer clearfix">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--底部-->
+    <div th:include="~{admin/template ::footer}"></div>
+</div>
+<div class="modal fade" id="addressManageModal" tabindex="-1" role="dialog" aria-labelledby="addressModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="page-header">
+                    <h1>
+                        <span class="fa fa-home">收货地址</span>
+                    </h1>
+                </div>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+
+            </div>
+            <div class="modal-body">
+                <ul class="list-group">
+                    <li th:each="address:${userDTO.address}" th:if="not ${#lists.isEmpty(userDTO.address)}"
+                        class="list-group-item">
+                        <input type="radio" name="addr" th:checked="${address.is_default}=='on'"
+                               th:value="${address.id}">
+                        <span th:text=" ${address.receiver}+' '+ ${address.tel}+'  '+${address.province}+${address.city}+${address.area}+${address.detail_address}"></span>
+                        <span th:if="${address.is_default}=='on'"><a href="#"
+                                                                     style="font-size: 10px">默认地址</a></span>
+                        <span><a href="javascript:void(0);" th:onclick="|addAddress(${address.id})|"
+                                 style="font-size: 10px">修改</a></span>
+                        <span><a href="javascript:void(0);" th:onclick="|delAddress(${address.id})|"
+                                 style="font-size: 10px">删除</a></span>
+                    </li>
+                    <li th:if=" ${#lists.isEmpty(userDTO.address)}" class="list-group-item">暂无地址，请添加。</li>
+                </ul>
+            </div>
+
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+<!-- 模态框（Modal） -->
+<!--修改密码-->
+<div class="modal fade" id="passwordModal" tabindex="-1" role="dialog" aria-labelledby="passwordModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="passwordModalLabel">修改密码</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+
+            </div>
+            <form method="post" id="passwordForm">
+                <div class="modal-body" style="height: 200px">
+                    <table style="width: 400px;height: 130px">
+                        <tr>
+                            <td>旧密码:</td>
+                            <td><input type="password" id="oldPassword" name="oldPassword"></td>
+                            <td style="width: 150px"></td>
+                        </tr>
+                        <tr>
+                            <td>新密码:</td>
+                            <td><input type="password" id="newPassword" name="newPassword"></td>
+                            <td style="width: 150px"></td>
+                        </tr>
+                        <tr>
+                            <td>确认密码:</td>
+                            <td><input type="password" id="rePassword" name="rePassword"></td>
+                            <td style="width: 150px"></td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <span id="changePwd"></span>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button class="btn btn-primary">提交更改</button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+<!--添加地址-->
+<div id="addAddress" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="gridSystemModalLabel">添加地址</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span>
+                </button>
+
+            </div>
+            <div class="modal-body">
+                <form action="#" id="savaAddress" class="form-horizontal" role="form">
+                    <div class="form-group">
+                        <label class="col-md-4 control-label" style="width: 100px">所在地区：</label>
+                        <div data-toggle="distpicker" id="target">
+                            <div class="form-group col-sm-12 col-md-8">
+                                <label class="sr-only" for="province1">Province</label>
+                                <select class="form-control province1" id="province1" name="province"></select>
+                            </div>
+                            <div class="form-group col-sm-12 col-md-8">
+                                <label class="sr-only" for="city1">City</label>
+                                <select class="form-control city1" id="city1" name="city"></select>
+                            </div>
+                            <div class="form-group col-sm-12 col-md-8">
+                                <label class="sr-only" for="area1">Area</label>
+                                <select class="form-control area1" id="area1" name="area"></select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group" style="">
+                        <label class="col-md-4 control-label" style="width: 100px"> 地址编号：</label>
+                        <div class="col-sm-12 col-md-8">
+                            <input type="text" class="form-control" id="addressId" name="id"
+                                   placeholder="地址编号" readonly>
+                            <span class=" form-control-feedback"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group " style="">
+                        <label class="col-md-4 control-label" style="width: 100px"> 详细地址：</label>
+                        <div class="col-sm-12 col-md-8">
+                            <textarea class="form-control" id="deatails" name="detail_address"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-group " style="">
+                        <label class="col-md-4 control-label" style="width: 100px"> 姓名：</label>
+                        <div class="col-sm-12 col-md-8">
+                            <input type="text" class="form-control" id="receiver" name="receiver"
+                                   placeholder="收货人姓名">
+                            <span class="glyphicon glyphicon-user form-control-feedback"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group " style="">
+                        <label class="col-md-4 control-label" style="width: 100px"> 电话：</label>
+                        <div class="col-sm-12 col-md-8">
+                            <input type="text" class="form-control" id="tel" name="tel" placeholder="合法手机格式">
+                            <span class="glyphicon glyphicon-phone form-control-feedback"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" id="setDefaultAddr" name="is_default"><span
+                                        class="text-success">设置默认地址</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" th:onclick="savaAddress()">保存地址</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+
+
+    var cuLi = $(".myInfo");
+    cuLi.addClass("active");
+    $(".adminInfo>a").addClass("active");
+    $(".adminInfo").addClass("menu-open");
+
+
+    // 打开修改地址模态框
+    function addAddress(addressId) {
+        $("#addAddress").modal("show");
+        //data不为空修改地址 为空增加地址
+        if (addressId != null) {
+            $.ajax({
+                method: "post",
+                url: "/address/find",
+                data: {addressId: addressId},
+                success: function (data) {
+                    if (data != null) {
+                        $("#target").distpicker('destroy');
+                        $("#target").distpicker({
+                            province: data.province,
+                            city: data.city,
+                            district: data.area
+                        })
+                        $("#addressId").val(data.id)
+                        $("#deatails").val(data.detail_address)
+                        $("#receiver").val(data.receiver)
+                        $("#tel").val(data.tel)
+                        if (data.is_default == "on") {
+                            $("#setDefaultAddr").prop("checked", true);
+                        }
+                    }
+                }
+            });
+        } else {
+            $("#target").distpicker('destroy');
+            $("#target").distpicker({
+                province: "",
+                city: "",
+                district: ""
+            })
+            $("#deatails").val("")
+            $("#receiver").val("")
+            $("#tel").val("")
+        }
+
+    }
+
+    //修改地址模态框
+    function savaAddress() {
+        var addressData = $("#savaAddress").serialize();
+        $.ajax({
+            method: "post",
+            url: "/address/add",
+            data: addressData,
+            success: function (data) {
+                if (data == "success") {
+                    window.location.reload(true)
+                }
+            }
+        })
+    }
+
+    //删除收货地址
+    function delAddress(addressId) {
+        $.confirm({
+            title: '删除',
+            content: '您确定删除这样商品？',
+            type: 'red',
+            buttons: {
+                ok: {
+                    text: "确定",
+                    btnClass: 'btn-danger',
+                    keys: ['enter'],
+                    action: function () {
+                        $.ajax({
+                            method: "post",
+                            url: "/address/del",
+                            data: {addressId: addressId},
+                            success: function (data) {
+                                if (data == true) {
+                                    window.location.reload(true)
+                                }
+                            }
+                        })
+                    }
+                },
+                cancel: {
+                    text: "取消"
+                }
+            }
+        });
+    }
+
+    $(function () {
+        jQuery.validator.addMethod("isMobile", function (value, element) {
+            var length = value.length;
+            var mobile = /^(13[0-9]{9})|(18[0-9]{9})|(14[0-9]{9})|(17[0-9]{9})|(15[0-9]{9})$/;
+            return this.optional(element) || (length == 11 && mobile.test(value));
+        }, "请正确填写手机号码");
+
+        $("#userInfoForm").validate({
+            //一失去焦点就校验
+            onfocusout: function (element) {
+                console.log(element);
+                $(element).valid();
+            },
+            errorPlacement: function (error, element) {	//错误信息位置设置方法
+                error.appendTo(element.next());//这里的error是生成的错误对象，element是录入数据的对象,parent父元素，next()下一个
+            },
+            errorClass: "red",
+            rules: {
+                nickname: {
+                    required: true
+                },
+                phone: {
+                    required: true,
+                    isMobile: true
+                },
+                sex: {
+                    required: true
+                },
+                email: {
+                    required: true
+                },
+                location: {
+                    required: true
+
+                },
+                detail_address: {
+                    required: true
+
+                },
+                zip_code: {
+                    required: true
+                },
+                identity: {
+                    required: true
+                }
+            },
+            messages: {
+                nickname: {
+                    required: "请输入用户名"
+                },
+                phone: {
+                    required: "请输入电话号码"
+                },
+                sex: {
+                    required: "请输入性别"
+                },
+                email: {
+                    required: "请填写邮箱"
+                },
+                location: {
+                    required: "请输入地方"
+                },
+                detail_address: {
+                    required: "请输入居住城市"
+                },
+                detail_address: {
+                    required: "请输入详细地址"
+                },
+                zip_code: {
+                    required: "请输入邮政编码"
+                }
+            }
+        });
+        $("#passwordForm").validate({
+            //一失去焦点就校验
+            onfocusout: function (element) {
+                $(element).valid();
+            },
+            errorPlacement: function (error, element) {	//错误信息位置设置方法
+                error.appendTo(element.parent().next());//这里的error是生成的错误对象，element是录入数据的对象,parent父元素，next()下一个
+            },
+            errorClass: "red",
+            rules: {
+                oldPassword: {
+                    required: true,
+                    rangelength: [3, 15]
+                },
+                newPassword: {
+                    required: true,
+                    rangelength: [3, 15]
+                },
+                rePassword: {
+                    equalTo: "[name='newPassword']",
+                    required: true
+                }
+            },
+            messages: {
+                oldPassword: {
+                    required: "旧密码不能为空",
+                    rangelength: "密码长度在{0}~{1}之间"
+                },
+                newPassword: {
+                    required: "新密码不能为空",
+                    rangelength: [3, 15]
+                },
+                rePassword: {
+                    equalTo: "两次输入密码不一致",
+                    required: "确认密码"
+                }
+            },
+            submitHandler: function (form) {
+                $.ajax({
+                    type: 'post',
+                    url: '/user/updatePwd',
+                    data: $("#passwordForm").serialize(),
+                    success: function (data) {
+                        if (data == true) {
+                            $('#passwordModal').modal('hide');
+                            // $("#saveMsg").text("修改密码成功！！");
+                            dialoger.$toast({mes: '修改成功', timeout: 3000});
+                            setTimeout(function () {
+                                $("#saveMsg").hide()
+                            }, 2000)
+                        } else {
+                            $('#passwordModal').modal('hide');
+                            // $("#saveMsg").text("修改密码失败！！");
+                            dialoger.$toast({mes: '修改失败', timeout: 3000});
+                            setTimeout(function () {
+                                $("#saveMsg").clear();
+                            }, 2000)
+                        }
+                        $('#oldPassword').val("");
+                        $('#oldPassword').focus();
+                        $('#newPassword').val("");
+                        $('#rePassword').val("");
+                    },
+                    dataType: "json"
+                });
+            }
+        });
+    });
+
+    function saveUser() {
+        $.ajax({
+            type: 'post',
+            url: '/user/update',
+            data: $("#userInfoForm").serialize(),
+            success: function (data) {
+                if (data == true) {
+                    window.location.reload(true)
+                } else {
+                    alert("保存失败")
+                }
+            },
+            dataType: "json"
+        });
+    }
+
+</script>
+</body>
+</html>

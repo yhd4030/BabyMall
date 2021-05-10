@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cmx.mall.mapper.IVisitCountMapper">
+    <resultMap id="baseResultMap" type="com.cmx.mall.model.VisitCount">
+        <id column="id" property="id"/>
+        <result column="visit_date" property="visitDate"/>
+        <result column="quantity" property="quantity"/>
+    </resultMap>
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        insert into shop_visitcount(visit_date, quantity)
+        VALUES (#{visitDate}, #{quantity})
+    </insert>
+    <update id="updateById">
+        update shop_visitcount
+        set visit_date=#{visitDate},
+            quantity=#{quantity}
+        where id = #{id}
+    </update>
+    <delete id="deleteById">
+        delete
+        from shop_visitcount
+        where id = #{id}
+    </delete>
+    <select id="selectById" resultMap="baseResultMap">
+        select id, visit_date, quantity
+        from shop_visitcount
+        where id = #{id}
+    </select>
+    <select id="selectAll" resultMap="baseResultMap">
+        select id, visit_date, quantity
+        from shop_visitcount
+    </select>
+
+    <select id="checkVisitDate" resultMap="baseResultMap">
+        select id, visit_date, quantity
+        from shop_visitcount
+        where visit_date like concat('%', #{visitDate}, '%')
+    </select>
+    <update id="updateVisitCount">
+        update shop_visitcount
+        set quantity=#{quantity}
+        where id = #{id}
+    </update>
+</mapper>

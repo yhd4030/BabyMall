@@ -81,9 +81,9 @@ public class UserService {
     }
 
     //后台用户列表查询，并使用分页
-    public PageInfo<UserDTO> userList(int pageNum, int pageSize) {
+    public PageInfo<UserDTO> userList(int pageNum, int pageSize,String keywords) {
         PageHelper.startPage(pageNum, pageSize);
-        List<UserDTO> allUser = userInfoMapper.findAllUser();
+        List<UserDTO> allUser = userInfoMapper.findAllUser(keywords);
         return new PageInfo(allUser);
     }
 

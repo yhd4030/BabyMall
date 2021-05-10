@@ -1,0 +1,30 @@
+<!DOCTYPE html >
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>后台主页</title>
+
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <link rel="stylesheet" th:href="@{/js/fontawesome-free/css/all.min.css}">
+    <link rel="stylesheet" th:href="@{/js/adminLTE-master/css/adminlte.min.css}">
+    <script th:src="@{/js/jquery-3.4.1.min.js}"></script>
+    <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+    <script th:src="@{/js/adminLTE-master/js/adminlte.min.js}"></script>
+</head>
+<body class="hold-transition sidebar-mini">
+<div class="wrapper">
+    <!--导航栏和菜单-->
+    <div th:include="~{admin/template ::navbarAndMenu}"></div>
+
+    <!--中间主要内容-->
+    <div style="text-align: center" class="content-wrapper">
+        <h1>欢迎使用菜菜母婴商城后台管理系统</h1>
+    </div>
+
+    <!--底部-->
+    <div th:include="~{admin/template ::footer}"></div>
+</div>
+</body>
+</html>

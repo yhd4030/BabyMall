@@ -1,20 +1,66 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.cmx.mall.mapper.IProductListMapper">
+    <resultMap id="productMap" type="com.cmx.mall.dto.ProductDTO">
+        <id property="id" column="id"/>
+        <result property="productName" column="productName"/>
+        <result property="productImg" column="productImg"/>
+        <result property="typeId" column="typeId"/>
+        <result property="price" column="price"/>
+        <result property="description" column="description"/>
+        <result property="amount" column="amount"/>
+        <result property="isShelf" column="isShelf"/>
+        <result property="discount" column="discount"/>
+        <result property="detail_id" column="detail_id"/>
+        <association property="productDetails" javaType="com.cmx.mall.model.ProductDetails">
+            <id property="did" column="did"/>
+            <result property="d_productName" column="d_productName"/>
+            <result property="d_brand" column="d_brand"/>
+            <result property="d_age" column="d_age"/>
+            <result property="d_placeOrigin" column="d_placeOrigin"/>
+            <result property="d_gender" column="d_gender"/>
+            <result property="d_weigth" column="d_weigth"/>
+            <result property="d_manufacturerContact" column="d_manufacturerContact"/>
+            <result property="d_manufacturerAddress" column="d_manufacturerAddress"/>
+            <result property="d_manufacturerName" column="d_manufacturerName"/>
+        </association>
+        <association property="category" javaType="com.cmx.mall.model.Category">
+            <id property="id" column="id"/>
+            <result property="type" column="type"/>
+        </association>
+    </resultMap>
+
+
     <select id="findProductByTypeId" resultType="com.cmx.mall.model.ShopProduct">
-    select * from shop_product where typeId=#{typeId}
+        select *
+        from shop_product
+        where typeId = #{typeId}
     </select>
 
-    <select id="findAllProduct" resultType="com.cmx.mall.model.ShopProduct">
-    select * from shop_product
+    <select id="findAllProduct" resultMap="productMap">
+        SELECT p.*,
+               spd.*,
+               c.id cid,
+               c.type
+        FROM shop_product p
+                     LEFT JOIN shop_productdetails spd ON p.detail_id = spd.did
+                     LEFT JOIN shop_productcategory c ON p.typeId = c.id
+        <where>
+            isShelf = 1
+            <if test="keywords != null and keywords != ''">
+                and productName like concat('%', #{keywords}, '%')
+            </if>
+        </where>
     </select>
 
     <update id="updateIsShelf">
-    update shop_product set isShelf=#{isShelf} where id=#{id}
+        update shop_product
+        set isShelf=#{isShelf}
+        where id = #{id}
     </update>
 
     <update id="updateProduct">
-    update shop_product
+        update shop_product
         <set>
             <if test="productName != null and productName != ''">
                 productName=#{productName},
@@ -34,21 +80,21 @@
             <if test="discount != null">
                 discount=#{discount},
             </if>
-           <if test="detail_id != null">
+            <if test="detail_id != null">
                 detail_id=#{detail_id},
-           </if>
-           <if test="amount != null">
-            amount=#{amount},
-           </if>
-           <if test="isShelf != null">
-            isShelf=#{isShelf},
-           </if>
+            </if>
+            <if test="amount != null">
+                amount=#{amount},
+            </if>
+            <if test="isShelf != null">
+                isShelf=#{isShelf},
+            </if>
         </set>
-        where id=#{id}
+        where id = #{id}
     </update>
-<!--    <update id="updateCategory">-->
-<!--        update shop_productcategory set `type`=#{type}-->
-<!--    </update>-->
+    <!--    <update id="updateCategory">-->
+    <!--        update shop_productcategory set `type`=#{type}-->
+    <!--    </update>-->
 
     <update id="updateProductDetailsById">
         update shop_productdetails
@@ -63,22 +109,22 @@
                 d_placeOrigin=#{d_placeOrigin},
             </if>
             <if test="d_gender != null and d_gender != ''">
-                   d_gender=#{d_gender},
+                d_gender=#{d_gender},
             </if>
             <if test="d_weigth != null and d_weigth != ''">
-                    d_weigth=#{d_weigth},
+                d_weigth=#{d_weigth},
             </if>
             <if test="d_manufacturerContact != null and d_manufacturerContact != ''">
-                    d_manufacturerContact=#{d_manufacturerContact},
+                d_manufacturerContact=#{d_manufacturerContact},
             </if>
             <if test="d_manufacturerAddress != null and d_manufacturerAddress != ''">
-                    d_manufacturerAddress=#{d_manufacturerAddress},
+                d_manufacturerAddress=#{d_manufacturerAddress},
             </if>
             <if test="d_manufacturerName != null and d_manufacturerName != ''">
-                    d_manufacturerName=#{d_manufacturerName},
+                d_manufacturerName=#{d_manufacturerName},
             </if>
         </set>
-        where did=#{did}
+        where did = #{did}
     </update>
 
     <insert id="addProductDetails" keyProperty="did" useGeneratedKeys="true">
@@ -90,26 +136,26 @@
             <if test="d_brand != null and d_brand != ''">
                 d_brand,
             </if>
-           <if test="d_age != null and d_age != ''">
+            <if test="d_age != null and d_age != ''">
                 d_age,
             </if>
             <if test="d_placeOrigin != null and d_placeOrigin != ''">
                 d_placeOrigin,
             </if>
             <if test="d_gender != null and d_gender != ''">
-                   d_gender,
+                d_gender,
             </if>
             <if test="d_weigth != null and d_weigth != ''">
-                    d_weigth,
+                d_weigth,
             </if>
             <if test="d_manufacturerContact != null and d_manufacturerContact != ''">
-                    d_manufacturerContact,
+                d_manufacturerContact,
             </if>
             <if test="d_manufacturerAddress != null and d_manufacturerAddress != ''">
-                    d_manufacturerAddress,
+                d_manufacturerAddress,
             </if>
             <if test="d_manufacturerName != null and d_manufacturerName != ''">
-                    d_manufacturerName
+                d_manufacturerName
             </if>
         </trim>
         values
@@ -127,19 +173,19 @@
                 #{d_placeOrigin},
             </if>
             <if test="d_gender != null and d_gender != ''">
-                   #{d_gender},
+                #{d_gender},
             </if>
             <if test="d_weigth != null and d_weigth != ''">
-                    #{d_weigth},
+                #{d_weigth},
             </if>
             <if test="d_manufacturerContact != null and d_manufacturerContact != ''">
-                    #{d_manufacturerContact},
+                #{d_manufacturerContact},
             </if>
             <if test="d_manufacturerAddress != null and d_manufacturerAddress != ''">
-                    #{d_manufacturerAddress},
+                #{d_manufacturerAddress},
             </if>
             <if test="d_manufacturerName != null and d_manufacturerName != ''">
-                    #{d_manufacturerName}
+                #{d_manufacturerName}
             </if>
         </trim>
     </insert>
@@ -147,33 +193,77 @@
     <insert id="addProduct">
         insert into shop_product
         <trim prefix="(" suffix=")" suffixOverrides=",">
-           <if test="productName != null and productName != ''">productName,</if>
-           <if test="productImg != null and productImg != ''">productImg,</if>
-           <if test="typeId != null">typeId,</if>
-           <if test="price != null">price,</if>
-           <if test="description != null and description != ''">description,</if>
-           <if test="discount != null">discount,</if>
-           <if test="detail_id != null">detail_id,</if>
-           <if test="amount != null">amount,</if>
-           <if test="isShelf != null">isShelf</if>
+            <if test="productName != null and productName != ''">
+                productName,
+            </if>
+            <if test="productImg != null and productImg != ''">
+                productImg,
+            </if>
+            <if test="typeId != null">
+                typeId,
+            </if>
+            <if test="price != null">
+                price,
+            </if>
+            <if test="description != null and description != ''">
+                description,
+            </if>
+            <if test="discount != null">
+                discount,
+            </if>
+            <if test="detail_id != null">
+                detail_id,
+            </if>
+            <if test="amount != null">
+                amount,
+            </if>
+            <if test="isShelf != null">
+                isShelf
+            </if>
         </trim>
         values
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="productName != null and productName != ''">#{productName},</if>
-           <if test="productImg != null and productImg != ''">#{productImg},</if>
-           <if test="typeId != null">#{typeId},</if>
-           <if test="price != null">#{price},</if>
-           <if test="description != null and description != ''">#{description},</if>
-           <if test="discount != null">#{discount},</if>
-           <if test="detail_id != null">#{detail_id},</if>
-           <if test="amount != null">#{amount},</if>
-           <if test="isShelf != null">#{isShelf}</if>
-
+            <if test="productName != null and productName != ''">
+                #{productName},
+            </if>
+            <if test="productImg != null and productImg != ''">
+                #{productImg},
+            </if>
+            <if test="typeId != null">
+                #{typeId},
+            </if>
+            <if test="price != null">
+                #{price},
+            </if>
+            <if test="description != null and description != ''">
+                #{description},
+            </if>
+            <if test="discount != null">
+                #{discount},
+            </if>
+            <if test="detail_id != null">
+                #{detail_id},
+            </if>
+            <if test="amount != null">
+                #{amount},
+            </if>
+            <if test="isShelf != null">
+                #{isShelf}
+            </if>
         </trim>
-
     </insert>
-
-
-
-
+    <select id="adminFindAllProduct" resultMap="productMap">
+        SELECT p.*,
+               spd.*,
+               c.id cid,
+               c.type
+        FROM shop_product p
+                     LEFT JOIN shop_productdetails spd ON p.detail_id = spd.did
+                     LEFT JOIN shop_productcategory c ON p.typeId = c.id
+        <where>
+            <if test="keywords != null and keywords != ''">
+                productName like concat('%', #{keywords}, '%')
+            </if>
+        </where>
+    </select>
 </mapper>

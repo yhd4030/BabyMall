@@ -24,9 +24,14 @@ public class ProductListService {
         return new PageInfo<>(product);
     }
 
-    public PageInfo<ShopProduct> findAllProduct(int pageNum, int pageSize) {
+    public PageInfo<ProductDTO> findAllProduct(int pageNum, int pageSize,String keywords) {
         PageHelper.startPage(pageNum, pageSize);
-        List<ShopProduct> allProduct = productListMapper.findAllProduct();
+        List<ProductDTO> allProduct = productListMapper.findAllProduct(keywords);
+        return new PageInfo<>(allProduct);
+    }
+    public PageInfo<ProductDTO> adminFindAllProduct(int pageNum, int pageSize,String keywords) {
+        PageHelper.startPage(pageNum, pageSize);
+        List<ProductDTO> allProduct = productListMapper.adminFindAllProduct(keywords);
         return new PageInfo<>(allProduct);
     }
 

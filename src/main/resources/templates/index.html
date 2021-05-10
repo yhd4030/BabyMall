@@ -83,11 +83,11 @@
                     <!--                    <c:forEach items="${bookInfos}" begin="0" end="7" var="bookInfo">-->
 
                     <li class="product_li" th:each="newProduct:${newProduct}">
-                        <a th:href="'product/info1/'+${newProduct.id}" class="img" target="_blank">
+                        <a th:href="'product/info/'+${newProduct.id}" class="img" target="_blank">
                             <img th:src="${newProduct.productImg}"/>
                         </a>
                         <p class="name">
-                            <a th:href="'product/info1/'+${newProduct.id}" th:text="${newProduct.productName}"></a>
+                            <a th:href="'product/info/'+${newProduct.id}" th:text="${newProduct.productName}"></a>
                         </p>
 <!--                        <p class="author">${bookInfo.author}</p>-->
                         <p class="price">
@@ -125,11 +125,11 @@
                 <ul class="product_ul">
                     <!--                    <c:forEach items="${bookInfos}" begin="8" end="17" var="bookInfo">-->
                     <li class="product_li" th:each="recommended:${recommended}">
-                        <a th:href="'product/info2/'+${recommended.id}" class="img" target="_blank">
+                        <a th:href="'product/info/'+${recommended.id}" class="img" target="_blank">
                             <img th:src="${recommended.productImg}"/>
                         </a>
                         <p class="name">
-                            <a th:href="'product/info2/'+${recommended.id}" th:text="${recommended.productName}"></a>
+                            <a th:href="'product/info/'+${recommended.id}" th:text="${recommended.productName}"></a>
                         </p>
                         <!--                        <p class="author">${bookInfo.author}</p>-->
                         <p class="price">

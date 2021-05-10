@@ -17,7 +17,7 @@ public interface IUserMapper {
 
     UserDTO checkPwd(String username);
 
-    List<UserDTO> findAllUser();
+    List<UserDTO> findAllUser(@Param("keywords") String keywords);
 
     void deleteById(Integer id);
 

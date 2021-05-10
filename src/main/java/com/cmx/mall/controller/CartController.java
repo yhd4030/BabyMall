@@ -1,17 +1,17 @@
 package com.cmx.mall.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.cmx.mall.model.Cart;
+import com.cmx.mall.model.JSONResult;
 import com.cmx.mall.service.CartService;
 import com.cmx.mall.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import java.math.BigDecimal;
 import java.util.List;
 
 @Controller
@@ -22,20 +22,21 @@ public class CartController {
 
     @Autowired
     private OrderService orderService;
-
+    //打开购物车界面
     @GetMapping("/cart")
     public String cart(String username, Model model) {
-        double total = 0;
+        BigDecimal total = new BigDecimal("0");
         List<Cart> carts = cartService.showCartByUsername(username);
         for (Cart cartItem : carts) {
-            total = total + cartItem.getRealPrice().doubleValue() * cartItem.getAmount();
+            BigDecimal amount = new BigDecimal(cartItem.getAmount().toString());
+            total = total.add(cartItem.getRealPrice().multiply(amount));
         }
         model.addAttribute("carts", carts);
         model.addAttribute("totalPrice", total);
         return "Cart";
     }
 
-
+    //添加购物车操作
     @PostMapping("/cart/addition")
     @ResponseBody
     public boolean addCart(Cart cart, HttpSession session) {
@@ -43,23 +44,36 @@ public class CartController {
         boolean addCart = cartService.addCart(cart, username);
         return addCart;
     }
-
+    //增加商品和减少商品时价格的处理操作
     @PostMapping("/cart/addOrSub")
     @ResponseBody
-    public Double addOrSub(Cart cart, HttpSession session) {
+    public BigDecimal addOrSub(Cart cart, HttpSession session) {
         String username = (String) session.getAttribute("username");
         cart.setUsername(username);
         cartService.updateAmount(cart);
-        double totalPrice = cartService.calTotalPrice(cart);
-        return totalPrice;
+        return cartService.calTotalPrice(cart).setScale(2);
     }
-
+    //删除单个购物车中的商品
     @PostMapping("/cart/delete")
     @ResponseBody
-    public boolean deleteCartItem(Integer id,HttpSession session){
+    public boolean deleteCartItem(Integer id, HttpSession session) {
         String username = (String) session.getAttribute("username");
-        boolean isDelete = cartService.deleteCartItemById(id,username);
+        boolean isDelete = cartService.deleteCartItemById(id, username);
         return isDelete;
+    }
+    //删除选中的购物车商品
+    @PostMapping("/cart/deleteAll")
+    @ResponseBody
+    public JSONResult deleteALl(String idStr) {
+        try {
+            List<Integer> ids = JSON.parseArray(idStr, Integer.class);
+            System.out.println(ids);
+            cartService.deleteAll(ids);
+            return new JSONResult(true, "删除成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return new JSONResult(false, "删除失败");
     }
 
 

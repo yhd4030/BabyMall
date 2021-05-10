@@ -11,20 +11,20 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @RequestMapping("/user")
 public class LoginController {
 
+    //打开登录界面
     @GetMapping("/login")
     public String login() {
         return "login";
     }
 
-//    @PostMapping("/login")
+    //    @PostMapping("/login")
 //    public String login(String username, String password) {
 //
 //        return "redirect:/";
 //    }
-
+    //发送登录错误的信息
     @PostMapping("/login/error")
     public String loginError(Model model) {
-        System.out.println("登录失败");
         model.addAttribute("error", "登录失败");
         return "login";
     }
