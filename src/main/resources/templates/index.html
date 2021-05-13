@@ -91,7 +91,7 @@
                         </p>
 <!--                        <p class="author">${bookInfo.author}</p>-->
                         <p class="price">
-                            <span class="rob" th:text="${newProduct.price}+'￥'"></span>
+                            <span class="rob" th:text="${newProduct.price.multiply(newProduct.discount).setScale(2)}+'￥'"></span>
                             <span class="oprice" th:text="${newProduct.price}+'￥'"></span>
                         </p>
                     </li>
@@ -133,7 +133,7 @@
                         </p>
                         <!--                        <p class="author">${bookInfo.author}</p>-->
                         <p class="price">
-                            <span class="rob" th:text="${recommended.price}+'￥'"></span>
+                            <span class="rob" th:text="${recommended.price.multiply(recommended.discount).setScale(2)}+'￥'"></span>
                             <span class="oprice" th:text="${recommended.price}+'￥'"></span>
                         </p>
                     </li>

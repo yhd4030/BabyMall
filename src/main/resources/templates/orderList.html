@@ -15,7 +15,7 @@
     <script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
     <script type="text/javascript" th:src="@{/js/dialoger.js}"></script>
     <script type="text/javascript" th:src="@{/js/domlastic.js}"></script>
-    <script type="text/javascript" th:src="@{/js/jquery-confirm.js}" ></script>
+    <script type="text/javascript" th:src="@{/js/jquery-confirm.js}"></script>
 
     <script>
         function confirmReceiving(id) {
@@ -36,7 +36,7 @@
                                 data: {id: id},
                                 dataType: "json",
                                 success: function (data) {
-                                    if (data==true){
+                                    if (data == true) {
                                         domLastic.init({
                                             itemsClassnameToConnect: 'cart_item', //类选择器
                                             itemsJointStrength: 10, //value optimum between 10 - 100
@@ -84,7 +84,7 @@
                                 data: {id: id},
                                 dataType: "json",
                                 success: function (data) {
-                                    if (data==true){
+                                    if (data == true) {
                                         domLastic.init({
                                             itemsClassnameToConnect: 'cart_item', //类选择器
                                             itemsJointStrength: 10, //value optimum between 10 - 100
@@ -101,7 +101,7 @@
                                             //aniamte ListItems
                                             domLastic.animateItems();
                                         });
-                                        var href= window.location.href;
+                                        var href = window.location.href;
                                         window.location.replace(href);
                                     }
 
@@ -134,8 +134,8 @@
                                 data: {id: id},
                                 dataType: "json",
                                 success: function (data) {
-                                    if (data==true){
-                                        var href= window.location.href;
+                                    if (data == true) {
+                                        var href = window.location.href;
                                         window.location.replace(href);
                                     }
 
@@ -151,7 +151,7 @@
         }
 
         function toPay(id) {
-            window.location.href="/order/toPayOrList?id="+id;
+            window.location.href = "/order/toPayOrList?id=" + id;
         }
     </script>
 </head>
@@ -183,7 +183,7 @@
                 <td style="text-align: center">
                     <div th:each="orderItem:${order.orderItems}">
                         <span th:text="${orderItem.amount} +X"></span>
-                        <a th:href="'/books?bookId='+${orderItem.shopProduct.id}" target="_blank"
+                        <a th:href="'/product/info/'+${orderItem.shopProduct.id}" target="_blank"
                            title="${orderDetail.bookName}" style="width: 50px;height: 50px">
                             <img th:src="${orderItem.shopProduct.productImg}" style="width: 40px"/>
                             <span class="orderList_product_name" th:text="${orderItem.shopProduct.productName}"></span>
@@ -209,14 +209,14 @@
                         <button type="button" class="btn btn-info btn-xs" th:onclick="|toPay(${order.id})|">
                             去支付
                         </button>
-                        <button  type="button" class="btn btn-xs btn-danger"
+                        <button type="button" class="btn btn-xs btn-danger"
                                 th:onclick="|cancelOrder(${order.id})|">
                             取消订单
                         </button>
                     </div>
 
-                    <div  th:if="${order.order_status.equals('5')}">
-                        <button  type="button" class="btn btn-xs btn-danger">
+                    <div th:if="${order.order_status.equals('5')}">
+                        <button type="button" class="btn btn-xs btn-danger">
                             订单已取消
                         </button>
                     </div>
@@ -231,7 +231,8 @@
                         <button type="button" class="btn btn-xs btn-info" onclick="lookShipping()">
                             查看物流
                         </button>
-                        <button th:id="'delete'+${order.id}" type="button" class="btn btn-xs btn-danger" th:onclick="|deleteOrder(${order.id})|">
+                        <button th:id="'delete'+${order.id}" type="button" class="btn btn-xs btn-danger"
+                                th:onclick="|deleteOrder(${order.id})|">
                             删除订单
                         </button>
                     </div>
@@ -255,9 +256,10 @@
                     </a>
                 </li>
                 <!--遍历条数-->
-                <li  th:each="nav:${orderLists.navigatepageNums}">
+                <li th:each="nav:${orderLists.navigatepageNums}">
                     <a th:href="'?pageNum='+${nav}" th:text="${nav}" th:if="${nav != orderLists.pageNum}"></a>
-                    <span style="font-weight: bold;background: #6faed9;" th:if="${nav == orderLists.pageNum}" th:text="${nav}" ></span>
+                    <span style="font-weight: bold;background: #6faed9;" th:if="${nav == orderLists.pageNum}"
+                          th:text="${nav}"></span>
                 </li>
 
                 <li class="next" th:if="${orderLists.hasNextPage}">

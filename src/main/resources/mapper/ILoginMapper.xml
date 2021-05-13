@@ -11,12 +11,13 @@
     <result property="email" column="email"></result>
     <result property="detail_address" column="detail_address"></result>
     <association property="role" javaType="com.cmx.mall.model.Role">
-        <id property="id" column="id"></id>
-        <result property="role" column="role"></result>
+        <id property="id" column="rid"></id>
+        <result property="name" column="name"></result>
+        <result property="sn" column="sn"></result>
     </association>
 </resultMap>
 
 <select id="checkUser" resultMap="userMap">
-    select su.*,sr.role from shop_user su,shop_role sr where su.roleId=sr.id and username=#{s};
+    select su.*,r.id rid,r.name,r.sn from shop_user su,role r where su.roleId=r.id and username=#{s};
 </select>
 </mapper>

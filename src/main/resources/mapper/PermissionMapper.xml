@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cmx.mall.mapper.PermissionMapper">
+    <resultMap id="BaseResultMap" type="com.cmx.mall.model.Permission">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="expression" property="expression"/>
+    </resultMap>
+    <delete id="deleteByPrimaryKey">
+        delete
+        from permission
+        where id = #{id}
+    </delete>
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        insert into permission (name, expression)
+        values (#{name}, #{expression})
+    </insert>
+    <update id="updateByPrimaryKey">
+        update permission
+        set name       = #{name},
+            expression = #{expression}
+        where id = #{id}
+    </update>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap">
+        select id, name, expression
+        from permission
+        where id = #{id}
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap">
+        select id, name, expression
+        from permission
+    </select>
+    <select id="selectForList" resultMap="BaseResultMap">
+        select id, name, expression
+        from permission
+    </select>
+    <insert id="batchInsert">
+        insert into permission (name, expression)
+                values
+        <foreach collection="permissions" item="item" separator=",">
+            (#{item.name}, #{item.expression})
+        </foreach>
+    </insert>
+    <select id="selectPermissionById" resultType="java.lang.String">
+        SELECT DISTINCT p.expression
+        FROM employee_role er
+                     JOIN role_permission rp ON er.role_id = rp.role_id
+                     JOIN permission p ON rp.permission_id = p.id
+        where er.employee_id = #{id}
+    </select>
+</mapper>

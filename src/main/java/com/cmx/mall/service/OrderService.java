@@ -1,6 +1,7 @@
 package com.cmx.mall.service;
 
 import com.cmx.mall.dto.OrderDTO;
+import com.cmx.mall.dto.ProductDTO;
 import com.cmx.mall.mapper.ICartMapper;
 import com.cmx.mall.mapper.IOrderMapper;
 import com.cmx.mall.model.Cart;
@@ -33,7 +34,7 @@ public class OrderService {
     }
 
     public List<Cart> getCartList(String[] pIds, Integer buyNum, String username) {
-        List<Cart> list=new ArrayList<>();
+        List<Cart> list = new ArrayList<>();
         Cart cart = new Cart();
         ShopProduct productById = cartMapper.findProductById(Integer.valueOf(pIds[0]));
         cart.setPid(Integer.valueOf(pIds[0]));
@@ -123,4 +124,9 @@ public class OrderService {
     }
 
 
+    public PageInfo<OrderDTO> queryForList(int pageNum, int pageSize, String keywords) {
+        PageHelper.startPage(pageNum, pageSize);
+        List<OrderDTO> orderDTOS = orderMapper.selectForList(keywords);
+        return new PageInfo<>(orderDTOS);
+    }
 }

@@ -32,4 +32,6 @@ public interface IOrderMapper {
     Order selectById(Integer id);
 
     boolean deleteOrderItemByOrderId(String order_num);
+
+    List<OrderDTO> selectForList(String keywords);
 }

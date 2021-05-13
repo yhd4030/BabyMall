@@ -26,7 +26,7 @@ public class LoginService implements UserDetailsService {
         //字符串s 为表单传过来的username
         UserDTO user = loginMapper.checkUser(s);
         List<SimpleGrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority(user.getRole().getRole()));
+        authorities.add(new SimpleGrantedAuthority(user.getRole().getSn()));
 
         return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), authorities);
         //passwordEncoderUtil.passwordEncoder(user.getPassword())

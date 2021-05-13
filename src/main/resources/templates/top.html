@@ -23,7 +23,7 @@
                 <li role="presentation">
                     <a href="/user/information">个人信息</a>
                 </li>
-                <li th:if="${#httpSession.getAttribute('role')}=='管理员'">
+                <li sec:authorize="hasAuthority('admin')">
                     <a href="/admin/home">后台管理</a>
                 </li>
                 <li role="presentation">

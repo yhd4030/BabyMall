@@ -27,7 +27,7 @@ public class IndexController {
         if (username != null && username != "") {
             UserDTO user = indexService.findUser(username);
             session.setAttribute("nickname", user.getNickname());
-            session.setAttribute("role", user.getRole().getRole());
+            session.setAttribute("role", user.getRole().getSn());
         }
         return "index";
     }

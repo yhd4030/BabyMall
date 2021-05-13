@@ -1,120 +1,191 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.cmx.mall.mapper.IOrderMapper">
-<resultMap id="orderMap" type="com.cmx.mall.dto.OrderDTO">
-    <id property="id" column="soid"></id>
-    <result property="order_num" column="order_num"></result>
-    <result property="create_date" column="create_date"></result>
-    <result property="user_id" column="user_id"></result>
-    <result property="address_id" column="address_id"></result>
-    <result property="order_status" column="order_status"></result>
-    <result property="order_total" column="order_total"></result>
-    <association property="address" javaType="com.cmx.mall.model.Address">
-        <id property="id" column="said"></id>
-        <result property="user_id" column="user_id"></result>
-        <result property="province" column="province"></result>
-        <result property="city" column="city"></result>
-        <result property="area" column="area"></result>
-        <result property="detail_address" column="detail_address"></result>
-        <result property="receiver" column="receiver"></result>
-        <result property="tel" column="tel"></result>
-        <result property="is_default" column="is_default"></result>
-    </association>
-    <collection property="orderItems" ofType="com.cmx.mall.model.OrderItem">
-        <id property="id" column="soiid"></id>
-        <result property="order_id" column="order_id"></result>
-        <result property="product_id" column="product_id"></result>
-        <result property="amount" column="amount"></result>
-        <association property="shopProduct" javaType="com.cmx.mall.model.ShopProduct">
-            <id property="id" column="spid"></id>
-            <result property="productName" column="productName"></result>
-            <result property="productImg" column="productImg"></result>
-            <result property="typeId" column="typeId"></result>
-            <result  property="price" column="price"></result>
-            <result property="description" column="description"></result>
-            <result property="discount" column="discount"></result>
-            <result property="detail_id" column="detail_id"></result>
+    <resultMap id="orderMap" type="com.cmx.mall.dto.OrderDTO">
+        <id property="id" column="soid"/>
+        <result property="order_num" column="order_num"/>
+        <result property="create_date" column="create_date"/>
+        <result property="user_id" column="user_id"/>
+        <result property="address_id" column="address_id"/>
+        <result property="order_status" column="order_status"/>
+        <result property="order_total" column="order_total"/>
+        <association property="address" javaType="com.cmx.mall.model.Address">
+            <id property="id" column="said"/>
+            <result property="user_id" column="user_id"/>
+            <result property="province" column="province"/>
+            <result property="city" column="city"/>
+            <result property="area" column="area"/>
+            <result property="detail_address" column="detail_address"/>
+            <result property="receiver" column="receiver"/>
+            <result property="tel" column="tel"/>
+            <result property="is_default" column="is_default"/>
         </association>
-    </collection>
-
-</resultMap>
+        <collection property="orderItems" ofType="com.cmx.mall.model.OrderItem">
+            <id property="id" column="soiid"/>
+            <result property="order_id" column="order_id"/>
+            <result property="product_id" column="product_id"/>
+            <result property="amount" column="amount"/>
+            <association property="shopProduct" javaType="com.cmx.mall.model.ShopProduct">
+                <id property="id" column="spid"/>
+                <result property="productName" column="productName"/>
+                <result property="productImg" column="productImg"/>
+                <result property="typeId" column="typeId"/>
+                <result property="price" column="price"/>
+                <result property="description" column="description"/>
+                <result property="discount" column="discount"/>
+                <result property="detail_id" column="detail_id"/>
+            </association>
+        </collection>
+    </resultMap>
     <select id="selectByPid" resultType="com.cmx.mall.model.Cart">
-    select * from shop_cart
+        select *
+        from shop_cart
         <where>
             id in
             <foreach item="item" collection="param1" separator="," open="(" close=")" index="">
                 #{item}
             </foreach>
         </where>
-                and username=#{username}
+        and username = #{username}
     </select>
 
     <insert id="addOrder">
-    insert into shop_order(order_num,create_date,user_id,order_total,address_id,order_status) values (#{order_num},#{create_date},#{user_id},#{order_total},#{address_id},#{order_status});
+        insert into shop_order(order_num, create_date, user_id, order_total, address_id, order_status)
+        values (#{order_num}, #{create_date}, #{user_id}, #{order_total}, #{address_id}, #{order_status});
     </insert>
 
     <insert id="addOrderItem">
-    insert  into shop_orderitem(order_id,product_id,amount) values
+        insert into shop_orderitem(order_id, product_id, amount) values
 
         <foreach collection="itemList" item='item' index='index' separator=','>
-            (#{item.order_id},#{item.product_id},#{item.amount})
+            (#{item.order_id}, #{item.product_id}, #{item.amount})
         </foreach>
-
     </insert>
 
     <select id="selectByOrderId" resultType="com.cmx.mall.model.Order">
-    select id,order_num from shop_order where order_num=#{order_num}
+        select id, order_num
+        from shop_order
+        where order_num = #{order_num}
     </select>
 
     <select id="selectById" resultType="com.cmx.mall.model.Order">
-    select * from shop_order where id=#{id}
+        select *
+        from shop_order
+        where id = #{id}
     </select>
 
     <select id="selectAllById" resultMap="orderMap">
-
-     select
-     so.id,so.order_num,so.create_date,so.user_id,so.order_total,so.order_status,
-     sa.id said,sa.user_id,sa.province,sa.city,sa.area,sa.detail_address,sa.receiver,sa.tel,sa.is_default,
-     soi.product_id,soi.amount,
-     sp.productName,sp.productImg,sp.typeId,sp.price,sp.description,sp.discount
-     from shop_order so,shop_orderitem soi,shop_product sp,shop_address sa
-      where so.order_num=soi.order_id
-       and soi.product_id=sp.id
-       AND so.address_id=sa.id
-       and  so.user_id=#{username}
-        and so.id=#{id}
-
+        select so.id,
+               so.order_num,
+               so.create_date,
+               so.user_id,
+               so.order_total,
+               so.order_status,
+               sa.id said,
+               sa.user_id,
+               sa.province,
+               sa.city,
+               sa.area,
+               sa.detail_address,
+               sa.receiver,
+               sa.tel,
+               sa.is_default,
+               soi.product_id,
+               soi.amount,
+               sp.productName,
+               sp.productImg,
+               sp.typeId,
+               sp.price,
+               sp.description,
+               sp.discount
+        from shop_order so,
+             shop_orderitem soi,
+             shop_product sp,
+             shop_address sa
+        where so.order_num = soi.order_id
+          and soi.product_id = sp.id
+          AND so.address_id = sa.id
+          and so.user_id = #{username}
+          and so.id = #{id}
     </select>
 
     <select id="selectByOrderList" resultMap="orderMap">
-    SELECT so.id soid,so.order_num,so.create_date,so.user_id,so.order_total,so.order_status,
-    soi.id soiid,soi.order_id,soi.product_id,soi.amount,
-    sp.id spid,sp.productImg,sp.productName
-    from shop_order so,shop_orderitem soi,shop_product sp
-    WHERE
-     so.`order_num`=soi.`order_id` AND soi.`product_id`=sp.`id` AND so.`user_id`=#{username}
+        SELECT so.id  soid,
+               so.order_num,
+               so.create_date,
+               so.user_id,
+               so.order_total,
+               so.order_status,
+               soi.id soiid,
+               soi.order_id,
+               soi.product_id,
+               soi.amount,
+               sp.id  spid,
+               sp.productImg,
+               sp.productName
+        from shop_order so,
+             shop_orderitem soi,
+             shop_product sp
+        where so.`order_num` = soi.`order_id`
+          AND soi.`product_id` = sp.`id`
+          AND so.`user_id` = #{username}
     </select>
     <update id="updateOrderStatusById">
-
-        update shop_order set order_status=#{status} where user_id=#{username} and id=#{id}
-
+        update shop_order
+        set order_status=#{status}
+        where user_id = #{username}
+          and id = #{id}
     </update>
 
     <update id="updateOrderStatusByOrderId">
-
-        update shop_order set order_status=#{status} where user_id=#{username} and order_num=#{orderId}
-
+        update shop_order
+        set order_status=#{status}
+        where user_id = #{username}
+          and order_num = #{orderId}
     </update>
 
     <delete id="deleteOrderById">
-
-        delete from shop_order so where so.user_id=#{username} and so.id=#{id}
-
+        delete
+        from shop_order so
+        where so.user_id = #{username}
+          and so.id = #{id}
     </delete>
 
     <delete id="deleteOrderItemByOrderId">
-
-        delete from shop_orderitem  where order_id=#{order_num}
-
+        delete
+        from shop_orderitem
+        where order_id = #{order_num}
     </delete>
+
+    <select id="selectForList" resultMap="orderMap">
+        SELECT so.id  soid,
+               so.order_num,
+               so.create_date,
+               so.user_id,
+               so.order_total,
+               so.order_status,
+               soi.id soiid,
+               soi.order_id,
+               soi.product_id,
+               soi.amount,
+               sp.id  spid,
+               sp.productImg,
+               sp.productName,
+               sa.id  said,
+               sa.user_id,
+               sa.province,
+               sa.city,
+               sa.area,
+               sa.detail_address,
+               sa.receiver,
+               sa.tel,
+               sa.is_default
+        from shop_order so,
+             shop_orderitem soi,
+             shop_product sp,
+             shop_address sa
+        where so.`order_num` = soi.`order_id`
+          AND soi.`product_id` = sp.`id`
+          AND so.address_id = sa.id
+    </select>
 </mapper>

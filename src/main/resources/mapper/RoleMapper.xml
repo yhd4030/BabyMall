@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cmx.mall.mapper.RoleMapper">
+    <resultMap id="BaseResultMap" type="com.cmx.mall.model.Role">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="sn" property="sn"/>
+    </resultMap>
+    <delete id="deleteByPrimaryKey">
+        delete
+        from role
+        where id = #{id}
+    </delete>
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        insert into role (name, sn)
+        values (#{name}, #{sn})
+    </insert>
+    <update id="updateByPrimaryKey">
+        update role
+        set name = #{name},
+            sn   = #{sn}
+        where id = #{id}
+    </update>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap">
+        select id, name, sn
+        from role
+        where id = #{id}
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap">
+        select id, name, sn
+        from role
+    </select>
+    <select id="selectForList" resultType="com.cmx.mall.model.Role">
+        select id, name, sn
+        from role
+    </select>
+    <insert id="insertRelation">
+        insert into role_permission(role_id, permission_id)
+        VALUES (#{roleId}, #{permissionId})
+    </insert>
+    <select id="selectRoleAndPermissionRelation" resultType="com.cmx.mall.model.Permission">
+        SELECT p.*
+        FROM role r
+                     JOIN role_permission rp on r.id = rp.role_id
+                     JOIN permission p ON p.id = rp.permission_id
+        where r.id = #{id}
+    </select>
+    <delete id="deleteRelation">
+        delete
+        from role_permission
+        where role_id = #{id}
+    </delete>
+    <select id="selectRoleById" resultType="java.lang.String">
+        SELECT r.sn
+        FROM employee_role er
+                     JOIN role r ON er.role_id = r.id
+        WHERE er.employee_id = #{id}
+    </select>
+</mapper>

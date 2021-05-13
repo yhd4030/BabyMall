@@ -40,7 +40,7 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1 class="m-0">商品管理</h1>
+                        <h1 class="m-0">订单管理</h1>
                     </div><!-- /.col -->
                 </div><!-- /.row -->
             </div><!-- /.container-fluid -->
@@ -54,7 +54,7 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-header">
-                                <h3 class="card-title">商品列表</h3>
+                                <h3 class="card-title">订单列表</h3>
 
                                 <div class="card-tools">
                                     <form id="adminProductSearch" action="/admin/product/list" class="form-inline"
@@ -78,54 +78,76 @@
                                     <thead>
                                     <tr>
                                         <th>序号</th>
-                                        <th>商品名称</th>
-                                        <th>图片</th>
-                                        <th>种类</th>
-                                        <th>原价</th>
-                                        <th>折扣</th>
-                                        <th>现价</th>
-                                        <th>状态</th>
-                                        <th>库存</th>
+                                        <th>订单编号</th>
+                                        <th width="220px">买了什么</th>
+                                        <th>订单状态</th>
+                                        <th>金额</th>
+                                        <th>收货地址</th>
                                         <th>操作</th>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr th:each="product:${productList.list}">
-                                        <td th:text="${productStat.count}"></td>
+                                    <tr class="order_item" th:id="'orderItem'+${order.id}" th:each="order:${pageInfo.list}">
+                                        <td th:text="${orderStat.count}"></td>
                                         <td>
-                                            <a th:href="'/product/info/'+${product.id}" target="_blank"
-                                               th:title="${product.productName}">
-                    <span class="admin_productName" th:text="${product.productName}"
-                          style="white-space: nowrap; text-overflow: ellipsis; overflow: hidden; width: 220px; display: inline-block;"></span>
-                                            </a>
+                                            <span th:text="${order.order_num}"></span>
+                                        </td>
+                                        <td style="text-align: center;white-space: nowrap; text-overflow: ellipsis; overflow: hidden; width: 220px; display: inline-block;">
+                                            <div th:each="orderItem:${order.orderItems}">
+                                                <span th:text="${orderItem.amount} +X"></span>
+                                                <a th:href="'/books?bookId='+${orderItem.shopProduct.id}" target="_blank"
+                                                   title="${orderDetail.bookName}" style="width: 50px;height: 50px">
+                                                    <img th:src="${orderItem.shopProduct.productImg}" style="width: 40px"/>
+                                                    <span class="orderList_product_name" th:text="${orderItem.shopProduct.productName}"></span>
+                                                </a>
+                                            </div>
+
+
                                         </td>
                                         <td>
-                                            <img th:src="${product.productImg}" style="width: 10%">
+                                            <!--                    三目运算符嵌套 先判断是否支付，再判断是否完成-->
+                                            <span th:text=" ${order.order_status}=='4'?'完成订单':(${order.order_status}=='1'?'支付成功':'未支付')"></span>
                                         </td>
-                                        <td th:text="${product.category.type}"></td>
-                                        <td class="red" th:text="'￥'+${product.price}"></td>
-                                        <td class="red" th:text="${product.discount}"></td>
-                                        <td class="red"
-                                            th:text="${product.price.multiply(product.discount).setScale(2)}"></td>
-                                        <td th:class="${product.isShelf}==1?'green':'red'" th:id="'state'+${product.id}"
-                                            th:text="${product.isShelf}==1?'上架中':'已下架'"></td>
-                                        <td th:text="${product.amount}"></td>
                                         <td>
-                                            <button type="button" class="btn btn-xs btn-info"
-                                                    th:onclick="|editBook(${product.id})|">
-                                                <span class="glyphicon glyphicon-pencil"></span> 编辑
-                                            </button>
-                                            <button th:id="'shelfBtn'+${product.id}" type="button"
-                                                    class="btn btn-xs btn-warning"
-                                                    th:text="${product.isShelf}==1?'下架':'上架'"
-                                                    th:onclick="|changeBookShelf(${product.id},${product.isShelf})|"></button>
-                                            <button type="button" class="btn btn-xs btn-danger"
-                                                    th:onclick="|deleteBook(${product.id})|">
-                                                <span class="glyphicon glyphicon-pencil"></span> 删除
-                                            </button>
+                                            <span class="red" th:text="'￥'+${order.order_total}"></span>
+                                        </td>
+                                        <td>
+                                                                <span th:text="${order.address.province}+${order.address.city}+${order.address.area}+${order.address.detail_address}"></span>
+                                        </td>
+                                        <td>
+                                            <!--                    订单状态为0 未支付-->
+                                            <div th:id="'cancel'+${order.id}" th:if="${order.order_status.equals('0')}">
+                                                <button type="button" class="btn btn-info btn-xs" th:onclick="|toPay(${order.id})|">
+                                                    去支付
+                                                </button>
+                                                <button  type="button" class="btn btn-xs btn-danger"
+                                                         th:onclick="|cancelOrder(${order.id})|">
+                                                    取消订单
+                                                </button>
+                                            </div>
+
+                                            <div  th:if="${order.order_status.equals('5')}">
+                                                <button  type="button" class="btn btn-xs btn-danger">
+                                                    订单已取消
+                                                </button>
+                                            </div>
+
+                                            <!--                    订单状态为1 已支付-->
+                                            <div th:if="${order.order_status.equals('1')||order.order_status.equals('4')}">
+                                                <button th:id="'complete'+${order.id}" th:if="${ order.order_status.equals('1')}"
+                                                        type="button" class="btn btn-xs btn-info"
+                                                        th:onclick="|confirmReceiving(${order.id})|">
+                                                    确认收货
+                                                </button>
+                                                <button type="button" class="btn btn-xs btn-info" onclick="lookShipping()">
+                                                    查看物流
+                                                </button>
+                                                <button th:id="'delete'+${order.id}" type="button" class="btn btn-xs btn-danger" th:onclick="|deleteOrder(${order.id})|">
+                                                    删除订单
+                                                </button>
+                                            </div>
                                         </td>
                                     </tr>
-                                    <!--        </c:forEach>-->
                                     </tbody>
                                 </table>
                             </div>
@@ -135,21 +157,21 @@
                                                              th:href="'?pageNum=1&keywords='+${keywords}"></a>
                                     </li>
                                     <li class="page-item"><a class="page-link fas fa-angle-left"
-                                                             th:href="'?pageNum='+${productList.prePage}+'&keywords='+${keywords}"></a>
+                                                             th:href="'?pageNum='+${pageInfo.prePage}+'&keywords='+${keywords}"></a>
                                     </li>
-                                    <li th:each="nav : ${productList.navigatepageNums}" class="page-item">
+                                    <li th:each="nav : ${pageInfo.navigatepageNums}" class="page-item">
                                         <a class="page-link" th:href="'?pageNum='+${nav}+'&keywords='+${keywords}" th:text="${nav}"
-                                           th:if="${nav != productList.pageNum}"></a>
+                                           th:if="${nav != pageInfo.pageNum}"></a>
                                         <a class="page-link" id="currentPage" th:href="'?pageNum='+${nav}+'&keywords='+${keywords}"
                                            th:text="${nav}"
-                                           th:if="${nav == productList.pageNum}"></a>
+                                           th:if="${nav == pageInfo.pageNum}"></a>
                                         <!--                                        <span style="font-weight: bold" th:if="${nav == userList.pageNum}" th:text="${nav}"></span>-->
                                     </li>
                                     <li class="page-item"><a class="page-link fas fa-angle-right"
-                                                             th:href="'?pageNum='+${productList.nextPage}+'&keywords='+${keywords}"></a>
+                                                             th:href="'?pageNum='+${pageInfo.nextPage}+'&keywords='+${keywords}"></a>
                                     </li>
                                     <li class="page-item"><a class="page-link fas fa-angle-double-right"
-                                                             th:href="'?pageNum='+${productList.pages}+'&keywords='+${keywords}"></a>
+                                                             th:href="'?pageNum='+${pageInfo.pages}+'&keywords='+${keywords}"></a>
                                     </li>
                                 </ul>
                             </div>
@@ -170,7 +192,7 @@
 </body>
 <script type="text/javascript">
 
-    var cuLi = $(".productList");
+    var cuLi = $(".orderList");
     cuLi.addClass("active");
     $(".adminProduct>a").addClass("active");
     $(".adminProduct").addClass("menu-open");
