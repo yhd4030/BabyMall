@@ -24,7 +24,6 @@ public class VisitCountListener implements HttpSessionListener {
     @Override
     public void sessionCreated(HttpSessionEvent se) {
         System.out.println("session已经创建");
-
         Date date = new Date(se.getSession().getCreationTime());
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         String visitDate = simpleDateFormat.format(date);

@@ -53,7 +53,7 @@ public class AdminReportController {
         List<Object> groupType = new ArrayList<>();
         List<Object> counts = new ArrayList<>();
         for (VisitCount visitCount : visitCounts) {
-            groupType.add(new SimpleDateFormat("yyyy-MM-dd").format(visitCount.getVisitDate()));
+            groupType.add(visitCount.getVisitDate());
             counts.add(visitCount.getQuantity());
         }
         model.addAttribute("groupType", groupType);

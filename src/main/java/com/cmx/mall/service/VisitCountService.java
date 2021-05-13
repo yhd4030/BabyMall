@@ -19,15 +19,10 @@ public class VisitCountService {
         //判断今天的访问是否为空
         VisitCount visitCount = visitCountMapper.checkVisitDate(visitDate);
         if (visitCount == null) {
-            try {
-                VisitCount newVisitCount = new VisitCount();
-                newVisitCount.setQuantity(1L);
-                Date date = new SimpleDateFormat("yyyy-MM-dd").parse(visitDate);
-                newVisitCount.setVisitDate(date);
-                visitCountMapper.insert(newVisitCount);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
+            VisitCount newVisitCount = new VisitCount();
+            newVisitCount.setQuantity(1L);
+            newVisitCount.setVisitDate(visitDate);
+            visitCountMapper.insert(newVisitCount);
         } else {
             Long quantity = visitCount.getQuantity();
             quantity++;

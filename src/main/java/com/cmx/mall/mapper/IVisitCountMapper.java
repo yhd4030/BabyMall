@@ -2,6 +2,7 @@ package com.cmx.mall.mapper;
 
 import com.cmx.mall.model.VisitCount;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.Date;
 import java.util.List;

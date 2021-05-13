@@ -7,6 +7,6 @@ import java.util.Date;
 @Data
 public class VisitCount {
     private Long id;
-    private Date visitDate;
+    private String visitDate;
     private Long quantity;
 }
