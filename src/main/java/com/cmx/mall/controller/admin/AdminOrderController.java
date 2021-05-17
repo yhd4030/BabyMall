@@ -22,7 +22,7 @@ public class AdminOrderController {
 
 
     //商品列表界面
-    @GetMapping("/list")
+    @RequestMapping("/list")
     public String productList(Model model,
                               @RequestParam(value = "errorMsg", required = false) String errorMsg,
                               @RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
