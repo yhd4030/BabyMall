@@ -14,7 +14,9 @@
         <result property="zip_code" column="zip_code"/>
         <result property="roleId" column="roleId"/>
         <association property="role" javaType="com.cmx.mall.model.Role">
-            <result property="role" column="role"/>
+            <id property="id" column="rid"/>
+            <result property="name" column="name"/>
+            <result property="sn" column="sn"/>
         </association>
         <collection property="address" ofType="com.cmx.mall.model.Address">
             <id property="id" column="addressId"/>
@@ -90,7 +92,11 @@
                 roleId=#{roleId}
             </if>
         </set>
-        where username = #{username}
+        <where>
+            <if test="username != null and username != ''">
+                username = #{username}
+            </if>
+        </where>
     </update>
 
     <update id="updatepwd">
@@ -135,10 +141,14 @@
 
 
     <select id="findUserById" resultMap="userMap">
-        select su.*, sr.role
+        select su.*, r.id rid, r.`name` rname, r.sn
         from shop_user su,
-             shop_role sr
-        where su.roleId = sr.id
+             role r
+        where su.roleId = r.id
           and su.id = #{id}
+    </select>
+    <select id="selectAllRole" resultType="com.cmx.mall.model.Role">
+        select id, name, sn
+        from role
     </select>
 </mapper>

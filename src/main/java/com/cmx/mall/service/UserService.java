@@ -2,6 +2,7 @@ package com.cmx.mall.service;
 
 import com.cmx.mall.dto.UserDTO;
 import com.cmx.mall.mapper.IUserMapper;
+import com.cmx.mall.model.Role;
 import com.cmx.mall.model.User;
 import com.cmx.mall.utils.PasswordEncoderUtil;
 import com.github.pagehelper.PageHelper;
@@ -105,5 +106,9 @@ public class UserService {
     public UserDTO checkUserExist(String username) {
         UserDTO userByUsername = userInfoMapper.findUser(username);
         return userByUsername;
+    }
+
+    public List<Role> queryAllRole() {
+        return userInfoMapper.selectAllRole();
     }
 }

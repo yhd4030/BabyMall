@@ -1,6 +1,7 @@
 package com.cmx.mall.controller.admin;
 
 import com.cmx.mall.dto.UserDTO;
+import com.cmx.mall.model.Role;
 import com.cmx.mall.model.User;
 import com.cmx.mall.service.UserService;
 import com.github.pagehelper.PageInfo;
@@ -9,9 +10,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Controller
 @RequestMapping("/admin/user")
 public class AdminUserController {
+
     @Autowired
     private UserService userInfoService;
 
@@ -57,8 +61,16 @@ public class AdminUserController {
     @GetMapping("/edit")
     public String editUser(Integer id, Model model) {
         UserDTO userMsg = userInfoService.findUserById(id);
+        List<Role> roles= userInfoService.queryAllRole();
         model.addAttribute("userMsg", userMsg);
+        model.addAttribute("roles", roles);
         return "admin/user/edit";
+    }
+
+    @RequestMapping("/update")
+    @ResponseBody
+    public Boolean update(UserDTO userDTO){
+        return userInfoService.updateUser(userDTO);
     }
 
     //添加用户时 检查用户名是否存在

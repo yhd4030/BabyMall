@@ -54,7 +54,7 @@
                                         <!-- /.card-header -->
                                         <!-- form start -->
                                         <form class="form-horizontal" role="form" id="storeForm" method="post">
-                                            <input type="hidden" name="userId" th:value="${userMsg.id}">
+                                            <input type="hidden" name="id" th:value="${userMsg.id}">
                                             <div class="card-body">
                                                 <div class="form-group">
                                                     <label for="username">用户名：</label>
@@ -118,7 +118,7 @@
                                                 <div class="form-group">
                                                     <label for="detailAddress">详细住址:</label>
                                                     <div class="col-sm-10">
-                                                        <input type="text" class="form-control" name="detailAddress"
+                                                        <input type="text" class="form-control" name="detail_address"
                                                                id="detailAddress"
                                                                th:value="${userMsg.detail_address}" placeholder="详细住址:">
                                                     </div>
@@ -131,14 +131,8 @@
                                                         <!--                <input type="text" th:value="${userMsg.roleId}" >-->
                                                         <select class="form-control" name="roleId" id="roleIds"
                                                                 style="width: 150px;">
-                                                            <option value="1"
-                                                                    th:selected="${userMsg.role.role.equals('初级')}">初级
-                                                            </option>
-                                                            <option value="2"
-                                                                    th:selected="${userMsg.role.role.equals('中级')}">中级
-                                                            </option>
-                                                            <option value="3"
-                                                                    th:selected="${userMsg.role.role.equals('管理员')}">管理员
+                                                            <option th:each="role:${roles}" th:value="${role.id}" th:selected="${role.id==userMsg.roleId}">
+                                                                [[${role.name}]]
                                                             </option>
                                                         </select>
                                                     </div>
@@ -250,7 +244,7 @@
             submitHandler: function (form) {
                 $.ajax({
                     type: 'post',
-                    url: '/user/update',
+                    url: '/admin/user/update',
                     data: $("#storeForm").serialize(),
                     success: function (data) {
                         if (data == true) {
@@ -265,7 +259,7 @@
                             }).then((result) => {
                                 /* Read more about handling dismissals below */
                                 if (result.dismiss === Swal.DismissReason.timer) {
-                                    window.location.reload();
+                                    window.location.href="/admin/user/list";
                                 }
                             })
                         } else {

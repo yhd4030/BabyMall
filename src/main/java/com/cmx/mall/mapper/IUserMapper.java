@@ -1,6 +1,7 @@
 package com.cmx.mall.mapper;
 
 import com.cmx.mall.dto.UserDTO;
+import com.cmx.mall.model.Role;
 import com.cmx.mall.model.User;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -26,4 +27,6 @@ public interface IUserMapper {
     UserDTO findUserById(Integer id);
 
     UserDTO findUser(String username);
+
+    List<Role> selectAllRole();
 }
