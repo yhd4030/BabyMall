@@ -34,7 +34,7 @@
     <select id="findProductByTypeId" resultType="com.cmx.mall.model.ShopProduct">
         select *
         from shop_product
-        where typeId = #{typeId}
+        where typeId = #{typeId} and isShelf=1
     </select>
 
     <select id="findAllProduct" resultMap="productMap">
@@ -92,6 +92,7 @@
         </set>
         where id = #{id}
     </update>
+
     <!--    <update id="updateCategory">-->
     <!--        update shop_productcategory set `type`=#{type}-->
     <!--    </update>-->

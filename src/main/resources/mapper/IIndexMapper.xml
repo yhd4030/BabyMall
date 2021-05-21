@@ -34,11 +34,11 @@
     <select id="findNewProduct" resultType="com.cmx.mall.model.ShopProduct">
         SELECT p.*
         FROM shop_newproduct n
-                     JOIN shop_product p on n.pid = p.id
+                     JOIN shop_product p on n.pid = p.id where isShelf=1
     </select>
     <select id="findRecommended" resultType="com.cmx.mall.model.ShopProduct">
         SELECT p.*
         FROM shop_recommended r
-                     JOIN shop_product p on r.pid = p.id
+                     JOIN shop_product p on r.pid = p.id where isShelf=1
     </select>
 </mapper>

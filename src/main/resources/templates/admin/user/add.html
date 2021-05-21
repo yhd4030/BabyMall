@@ -137,10 +137,11 @@
                                             <div class="form-group">
                                                 <label for="role" class="col-sm-2 control-label">角色:</label>
                                                 <div class="col-sm-10">
-                                                    <select class="form-control" name="roleId" id="role" multiple="multiple" style="width: 150px;">
-                                                        <option value="1" >初级</option>
-                                                        <option value="2" >中级</option>
-                                                        <option value="3" >管理员</option>
+                                                    <select class="form-control" name="roleId" id="role" style="width: 150px;">
+                                                        <option value="">请选择角色</option>
+                                                        <option th:each="role:${roles}" th:value="${role.id}" >
+                                                            [[${role.name}]]
+                                                        </option>
                                                     </select>
                                                     <span>按住ctrl或shift键多选</span>
                                                 </div>

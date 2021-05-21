@@ -40,7 +40,9 @@ public class AdminUserController {
 
     //添加用户页面
     @GetMapping("/add")
-    public String addUser() {
+    public String addUser(Model model) {
+        List<Role> roles= userInfoService.queryAllRole();
+        model.addAttribute("roles", roles);
         return "admin/user/add";
     }
 

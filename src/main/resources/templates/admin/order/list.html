@@ -61,7 +61,7 @@
                                           role="form" method="get">
                                         <div class="input-group input-group-sm" style="width: 150px;">
                                             <input type="text" name="keywords" class="form-control float-right"
-                                                  th:value="${keywords}" placeholder="Search">
+                                                   th:value="${keywords}" placeholder="Search">
 
                                             <div class="input-group-append">
                                                 <button type="submit" class="btn btn-default">
@@ -87,7 +87,8 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr class="order_item" th:id="'orderItem'+${order.id}" th:each="order:${pageInfo.list}">
+                                    <tr class="order_item" th:id="'orderItem'+${order.id}"
+                                        th:each="order:${pageInfo.list}">
                                         <td th:text="${orderStat.count}"></td>
                                         <td>
                                             <span th:text="${order.order_num}"></span>
@@ -95,10 +96,13 @@
                                         <td style="text-align: center;white-space: nowrap; text-overflow: ellipsis; overflow: hidden; width: 220px; display: inline-block;">
                                             <div th:each="orderItem:${order.orderItems}">
                                                 <span th:text="${orderItem.amount} +X"></span>
-                                                <a th:href="'/books?bookId='+${orderItem.shopProduct.id}" target="_blank"
+                                                <a th:href="'/books?bookId='+${orderItem.shopProduct.id}"
+                                                   target="_blank"
                                                    title="${orderDetail.bookName}" style="width: 50px;height: 50px">
-                                                    <img th:src="${orderItem.shopProduct.productImg}" style="width: 40px"/>
-                                                    <span class="orderList_product_name" th:text="${orderItem.shopProduct.productName}"></span>
+                                                    <img th:src="${orderItem.shopProduct.productImg}"
+                                                         style="width: 40px"/>
+                                                    <span class="orderList_product_name"
+                                                          th:text="${orderItem.shopProduct.productName}"></span>
                                                 </a>
                                             </div>
 
@@ -112,37 +116,42 @@
                                             <span class="red" th:text="'￥'+${order.order_total}"></span>
                                         </td>
                                         <td>
-                                                                <span th:text="${order.address.province}+${order.address.city}+${order.address.area}+${order.address.detail_address}"></span>
+                                            <span th:text="${order.address.province}+${order.address.city}+${order.address.area}+${order.address.detail_address}"></span>
                                         </td>
                                         <td>
                                             <!--                    订单状态为0 未支付-->
                                             <div th:id="'cancel'+${order.id}" th:if="${order.order_status.equals('0')}">
-                                                <button type="button" class="btn btn-info btn-xs" th:onclick="|toPay(${order.id})|">
+                                                <button type="button" class="btn btn-info btn-xs"
+                                                        th:onclick="|toPay(${order.id})|">
                                                     去支付
                                                 </button>
-                                                <button  type="button" class="btn btn-xs btn-danger"
-                                                         th:onclick="|cancelOrder(${order.id})|">
+                                                <button type="button" class="btn btn-xs btn-danger"
+                                                        th:onclick="|cancelOrder(${order.id})|">
                                                     取消订单
                                                 </button>
                                             </div>
 
-                                            <div  th:if="${order.order_status.equals('5')}">
-                                                <button  type="button" class="btn btn-xs btn-danger">
+                                            <div th:if="${order.order_status.equals('5')}">
+                                                <button type="button" class="btn btn-xs btn-danger">
                                                     订单已取消
                                                 </button>
                                             </div>
 
                                             <!--                    订单状态为1 已支付-->
                                             <div th:if="${order.order_status.equals('1')||order.order_status.equals('4')}">
-                                                <button th:id="'complete'+${order.id}" th:if="${ order.order_status.equals('1')}"
+                                                <button th:id="'complete'+${order.id}"
+                                                        th:if="${ order.order_status.equals('1')}"
                                                         type="button" class="btn btn-xs btn-info"
                                                         th:onclick="|confirmReceiving(${order.id})|">
                                                     确认收货
                                                 </button>
-                                                <button type="button" class="btn btn-xs btn-info" onclick="lookShipping()">
+                                                <button type="button" class="btn btn-xs btn-info"
+                                                        onclick="lookShipping()">
                                                     查看物流
                                                 </button>
-                                                <button th:id="'delete'+${order.id}" type="button" class="btn btn-xs btn-danger" th:onclick="|deleteOrder(${order.id})|">
+                                                <button th:id="'delete'+${order.id}" type="button"
+                                                        class="btn btn-xs btn-danger"
+                                                        th:onclick="|deleteOrder(${order.id})|">
                                                     删除订单
                                                 </button>
                                             </div>
@@ -160,9 +169,11 @@
                                                              th:href="'?pageNum='+${pageInfo.prePage}+'&keywords='+${keywords}"></a>
                                     </li>
                                     <li th:each="nav : ${pageInfo.navigatepageNums}" class="page-item">
-                                        <a class="page-link" th:href="'?pageNum='+${nav}+'&keywords='+${keywords}" th:text="${nav}"
+                                        <a class="page-link" th:href="'?pageNum='+${nav}+'&keywords='+${keywords}"
+                                           th:text="${nav}"
                                            th:if="${nav != pageInfo.pageNum}"></a>
-                                        <a class="page-link" id="currentPage" th:href="'?pageNum='+${nav}+'&keywords='+${keywords}"
+                                        <a class="page-link" id="currentPage"
+                                           th:href="'?pageNum='+${nav}+'&keywords='+${keywords}"
                                            th:text="${nav}"
                                            th:if="${nav == pageInfo.pageNum}"></a>
                                         <!--                                        <span style="font-weight: bold" th:if="${nav == userList.pageNum}" th:text="${nav}"></span>-->
@@ -305,6 +316,10 @@
             $("#name").val("");
         }
         $("#adminProductSearch").submit();
+    }
+
+    function toPay(id) {
+        window.location.href = "/order/toPayOrList?id=" + id;
     }
 
 </script>
